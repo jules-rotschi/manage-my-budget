@@ -66,11 +66,13 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -102,17 +104,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="core\Amount.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="app\MainWindow.cpp" />
-    <ClCompile Include="core\Operation.cpp" />
+    <ClCompile Include="src\app\AddOperationForm.cpp" />
+    <ClCompile Include="src\app\OperationsList.cpp" />
+    <ClCompile Include="src\app\EditOperationDialog.cpp" />
+    <ClCompile Include="src\app\DataManager.cpp" />
+    <ClCompile Include="src\core\Amount.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\app\MainWindow.cpp" />
+    <ClCompile Include="src\core\Operation.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="app\MainWindow.h" />
+    <QtMoc Include="src\app\MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="core\Amount.h" />
-    <ClInclude Include="core\Operation.h" />
+    <QtMoc Include="src\app\EditOperationDialog.h" />
+    <QtMoc Include="src\app\OperationsList.h" />
+    <QtMoc Include="src\app\AddOperationForm.h" />
+    <ClInclude Include="src\app\DataManager.h" />
+    <ClInclude Include="src\core\Amount.h" />
+    <ClInclude Include="src\core\Operation.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

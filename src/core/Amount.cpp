@@ -2,7 +2,7 @@
 
 Amount::Amount(int value) : value(value) {}
 
-std::string Amount::getString() const {
+std::string Amount::GetString() const {
 	std::string valueString = std::to_string(value);
 	if (valueString.length() == 2) {
 		valueString = "0" + valueString;

@@ -1,4 +1,12 @@
-#include "Operation.h"
+﻿#include "Operation.h"
+
+#include "app/DataManager.h"
+
+Operation::Operation()
+{
+	id = dataManager.nextId;
+	dataManager.nextId++;
+}
 
 Operation::Operation(
 	int year,
@@ -11,13 +19,17 @@ Operation::Operation(
 	month(month),
 	amount(amount),
 	categoryIndex(categoryIndex),
-	description(description) {}
+	description(description)
+{
+	id = dataManager.nextId;
+	dataManager.nextId++;
+}
 
-Operation::Operation(const Operation& operation)
-	: id(operation.id),
-	year(operation.year),
-	month(operation.month),
-	amount(operation.amount),
-	categoryIndex(operation.categoryIndex),
-	description(operation.description)
-{}
+void Operation::Edit(const Operation& operation)
+{
+	year = operation.year;
+	month = operation.month;
+	categoryIndex = operation.categoryIndex;
+	amount = operation.amount;
+	description = operation.description;
+}

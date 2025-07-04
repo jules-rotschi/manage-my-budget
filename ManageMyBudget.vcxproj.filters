@@ -35,30 +35,57 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="app\MainWindow.cpp">
+    <ClCompile Include="src\app\MainWindow.cpp">
       <Filter>Source Files\app</Filter>
     </ClCompile>
-    <ClCompile Include="core\Operation.cpp">
+    <ClCompile Include="src\core\Operation.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="core\Amount.cpp">
+    <ClCompile Include="src\core\Amount.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\DataManager.cpp">
+      <Filter>Source Files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\EditOperationDialog.cpp">
+      <Filter>Source Files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\OperationsList.cpp">
+      <Filter>Source Files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\AddOperationForm.cpp">
+      <Filter>Source Files\app</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="app\MainWindow.h">
+    <QtMoc Include="src\app\MainWindow.h">
+      <Filter>Header Files\app</Filter>
+    </QtMoc>
+    <QtMoc Include="src\app\EditOperationDialog.h">
+      <Filter>Header Files\app</Filter>
+    </QtMoc>
+    <QtMoc Include="src\app\OperationsList.h">
+      <Filter>Header Files\app</Filter>
+    </QtMoc>
+    <QtMoc Include="src\app\AddOperationForm.h">
       <Filter>Header Files\app</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="core\Operation.h">
+    <ClInclude Include="src\core\Operation.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="core\Amount.h">
+    <ClInclude Include="src\core\Amount.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="src\app\DataManager.h">
+      <Filter>Header Files\app</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
   </ItemGroup>
 </Project>

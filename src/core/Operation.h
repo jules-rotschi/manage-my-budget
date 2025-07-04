@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <string>
 
@@ -11,11 +11,10 @@ public:
 	int year = 2025;
 	int month = 1;
 	Amount amount = 0;
-	int categoryIndex;
+	int categoryIndex = 0;
 	std::string description;
 
-	Operation() = delete;
-	Operation(const Operation& operation);
+	Operation();
 	Operation(
 		int year,
 		int month,
@@ -23,5 +22,7 @@ public:
 		int categoryIndex,
 		const std::string& description
 	);
+
+	void Edit(const Operation& operation);
 };
 
