@@ -59,6 +59,12 @@
     <ClCompile Include="src\app\AddOperationForm.cpp">
       <Filter>Source Files\app</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\BankAccount.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\ManageCategoriesDialog.cpp">
+      <Filter>Source Files\app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\app\MainWindow.h">
@@ -73,6 +79,9 @@
     <QtMoc Include="src\app\AddOperationForm.h">
       <Filter>Header Files\app</Filter>
     </QtMoc>
+    <QtMoc Include="src\app\ManageCategoriesDialog.h">
+      <Filter>Header Files\app</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Operation.h">
@@ -83,6 +92,9 @@
     </ClInclude>
     <ClInclude Include="src\app\DataManager.h">
       <Filter>Header Files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\BankAccount.h">
+      <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

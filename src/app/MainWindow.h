@@ -2,19 +2,13 @@
 
 #include <vector>
 
-#include <qmainwindow.h>
 #include <qwidget.h>
-#include <qlabel.h>
-#include <qformlayout.h>
-#include <qlineedit.h>
-#include <qcombobox.h>
 #include <qpushbutton.h>
-#include <qvalidator.h>
-#include <qdialog.h>
 
 #include "core/Operation.h"
 #include "app/OperationsList.h"
 #include "app/AddOperationForm.h"
+#include "app/ManageCategoriesDialog.h"
 
 class MainWindow : public QWidget
 {
@@ -27,6 +21,8 @@ public:
 private:
 	QVBoxLayout* m_mainLayout;
 
+	QPushButton* m_manageCategoriesButton;
+
 	OperationsList* m_operationsList;
 	AddOperationForm* m_addOperationForm;
 
@@ -35,4 +31,5 @@ private:
 
 private slots:
 	void HandleOperationAdd(const Operation& operation);
+	void HandleManageCategories();
 };

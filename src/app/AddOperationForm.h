@@ -17,6 +17,8 @@ public:
 	AddOperationForm(QWidget* parent = nullptr);
 	~AddOperationForm();
 
+	void LoadCategories();
+
 private:
 	QFormLayout* m_mainLayout;
 	QLabel* m_yearLabel;
@@ -31,12 +33,10 @@ private:
 	QLabel* m_descriptionLabel;
 	QLineEdit* m_descriptionLineEdit;
 	QPushButton* m_addButton;
-	QPushButton* m_cancelButton;
 
-	void Initialize();
+	void ResetForm();
 
 	void HandleAddButton();
-	void HandleCancelButton();
 
 signals:
 	void OperationAdd(const Operation& operation);

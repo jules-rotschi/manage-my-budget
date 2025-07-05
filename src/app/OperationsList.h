@@ -30,7 +30,9 @@ private:
 	std::vector<QPushButton*> m_editOperationButtons;
 	std::vector<QPushButton*> m_deleteOperationButtons;
 
-	void Reset();
+	void ResetUI();
+
+private slots:
 	void HandleOperationEdit(const Operation& operation);
 	void HandleOperationDelete(int id);
 };

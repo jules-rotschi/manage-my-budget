@@ -90,7 +90,7 @@ void EditOperationDialog::HandleConfirm()
 		return;
 	}
 
-	Operation newOperation(
+	Operation newOperation = s_DataManager.bankAccount.GetNewOperation(
 		year,
 		month,
 		amount,
@@ -98,7 +98,7 @@ void EditOperationDialog::HandleConfirm()
 		description
 	);
 
-	s_DataManager.EditOperation(operation.id, newOperation);
+	s_DataManager.bankAccount.EditOperation(operation.id, newOperation);
 
 	accept();
 }

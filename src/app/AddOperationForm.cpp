@@ -1,5 +1,7 @@
 ﻿#include "AddOperationForm.h"
 
+#include <iostream>
+
 #include <qdatetime.h>
 #include <qlineedit.h>
 
@@ -9,31 +11,9 @@
 AddOperationForm::AddOperationForm(QWidget* parent)
 	: QWidget(parent)
 {
-	Initialize();
-
-	m_addButton = new QPushButton("Ajouter l'opération");
-	m_cancelButton = new QPushButton("Annuler");
-
-	connect(m_addButton, &QPushButton::released, this, &AddOperationForm::HandleAddButton);
-	connect(m_cancelButton, &QPushButton::released, this, &AddOperationForm::HandleCancelButton);
-
-	m_mainLayout = new QFormLayout(this);
-	m_mainLayout->addRow(m_yearLabel, m_yearCombobox);
-	m_mainLayout->addRow(m_monthLabel, m_monthCombobox);
-	m_mainLayout->addRow(m_categoryLabel, m_categoryCombobox);
-	m_mainLayout->addRow(m_amountLabel, m_amountLineEdit);
-	m_mainLayout->addRow(m_descriptionLabel, m_descriptionLineEdit);
-	m_mainLayout->addWidget(m_addButton);
-	m_mainLayout->addWidget(m_cancelButton);
-}
-
-AddOperationForm::~AddOperationForm() {}
-
-void AddOperationForm::Initialize()
-{
 	QDate currentDate = QDate::currentDate();
 
-	m_yearLabel = new QLabel(QString::fromUtf8("Année"));
+	m_yearLabel = new QLabel("Année");
 
 	m_yearCombobox = new QComboBox();
 	for (int i = 0; i <= 2; i++) {
@@ -58,16 +38,42 @@ void AddOperationForm::Initialize()
 
 	m_amountLineEdit->setValidator(m_amountValidator);
 
-	m_categoryLabel = new QLabel(QString::fromUtf8("Catégorie"));
+	m_categoryLabel = new QLabel("Catégorie");
 
 	m_categoryCombobox = new QComboBox();
-	for (std::string category : s_DataManager.categories) {
-		m_categoryCombobox->addItem(QString::fromStdString(category));
-	}
+	LoadCategories();
 
 	m_descriptionLabel = new QLabel("Description");
 
 	m_descriptionLineEdit = new QLineEdit();
+
+	m_addButton = new QPushButton("Ajouter l'opération");
+
+	connect(m_addButton, &QPushButton::released, this, &AddOperationForm::HandleAddButton);
+
+	m_mainLayout = new QFormLayout(this);
+	m_mainLayout->addRow(m_yearLabel, m_yearCombobox);
+	m_mainLayout->addRow(m_monthLabel, m_monthCombobox);
+	m_mainLayout->addRow(m_categoryLabel, m_categoryCombobox);
+	m_mainLayout->addRow(m_amountLabel, m_amountLineEdit);
+	m_mainLayout->addRow(m_descriptionLabel, m_descriptionLineEdit);
+	m_mainLayout->addWidget(m_addButton);
+}
+
+AddOperationForm::~AddOperationForm() {}
+
+void AddOperationForm::LoadCategories()
+{
+	m_categoryCombobox->clear();
+	for (std::string category : s_DataManager.categories) {
+		m_categoryCombobox->addItem(QString::fromStdString(category));
+	}
+}
+
+void AddOperationForm::ResetForm()
+{
+	m_amountLineEdit->setText("");
+	m_descriptionLineEdit->setText("");
 }
 
 void AddOperationForm::HandleAddButton()
@@ -82,14 +88,17 @@ void AddOperationForm::HandleAddButton()
 	int categoryIndex = m_categoryCombobox->currentIndex();
 	std::string description = m_descriptionLineEdit->text().toStdString();
 
+	std::cout << categoryIndex << std::endl;
+
 	if (!isYearOk || !isMonthOk || !isAmountOk) {
+		std::cout << isYearOk << isMonthOk << isAmountOk << std::endl;
 		return;
 	}
 
 	m_amountLineEdit->setText("");
 	m_descriptionLineEdit->setText("");
 
-	Operation operation(
+	Operation operation = s_DataManager.bankAccount.GetNewOperation(
 		year,
 		month,
 		amount,
@@ -98,9 +107,6 @@ void AddOperationForm::HandleAddButton()
 	);
 
 	emit OperationAdd(operation);
-}
 
-void AddOperationForm::HandleCancelButton()
-{
-	Initialize();
+	ResetForm();
 }

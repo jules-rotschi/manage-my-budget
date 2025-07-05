@@ -14,6 +14,12 @@ MainWindow::MainWindow(QWidget* parent)
 {
 	setWindowTitle("Manage my budget");
 
+	InitializeData();
+
+	m_manageCategoriesButton = new QPushButton("Gérer les catégories");
+
+	connect(m_manageCategoriesButton, &QPushButton::released, this, &MainWindow::HandleManageCategories);
+
 	m_operationsList = new OperationsList();
 
 	m_addOperationForm = new AddOperationForm();
@@ -21,22 +27,15 @@ MainWindow::MainWindow(QWidget* parent)
 	connect(m_addOperationForm, &AddOperationForm::OperationAdd, this, &MainWindow::HandleOperationAdd);
 
 	m_mainLayout = new QVBoxLayout(this);
+	m_mainLayout->addWidget(m_manageCategoriesButton);
 	m_mainLayout->addWidget(m_operationsList);
 	m_mainLayout->addWidget(m_addOperationForm);
 
-	InitializeData();
+	UpdateUI();
 }
 
 MainWindow::~MainWindow()
 {}
-
-void MainWindow::HandleOperationAdd(const Operation& operation)
-{
-	s_DataManager.operations.push_back(operation);
-	s_DataManager.SaveData();
-
-	UpdateUI();
-}
 
 void MainWindow::UpdateUI()
 {
@@ -45,5 +44,19 @@ void MainWindow::UpdateUI()
 
 void MainWindow::InitializeData() {
 	s_DataManager.LoadData();
+}
+
+void MainWindow::HandleOperationAdd(const Operation& operation)
+{
+	s_DataManager.bankAccount.operations.push_back(operation);
+	s_DataManager.SaveOperations();
+
 	UpdateUI();
+}
+
+void MainWindow::HandleManageCategories()
+{
+	ManageCategoriesDialog manageCategoriesDialog = new ManageCategoriesDialog();
+	manageCategoriesDialog.exec();
+	m_addOperationForm->LoadCategories();
 }

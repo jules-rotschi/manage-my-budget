@@ -6,90 +6,129 @@
 #include <qdir.h>
 #include <qdebug.h>
 
-int DataManager::NextId()
+void DataManager::SaveOperations() const
 {
-	int id = m_nextId;
-	m_nextId++;
-	return id;
-}
-
-void DataManager::SaveData() const
-{ 
 	QDir dir;
 	dir.mkdir("data");
 
-	QFile operationFile("data/operations.dat");
+	QFile operationsFile("data/operations.dat");
 
-	if (!operationFile.open(QIODeviceBase::WriteOnly)) {
-		qDebug() << "Cannot open file for writing: " << operationFile.errorString();
+	if (!operationsFile.open(QIODeviceBase::WriteOnly)) {
 		return;
 	}
 
-	std::cout << "Saving" << std::endl;
-	QDataStream dataStream(&operationFile);
+	QDataStream operationStream(&operationsFile);
 
-	for (const Operation& operation : operations) {
-		std::cout << "writing operation" << std::endl;
-		dataStream << operation;
+	for (const Operation& operation : bankAccount.operations) {
+		operationStream << operation;
 	}
 }
 
-void DataManager::LoadData()
+void DataManager::SaveCategories() const
+{
+	QDir dir;
+	dir.mkdir("data");
+
+	QFile categoriesFile("data/categories.dat");
+
+	if (!categoriesFile.open(QIODeviceBase::WriteOnly)) {
+		return;
+	}
+
+	QDataStream categoriesStream(&categoriesFile);
+
+	for (const std::string& category : categories) {
+		categoriesStream << QString::fromStdString(category);
+	}
+}
+
+void DataManager::LoadOperations()
 {
 	QFile operationFile("data/operations.dat");
 
 	if (!operationFile.open(QIODeviceBase::ReadOnly)) {
 		return;
 	}
-	
-	std::cout << "Loading" << std::endl;
+
 	QDataStream dataStream(&operationFile);
 
 	while (!operationFile.atEnd()) {
 		Operation readOperation;
 		dataStream >> readOperation;
-		operations.push_back(readOperation);
-		if (readOperation.id >= m_nextId) {
-			m_nextId = readOperation.id + 1;
+		bankAccount.operations.push_back(readOperation);
+		if (readOperation.id >= bankAccount.nextId) {
+			bankAccount.nextId = readOperation.id + 1;
 		}
 	}
 }
 
-Amount DataManager::GetTotalAmount() const
+void DataManager::LoadCategories()
 {
-	Amount total;
+	QFile categoriesFile("data/categories.dat");
 
-	for (const Operation& operation : operations) {
-		total += operation.amount;
+	if (!categoriesFile.open(QIODeviceBase::ReadOnly)) {
+		LoadDefaultCategory();
+		return;
 	}
 
-	return total;
+	QDataStream dataStream(&categoriesFile);
+
+	while (!categoriesFile.atEnd()) {
+		QString readCategory;
+		dataStream >> readCategory;
+		categories.push_back(readCategory.toStdString());
+	}
+
+	if (categories.empty()) {
+		LoadDefaultCategory();
+	}
 }
 
-void DataManager::EditOperation(int id, const Operation& operation)
+void DataManager::LoadData()
 {
-	for (Operation& oldOperation : operations) {
-		if (oldOperation.id == id) {
-			oldOperation.Edit(operation);
+	LoadCategories();
+	LoadOperations();
+}
+
+void DataManager::AddCategory(const std::string& newCategory)
+{
+	for (const std::string& existingCategory : categories) {
+		if (newCategory == existingCategory) {
 			return;
 		}
 	}
+
+	categories.push_back(newCategory);
 }
 
-void DataManager::DeleteOperation(int id)
+void DataManager::DeleteCategory(int index)
 {
-	for (int i = 0; i < operations.size(); i++) {
-		const Operation& operation = operations[i];
+	if (categories.size() == 1) {
+		return;
+	}
 
-		if (operation.id == id) {
-			operations.erase(operations.begin() + i);
+	for (Operation& operation : bankAccount.operations) {
+		if (operation.categoryIndex == index) {
+			return;
+		}
+
+		if (operation.categoryIndex > index) {
+			operation.categoryIndex--;
 		}
 	}
+
+	categories.erase(categories.begin() + index);
+}
+
+void DataManager::LoadDefaultCategory()
+{
+	categories.emplace_back("Ma première catégorie");
 }
 
 QDataStream& operator<<(QDataStream& stream, const Operation& operation)
 {
 	stream
+		<< operation.id
 		<< operation.year
 		<< operation.month
 		<< operation.amount.value
@@ -104,6 +143,7 @@ QDataStream& operator>>(QDataStream& stream, Operation& operation)
 	QString description;
 
 	stream
+		>> operation.id
 		>> operation.year
 		>> operation.month
 		>> operation.amount.value

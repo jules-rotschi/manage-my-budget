@@ -1,30 +1,29 @@
 ﻿#pragma once
 
 #include <vector>
-#include <string>
 
 #include <qdatastream.h>
 
-#include <core/Operation.h>
+#include <core/BankAccount.h>
 
 class DataManager
 {
 public:
-	std::vector<std::string> categories{ "Interne" };
-	std::vector<Operation> operations;
+	std::vector<std::string> categories;
+	BankAccount bankAccount;
 
-	int NextId();
+	void SaveOperations() const;
+	void SaveCategories() const;
 
-	void SaveData() const;
+	void LoadOperations();
+	void LoadCategories();
 	void LoadData();
 
-	Amount GetTotalAmount() const;
-
-	void EditOperation(int id, const Operation& operation);
-	void DeleteOperation(int id);
+	void AddCategory(const std::string& category);
+	void DeleteCategory(int index);
 
 private:
-	int m_nextId = 1;
+	void LoadDefaultCategory();
 };
 
 QDataStream& operator<<(QDataStream& stream, const Operation& operation);

@@ -7,7 +7,7 @@
 OperationsList::OperationsList(QWidget* parent)
 	: QWidget(parent)
 {
-	m_totalLabel = new QLabel(QString::fromStdString("Total : " + s_DataManager.GetTotalAmount().GetString()));
+	m_totalLabel = new QLabel(QString::fromStdString("Total : " + s_DataManager.bankAccount.GetTotalAmount().GetString()));
 
 	m_operationsView = new QWidget();
 
@@ -22,23 +22,25 @@ OperationsList::~OperationsList() {}
 
 void OperationsList::UpdateUI()
 {
-	Reset();
+	ResetUI();
 
-	m_totalLabel->setText("Total : " + QString::fromStdString(s_DataManager.GetTotalAmount().GetString()));
+	m_totalLabel->setText("Total : " + QString::fromStdString(s_DataManager.bankAccount.GetTotalAmount().GetString()));
 
-	for (const Operation& operation : s_DataManager.operations)
+	for (const Operation& operation : s_DataManager.bankAccount.operations)
 	{
 		QString descriptionString = operation.description.size() > 0
 			? " (" + QString::fromStdString(operation.description) + ")"
 			: "";
 
 		QString operationString =
+			QString::fromStdString(std::to_string(operation.id)) + " " +
 			QString::fromStdString(std::to_string(operation.month))
 			+ '/'
 			+ QString::fromStdString(std::to_string(operation.year))
 			+ " : "
 			+ QString::fromStdString(operation.amount.GetString())
 			+ " | "
+			+ QString::fromStdString(std::to_string(operation.categoryIndex)) + " "
 			+ QString::fromStdString(s_DataManager.categories[operation.categoryIndex])
 			+ descriptionString;
 
@@ -71,7 +73,7 @@ void OperationsList::UpdateUI()
 	}
 }
 
-void OperationsList::Reset()
+void OperationsList::ResetUI()
 {
 	for (QWidget* widget : m_operationWidgets) {
 		delete widget;
@@ -90,13 +92,13 @@ void OperationsList::HandleOperationEdit(const Operation& operation)
 	if (dialog.exec())
 	{
 		UpdateUI();
-		s_DataManager.SaveData();
+		s_DataManager.SaveOperations();
 	}
 }
 
 void OperationsList::HandleOperationDelete(int id)
 {
-	s_DataManager.DeleteOperation(id);
+	s_DataManager.bankAccount.DeleteOperation(id);
 	UpdateUI();
-	s_DataManager.SaveData();
+	s_DataManager.SaveOperations();
 }

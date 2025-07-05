@@ -14,18 +14,7 @@ public:
 	int categoryIndex = 0;
 	std::string description;
 
-	Operation();
-	Operation(
-		int year,
-		int month,
-		Amount amount,
-		int categoryIndex,
-		const std::string& description
-	);
+	Operation() = default;
 
 	void Edit(const Operation& operation);
-
-private:
-	void SetAutoId();
 };
-
