@@ -20,6 +20,21 @@ MainWindow::MainWindow(QWidget* parent)
 
 	connect(m_manageCategoriesButton, &QPushButton::released, this, &MainWindow::HandleManageCategories);
 
+	m_manageAccountsButton = new QPushButton("Gérer les comptes");
+
+	m_currentAccountLabel = new QLabel("Compte bancaire sélectionné");
+	m_currentAccountComboBox = new QComboBox();
+	for (const BankAccount& account : s_DataManager.bankAccounts) {
+		m_currentAccountComboBox->addItem(QString::fromStdString(account.name));
+	}
+	m_currentAccountComboBox->setCurrentText(QString::fromStdString(s_DataManager.r_CurrentBankAccount().name));
+
+	connect(m_currentAccountComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::HandleCurrentAccountChange);
+
+	m_currentAccountForm = new QWidget();
+	m_currentAccountFormLayout = new QFormLayout(m_currentAccountForm);
+	m_currentAccountFormLayout->addRow(m_currentAccountLabel, m_currentAccountComboBox);
+
 	m_operationsList = new OperationsList();
 
 	m_addOperationForm = new AddOperationForm();
@@ -28,6 +43,8 @@ MainWindow::MainWindow(QWidget* parent)
 
 	m_mainLayout = new QVBoxLayout(this);
 	m_mainLayout->addWidget(m_manageCategoriesButton);
+	m_mainLayout->addWidget(m_manageAccountsButton);
+	m_mainLayout->addWidget(m_currentAccountForm);
 	m_mainLayout->addWidget(m_operationsList);
 	m_mainLayout->addWidget(m_addOperationForm);
 
@@ -44,11 +61,14 @@ void MainWindow::UpdateUI()
 
 void MainWindow::InitializeData() {
 	s_DataManager.LoadData();
+	s_DataManager.SaveCategories();
+	s_DataManager.SaveAccounts();
+	s_DataManager.SaveOperations();
 }
 
 void MainWindow::HandleOperationAdd(const Operation& operation)
 {
-	s_DataManager.bankAccount.operations.push_back(operation);
+	s_DataManager.r_CurrentBankAccount().operations.push_back(operation);
 	s_DataManager.SaveOperations();
 
 	UpdateUI();
@@ -60,4 +80,10 @@ void MainWindow::HandleManageCategories()
 	manageCategoriesDialog.exec();
 	UpdateUI();
 	m_addOperationForm->LoadCategories();
+}
+
+void MainWindow::HandleCurrentAccountChange()
+{
+	s_DataManager.r_CurrentBankAccount() = s_DataManager.bankAccounts[m_currentAccountComboBox->currentIndex()];
+	UpdateUI();
 }

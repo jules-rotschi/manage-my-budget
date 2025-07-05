@@ -7,7 +7,7 @@
 OperationsList::OperationsList(QWidget* parent)
 	: QWidget(parent)
 {
-	m_totalLabel = new QLabel(QString::fromStdString("Total : " + s_DataManager.bankAccount.GetTotalAmount().GetString()));
+	m_totalLabel = new QLabel(QString::fromStdString("Solde du compte : " + s_DataManager.r_CurrentBankAccount().GetTotalAmount().GetString()));
 
 	m_operationsView = new QWidget();
 
@@ -24,9 +24,9 @@ void OperationsList::UpdateUI()
 {
 	ResetUI();
 
-	m_totalLabel->setText("Total : " + QString::fromStdString(s_DataManager.bankAccount.GetTotalAmount().GetString()));
+	m_totalLabel->setText("Total : " + QString::fromStdString(s_DataManager.r_CurrentBankAccount().GetTotalAmount().GetString()));
 
-	for (const Operation& operation : s_DataManager.bankAccount.operations)
+	for (const Operation& operation : s_DataManager.r_CurrentBankAccount().operations)
 	{
 		QString descriptionString = operation.description.size() > 0
 			? " (" + QString::fromStdString(operation.description) + ")"
@@ -98,7 +98,7 @@ void OperationsList::HandleOperationEdit(const Operation& operation)
 
 void OperationsList::HandleOperationDelete(int id)
 {
-	s_DataManager.bankAccount.DeleteOperation(id);
+	s_DataManager.r_CurrentBankAccount().DeleteOperation(id);
 	UpdateUI();
 	s_DataManager.SaveOperations();
 }

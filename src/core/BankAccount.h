@@ -5,9 +5,17 @@
 
 #include "core/Operation.h"
 
+enum class AccountType
+{
+	CURRENT,
+	SAVING
+};
+
 class BankAccount
 {
 public:
+	std::string name;
+	AccountType type = AccountType::CURRENT;
 	Amount initialAmount;
 	std::vector<Operation> operations;
 

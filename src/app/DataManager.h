@@ -10,11 +10,15 @@ class DataManager
 {
 public:
 	std::vector<std::string> categories;
-	BankAccount bankAccount;
+	std::vector<BankAccount> bankAccounts;
 
+	BankAccount& r_CurrentBankAccount();
+
+	void SaveAccounts() const;
 	void SaveOperations() const;
 	void SaveCategories() const;
 
+	void LoadAccounts();
 	void LoadOperations();
 	void LoadCategories();
 	void LoadData();
@@ -24,8 +28,16 @@ public:
 	void DeleteCategory(int index);
 
 private:
-	void LoadDefaultCategory();
+	int currentBankAccountIndex;
+
+	void LoadInternalCategory();
+	void LoadDefaultAccount();
+
+	std::string ToFileName(std::string str) const;
 };
+
+QDataStream& operator<<(QDataStream& stream, const BankAccount& account);
+QDataStream& operator>>(QDataStream& stream, BankAccount& account);
 
 QDataStream& operator<<(QDataStream& stream, const Operation& operation);
 QDataStream& operator>>(QDataStream& stream, Operation& operation);

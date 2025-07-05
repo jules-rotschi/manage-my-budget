@@ -98,7 +98,7 @@ void AddOperationForm::HandleAddButton()
 	m_amountLineEdit->setText("");
 	m_descriptionLineEdit->setText("");
 
-	Operation operation = s_DataManager.bankAccount.GetNewOperation(
+	Operation operation = s_DataManager.r_CurrentBankAccount().GetNewOperation(
 		year,
 		month,
 		amount,

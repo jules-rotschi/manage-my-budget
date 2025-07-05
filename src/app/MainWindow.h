@@ -22,6 +22,12 @@ private:
 	QVBoxLayout* m_mainLayout;
 
 	QPushButton* m_manageCategoriesButton;
+	QPushButton* m_manageAccountsButton;
+
+	QWidget* m_currentAccountForm;
+	QFormLayout* m_currentAccountFormLayout;
+	QLabel* m_currentAccountLabel;
+	QComboBox* m_currentAccountComboBox;
 
 	OperationsList* m_operationsList;
 	AddOperationForm* m_addOperationForm;
@@ -32,4 +38,5 @@ private:
 private slots:
 	void HandleOperationAdd(const Operation& operation);
 	void HandleManageCategories();
+	void HandleCurrentAccountChange();
 };
