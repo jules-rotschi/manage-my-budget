@@ -9,6 +9,28 @@
 AddOperationForm::AddOperationForm(QWidget* parent)
 	: QWidget(parent)
 {
+	Initialize();
+
+	m_addButton = new QPushButton("Ajouter l'opération");
+	m_cancelButton = new QPushButton("Annuler");
+
+	connect(m_addButton, &QPushButton::released, this, &AddOperationForm::HandleAddButton);
+	connect(m_cancelButton, &QPushButton::released, this, &AddOperationForm::HandleCancelButton);
+
+	m_mainLayout = new QFormLayout(this);
+	m_mainLayout->addRow(m_yearLabel, m_yearCombobox);
+	m_mainLayout->addRow(m_monthLabel, m_monthCombobox);
+	m_mainLayout->addRow(m_categoryLabel, m_categoryCombobox);
+	m_mainLayout->addRow(m_amountLabel, m_amountLineEdit);
+	m_mainLayout->addRow(m_descriptionLabel, m_descriptionLineEdit);
+	m_mainLayout->addWidget(m_addButton);
+	m_mainLayout->addWidget(m_cancelButton);
+}
+
+AddOperationForm::~AddOperationForm() {}
+
+void AddOperationForm::Initialize()
+{
 	QDate currentDate = QDate::currentDate();
 
 	m_yearLabel = new QLabel(QString::fromUtf8("Année"));
@@ -39,30 +61,14 @@ AddOperationForm::AddOperationForm(QWidget* parent)
 	m_categoryLabel = new QLabel(QString::fromUtf8("Catégorie"));
 
 	m_categoryCombobox = new QComboBox();
-	for (std::string category : dataManager.categories) {
+	for (std::string category : s_DataManager.categories) {
 		m_categoryCombobox->addItem(QString::fromStdString(category));
 	}
 
 	m_descriptionLabel = new QLabel("Description");
 
 	m_descriptionLineEdit = new QLineEdit();
-
-	m_addButton = new QPushButton(QString::fromUtf8("Ajouter l'opération"));
-	m_cancelButton = new QPushButton("Annuler");
-
-	connect(m_addButton, &QPushButton::released, this, &AddOperationForm::HandleAddButton);
-
-	m_mainLayout = new QFormLayout(this);
-	m_mainLayout->addRow(m_yearLabel, m_yearCombobox);
-	m_mainLayout->addRow(m_monthLabel, m_monthCombobox);
-	m_mainLayout->addRow(m_categoryLabel, m_categoryCombobox);
-	m_mainLayout->addRow(m_amountLabel, m_amountLineEdit);
-	m_mainLayout->addRow(m_descriptionLabel, m_descriptionLineEdit);
-	m_mainLayout->addWidget(m_addButton);
-	m_mainLayout->addWidget(m_cancelButton);
 }
-
-AddOperationForm::~AddOperationForm() {}
 
 void AddOperationForm::HandleAddButton()
 {
@@ -92,4 +98,9 @@ void AddOperationForm::HandleAddButton()
 	);
 
 	emit OperationAdd(operation);
+}
+
+void AddOperationForm::HandleCancelButton()
+{
+	Initialize();
 }

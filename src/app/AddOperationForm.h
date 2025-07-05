@@ -33,7 +33,10 @@ private:
 	QPushButton* m_addButton;
 	QPushButton* m_cancelButton;
 
+	void Initialize();
+
 	void HandleAddButton();
+	void HandleCancelButton();
 
 signals:
 	void OperationAdd(const Operation& operation);

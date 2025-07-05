@@ -24,5 +24,8 @@ public:
 	);
 
 	void Edit(const Operation& operation);
+
+private:
+	void SetAutoId();
 };
 

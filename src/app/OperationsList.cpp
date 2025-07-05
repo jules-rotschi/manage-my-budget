@@ -7,7 +7,7 @@
 OperationsList::OperationsList(QWidget* parent)
 	: QWidget(parent)
 {
-	m_totalLabel = new QLabel(QString::fromStdString("Total : " + dataManager.GetTotalAmount().GetString()));
+	m_totalLabel = new QLabel(QString::fromStdString("Total : " + s_DataManager.GetTotalAmount().GetString()));
 
 	m_operationsView = new QWidget();
 
@@ -20,13 +20,13 @@ OperationsList::OperationsList(QWidget* parent)
 
 OperationsList::~OperationsList() {}
 
-void OperationsList::Update()
+void OperationsList::UpdateUI()
 {
 	Reset();
 
-	m_totalLabel->setText("Total : " + QString::fromStdString(dataManager.GetTotalAmount().GetString()));
+	m_totalLabel->setText("Total : " + QString::fromStdString(s_DataManager.GetTotalAmount().GetString()));
 
-	for (const Operation& operation : dataManager.operations)
+	for (const Operation& operation : s_DataManager.operations)
 	{
 		QString descriptionString = operation.description.size() > 0
 			? " (" + QString::fromStdString(operation.description) + ")"
@@ -39,7 +39,7 @@ void OperationsList::Update()
 			+ " : "
 			+ QString::fromStdString(operation.amount.GetString())
 			+ " | "
-			+ QString::fromStdString(dataManager.categories[operation.categoryIndex])
+			+ QString::fromStdString(s_DataManager.categories[operation.categoryIndex])
 			+ descriptionString;
 
 		QLabel* operationLabel = new QLabel(operationString);
@@ -51,11 +51,11 @@ void OperationsList::Update()
 		m_deleteOperationButtons.push_back(deleteOperationButton);
 
 		connect(editOperationButton, &QPushButton::released, [this, operation]() {
-			OnOperationEdit(operation);
+			HandleOperationEdit(operation);
 			});
 
 		connect(deleteOperationButton, &QPushButton::released, [this, operation]() {
-			OnOperationDelete(operation.id);
+			HandleOperationDelete(operation.id);
 			});
 
 		QWidget* operationWidget = new QWidget();
@@ -84,19 +84,19 @@ void OperationsList::Reset()
 	m_deleteOperationButtons.clear();
 }
 
-void OperationsList::OnOperationEdit(const Operation& operation)
+void OperationsList::HandleOperationEdit(const Operation& operation)
 {
 	EditOperationDialog dialog(operation);
 	if (dialog.exec())
 	{
-		Update();
-		dataManager.SaveData();
+		UpdateUI();
+		s_DataManager.SaveData();
 	}
 }
 
-void OperationsList::OnOperationDelete(int id)
+void OperationsList::HandleOperationDelete(int id)
 {
-	dataManager.DeleteOperation(id);
-	Update();
-	dataManager.SaveData();
+	s_DataManager.DeleteOperation(id);
+	UpdateUI();
+	s_DataManager.SaveData();
 }

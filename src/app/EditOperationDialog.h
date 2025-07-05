@@ -35,6 +35,6 @@ private:
 	QPushButton* m_editButton;
 	QPushButton* m_cancelButton;
 
-	void OnAccept();
+	void HandleConfirm();
 };
 

@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget* parent)
 
 	m_addOperationForm = new AddOperationForm();
 
-	connect(m_addOperationForm, &AddOperationForm::OperationAdd, this, &MainWindow::OnOperationAdd);
+	connect(m_addOperationForm, &AddOperationForm::OperationAdd, this, &MainWindow::HandleOperationAdd);
 
 	m_mainLayout = new QVBoxLayout(this);
 	m_mainLayout->addWidget(m_operationsList);
@@ -30,20 +30,20 @@ MainWindow::MainWindow(QWidget* parent)
 MainWindow::~MainWindow()
 {}
 
-void MainWindow::OnOperationAdd(const Operation& operation)
+void MainWindow::HandleOperationAdd(const Operation& operation)
 {
-	dataManager.operations.push_back(operation);
-	dataManager.SaveData();
+	s_DataManager.operations.push_back(operation);
+	s_DataManager.SaveData();
 
-	Update();
+	UpdateUI();
 }
 
-void MainWindow::Update()
+void MainWindow::UpdateUI()
 {
-	m_operationsList->Update();
+	m_operationsList->UpdateUI();
 }
 
 void MainWindow::InitializeData() {
-	dataManager.LoadData();
-	Update();
+	s_DataManager.LoadData();
+	UpdateUI();
 }

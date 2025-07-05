@@ -6,6 +6,13 @@
 #include <qdir.h>
 #include <qdebug.h>
 
+int DataManager::NextId()
+{
+	int id = m_nextId;
+	m_nextId++;
+	return id;
+}
+
 void DataManager::SaveData() const
 { 
 	QDir dir;
@@ -42,6 +49,9 @@ void DataManager::LoadData()
 		Operation readOperation;
 		dataStream >> readOperation;
 		operations.push_back(readOperation);
+		if (readOperation.id >= m_nextId) {
+			m_nextId = readOperation.id + 1;
+		}
 	}
 }
 

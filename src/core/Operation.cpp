@@ -4,8 +4,7 @@
 
 Operation::Operation()
 {
-	id = dataManager.nextId;
-	dataManager.nextId++;
+	id = s_DataManager.NextId();
 }
 
 Operation::Operation(
@@ -21,8 +20,7 @@ Operation::Operation(
 	categoryIndex(categoryIndex),
 	description(description)
 {
-	id = dataManager.nextId;
-	dataManager.nextId++;
+	id = s_DataManager.NextId();
 }
 
 void Operation::Edit(const Operation& operation)
@@ -32,4 +30,9 @@ void Operation::Edit(const Operation& operation)
 	categoryIndex = operation.categoryIndex;
 	amount = operation.amount;
 	description = operation.description;
+}
+
+void Operation::SetAutoId()
+{
+	id = s_DataManager.NextId();
 }

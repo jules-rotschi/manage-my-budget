@@ -15,7 +15,7 @@ public:
 	OperationsList(QWidget* parent = nullptr);
 	~OperationsList();
 
-	void Update();
+	void UpdateUI();
 
 private:
 	QVBoxLayout* m_mainLayout;
@@ -31,7 +31,7 @@ private:
 	std::vector<QPushButton*> m_deleteOperationButtons;
 
 	void Reset();
-	void OnOperationEdit(const Operation& operation);
-	void OnOperationDelete(int id);
+	void HandleOperationEdit(const Operation& operation);
+	void HandleOperationDelete(int id);
 };
 

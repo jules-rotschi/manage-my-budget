@@ -30,9 +30,9 @@ private:
 	OperationsList* m_operationsList;
 	AddOperationForm* m_addOperationForm;
 
-	void Update();
+	void UpdateUI();
 	void InitializeData();
 
 private slots:
-	void OnOperationAdd(const Operation& operation);
+	void HandleOperationAdd(const Operation& operation);
 };

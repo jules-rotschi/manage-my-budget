@@ -43,7 +43,7 @@ EditOperationDialog::EditOperationDialog(const Operation& operation, QWidget* pa
 	m_categoryLabel = new QLabel("Catégorie");
 
 	m_categoryCombobox = new QComboBox();
-	for (std::string category : dataManager.categories) {
+	for (std::string category : s_DataManager.categories) {
 		m_categoryCombobox->addItem(QString::fromStdString(category));
 	}
 	m_categoryCombobox->setCurrentIndex(operation.categoryIndex);
@@ -57,7 +57,7 @@ EditOperationDialog::EditOperationDialog(const Operation& operation, QWidget* pa
 
 	m_editButton->isDefault();
 
-	connect(m_editButton, &QPushButton::released, this, &EditOperationDialog::OnAccept);
+	connect(m_editButton, &QPushButton::released, this, &EditOperationDialog::HandleConfirm);
 	connect(m_cancelButton, &QPushButton::released, this, &EditOperationDialog::reject);
 
 	m_formLayout = new QFormLayout();
@@ -74,7 +74,7 @@ EditOperationDialog::EditOperationDialog(const Operation& operation, QWidget* pa
 
 EditOperationDialog::~EditOperationDialog() {}
 
-void EditOperationDialog::OnAccept()
+void EditOperationDialog::HandleConfirm()
 {
 	bool isYearOk = false;
 	bool isMonthOk = false;
@@ -98,7 +98,7 @@ void EditOperationDialog::OnAccept()
 		description
 	);
 
-	dataManager.EditOperation(operation.id, newOperation);
+	s_DataManager.EditOperation(operation.id, newOperation);
 
 	accept();
 }
