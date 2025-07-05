@@ -20,6 +20,7 @@ public:
 	void LoadData();
 
 	void AddCategory(const std::string& category);
+	void RenameCategory(int index, const std::string& newName);
 	void DeleteCategory(int index);
 
 private:

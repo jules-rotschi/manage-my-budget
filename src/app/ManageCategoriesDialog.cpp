@@ -1,6 +1,7 @@
 ﻿#include "ManageCategoriesDialog.h"
 
 #include "app/DataManager.h"
+#include "app/RenameCategoryDialog.h"
 
 ManageCategoriesDialog::ManageCategoriesDialog(QWidget* parent)
 	: QDialog(parent)
@@ -38,7 +39,7 @@ void ManageCategoriesDialog::ResetUI()
 	m_categoryWidgets.clear();
 	m_categoryLayouts.clear();
 	m_categoryLabels.clear();
-	m_categoryEditButtons.clear();
+	m_categoryRenameButtons.clear();
 	m_categoryDeleteButtons.clear();
 }
 
@@ -52,8 +53,14 @@ void ManageCategoriesDialog::UpdateUI()
 		QWidget* categoryWidget = new QWidget();
 		QHBoxLayout* categoryLayout = new QHBoxLayout(categoryWidget);
 		QLabel* categoryLabel = new QLabel(QString::fromStdString(category));
-		QPushButton* categoryEditButton = new QPushButton("Modifier");
+		QPushButton* categoryRenameButton = new QPushButton("Renommer");
 		QPushButton* categoryDeleteButton = new QPushButton("Supprimer");
+
+		connect(
+			categoryRenameButton,
+			&QPushButton::released,
+			[this, i]() {HandleCategoryRename(i); }
+		);
 
 		connect(
 			categoryDeleteButton,
@@ -64,11 +71,11 @@ void ManageCategoriesDialog::UpdateUI()
 		m_categoryWidgets.push_back(categoryWidget);
 		m_categoryLayouts.push_back(categoryLayout);
 		m_categoryLabels.push_back(categoryLabel);
-		m_categoryEditButtons.push_back(categoryEditButton);
+		m_categoryRenameButtons.push_back(categoryRenameButton);
 		m_categoryDeleteButtons.push_back(categoryDeleteButton);
 
 		categoryLayout->addWidget(categoryLabel);
-		categoryLayout->addWidget(categoryEditButton);
+		categoryLayout->addWidget(categoryRenameButton);
 		categoryLayout->addWidget(categoryDeleteButton);
 
 		m_categoriesLayout->addWidget(categoryWidget);
@@ -84,6 +91,15 @@ void ManageCategoriesDialog::HandleCategoryAdd()
 	m_nameLineEdit->setText("");
 
 	s_DataManager.SaveCategories();
+}
+
+void ManageCategoriesDialog::HandleCategoryRename(int index)
+{
+	RenameCategoryDialog dialog(index);
+	if (dialog.exec()) {
+		UpdateUI();
+		s_DataManager.SaveCategories();
+	}
 }
 
 void ManageCategoriesDialog::HandleCategoryDelete(int index)

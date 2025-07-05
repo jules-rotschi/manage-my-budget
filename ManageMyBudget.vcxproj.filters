@@ -65,6 +65,9 @@
     <ClCompile Include="src\app\ManageCategoriesDialog.cpp">
       <Filter>Source Files\app</Filter>
     </ClCompile>
+    <ClCompile Include="src\app\RenameCategoryDialog.cpp">
+      <Filter>Source Files\app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\app\MainWindow.h">
@@ -80,6 +83,9 @@
       <Filter>Header Files\app</Filter>
     </QtMoc>
     <QtMoc Include="src\app\ManageCategoriesDialog.h">
+      <Filter>Header Files\app</Filter>
+    </QtMoc>
+    <QtMoc Include="src\app\RenameCategoryDialog.h">
       <Filter>Header Files\app</Filter>
     </QtMoc>
   </ItemGroup>

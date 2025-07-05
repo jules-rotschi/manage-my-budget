@@ -101,6 +101,11 @@ void DataManager::AddCategory(const std::string& newCategory)
 	categories.push_back(newCategory);
 }
 
+void DataManager::RenameCategory(int index, const std::string& newName)
+{
+	categories[index] = newName;
+}
+
 void DataManager::DeleteCategory(int index)
 {
 	if (categories.size() == 1) {

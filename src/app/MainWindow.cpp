@@ -56,7 +56,8 @@ void MainWindow::HandleOperationAdd(const Operation& operation)
 
 void MainWindow::HandleManageCategories()
 {
-	ManageCategoriesDialog manageCategoriesDialog = new ManageCategoriesDialog();
+	ManageCategoriesDialog manageCategoriesDialog;
 	manageCategoriesDialog.exec();
+	UpdateUI();
 	m_addOperationForm->LoadCategories();
 }

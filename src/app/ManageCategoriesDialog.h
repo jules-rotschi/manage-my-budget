@@ -26,7 +26,7 @@ private:
 	std::vector<QWidget*> m_categoryWidgets;
 	std::vector<QHBoxLayout*> m_categoryLayouts;
 	std::vector<QLabel*> m_categoryLabels;
-	std::vector<QPushButton*> m_categoryEditButtons;
+	std::vector<QPushButton*> m_categoryRenameButtons;
 	std::vector<QPushButton*> m_categoryDeleteButtons;
 
 	QWidget* m_newOperationFormWidget;
@@ -40,5 +40,6 @@ private:
 
 private slots:
 	void HandleCategoryAdd();
+	void HandleCategoryRename(int index);
 	void HandleCategoryDelete(int index);
 };
