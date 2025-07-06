@@ -26,7 +26,7 @@ AddOperationForm::AddOperationForm(QWidget* parent)
 	for (int i = 0; i < 12; i++) {
 		m_monthCombobox->addItem(QString::fromStdString(std::to_string(i + 1)));
 	}
-	m_monthCombobox->setCurrentIndex(m_monthCombobox->findText(QString::fromStdString(std::to_string(currentDate.month()))));
+	m_monthCombobox->setCurrentIndex(currentDate.month() - 1);
 
 	m_amountLabel = new QLabel("Montant");
 	m_amountLineEdit = new QLineEdit();
@@ -80,19 +80,17 @@ void AddOperationForm::ResetForm()
 void AddOperationForm::HandleAddButton()
 {
 	bool isYearOk = false;
-	bool isMonthOk = false;
 	bool isAmountOk = false;
 
 	int year = m_yearCombobox->currentText().toInt(&isYearOk);
-	int month = m_monthCombobox->currentText().toInt(&isMonthOk);
+	int month = m_monthCombobox->currentIndex() + 1;
 	int amount = m_amountLineEdit->text().toDouble(&isAmountOk) * 100;
 	int categoryIndex = m_categoryCombobox->currentIndex();
 	std::string description = m_descriptionLineEdit->text().toStdString();
 
 	std::cout << categoryIndex << std::endl;
 
-	if (!isYearOk || !isMonthOk || !isAmountOk) {
-		std::cout << isYearOk << isMonthOk << isAmountOk << std::endl;
+	if (!isYearOk || !isAmountOk) {
 		return;
 	}
 

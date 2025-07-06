@@ -17,7 +17,7 @@ ManageAccountsDialog::ManageAccountsDialog(QWidget* parent)
 
 	connect(m_addButton, &QPushButton::released, this, &ManageAccountsDialog::HandleAccountAdd);
 
-	m_defaultButton = new QPushButton("Retour");
+	m_defaultButton = new QPushButton("Terminé");
 	m_defaultButton->setDefault(true);
 
 	connect(m_defaultButton, &QPushButton::released, this, &ManageAccountsDialog::accept);

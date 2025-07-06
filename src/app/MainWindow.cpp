@@ -10,6 +10,8 @@
 #include "app/EditOperationDialog.h"
 #include "app/ManageCategoriesDialog.h"
 #include "app/ManageAccountsDialog.h"
+#include "app/MonthlyReviewDialog.h"
+#include "app/YearlyReviewDialog.h"
 
 MainWindow::MainWindow(QWidget* parent)
 	: QWidget(parent)
@@ -19,12 +21,16 @@ MainWindow::MainWindow(QWidget* parent)
 	InitializeData();
 
 	m_manageCategoriesButton = new QPushButton("Gérer les catégories");
-
-	connect(m_manageCategoriesButton, &QPushButton::released, this, &MainWindow::HandleManageCategories);
-
 	m_manageAccountsButton = new QPushButton("Gérer les comptes");
 
+	connect(m_manageCategoriesButton, &QPushButton::released, this, &MainWindow::HandleManageCategories);
 	connect(m_manageAccountsButton, &QPushButton::released, this, &MainWindow::HandleManageAccounts);
+
+	m_monthlyReviewButton = new QPushButton("Bilans mensuels");
+	m_yearlyReviewButton = new QPushButton("Bilans annuels");
+
+	connect(m_monthlyReviewButton, &QPushButton::released, this, &MainWindow::HandleMonthlyReview);
+	connect(m_yearlyReviewButton, &QPushButton::released, this, &MainWindow::HandleYearlyReview);
 
 	m_currentAccountLabel = new QLabel("Compte bancaire sélectionné");
 	m_currentAccountComboBox = new QComboBox();
@@ -46,6 +52,8 @@ MainWindow::MainWindow(QWidget* parent)
 	m_mainLayout = new QVBoxLayout(this);
 	m_mainLayout->addWidget(m_manageCategoriesButton);
 	m_mainLayout->addWidget(m_manageAccountsButton);
+	m_mainLayout->addWidget(m_monthlyReviewButton);
+	m_mainLayout->addWidget(m_yearlyReviewButton);
 	m_mainLayout->addWidget(m_currentAccountForm);
 	m_mainLayout->addWidget(m_operationsList);
 	m_mainLayout->addWidget(m_addOperationForm);
@@ -85,7 +93,7 @@ void MainWindow::LoadAccountsToComboBox()
 void MainWindow::HandleOperationAdd(const Operation& operation)
 {
 	s_DataManager.r_CurrentBankAccount().operations.push_back(operation);
-	s_DataManager.SaveOperations();
+	s_DataManager.SaveAccounts();
 
 	UpdateUI();
 }
@@ -112,4 +120,16 @@ void MainWindow::HandleCurrentAccountChange()
 {
 	s_DataManager.SetCurrentAccountIndex(m_currentAccountComboBox->currentIndex());
 	UpdateUI();
+}
+
+void MainWindow::HandleMonthlyReview() const
+{
+	MonthlyReviewDialog dialog;
+	dialog.exec();
+}
+
+void MainWindow::HandleYearlyReview() const
+{
+	YearlyReviewDialog dialog;
+	dialog.exec();
 }

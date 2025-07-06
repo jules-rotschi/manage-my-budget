@@ -36,6 +36,11 @@ public:
 
 	Amount GetTotalAmount() const;
 
+	Amount GetMonthlyAmount(int year, int month) const;
+	Amount GetMonthlyAmount(int year, int month, int categoryIndex) const;
+	Amount GetYearlyAmount(int year) const;
+	Amount GetYearlyAmount(int year, int categoryIndex) const;
+
 	void EditOperation(int id, const Operation& operation);
 	void DeleteOperation(int id);
 

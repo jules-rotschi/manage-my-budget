@@ -104,6 +104,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\app\MonthlyReviewDialog.cpp" />
+    <ClCompile Include="src\core\Accountant.cpp" />
     <ClCompile Include="src\app\EditAccountDialog.cpp" />
     <ClCompile Include="src\app\AddAccountDialog.cpp" />
     <ClCompile Include="src\app\ManageAccountsDialog.cpp" />
@@ -118,11 +120,13 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\app\MainWindow.cpp" />
     <ClCompile Include="src\core\Operation.cpp" />
+    <ClCompile Include="src\app\YearlyReviewDialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\app\MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="src\app\YearlyReviewDialog.h" />
     <QtMoc Include="src\app\EditOperationDialog.h" />
     <QtMoc Include="src\app\OperationsList.h" />
     <QtMoc Include="src\app\AddOperationForm.h" />
@@ -131,6 +135,8 @@
     <QtMoc Include="src\app\ManageAccountsDialog.h" />
     <QtMoc Include="src\app\AddAccountDialog.h" />
     <QtMoc Include="src\app\EditAccountDialog.h" />
+    <QtMoc Include="src\app\MonthlyReviewDialog.h" />
+    <ClInclude Include="src\core\Accountant.h" />
     <ClInclude Include="src\core\BankAccount.h" />
     <ClInclude Include="src\app\DataManager.h" />
     <ClInclude Include="src\core\Amount.h" />

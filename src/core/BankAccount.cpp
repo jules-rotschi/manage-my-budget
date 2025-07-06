@@ -53,6 +53,67 @@ Amount BankAccount::GetTotalAmount() const
 	return total;
 }
 
+Amount BankAccount::GetMonthlyAmount(int year, int month) const
+{
+	Amount amount = 0;
+
+	for (const Operation& operation : operations) {
+
+		bool isInternalOperation = operation.categoryIndex == 0;
+
+		if (!isInternalOperation && operation.year == year && operation.month == month) {
+			amount += operation.amount;
+		}
+	}
+
+	return amount;
+}
+
+Amount BankAccount::GetMonthlyAmount(int year, int month, int categoryIndex) const
+{
+	Amount amount = 0;
+
+	for (const Operation& operation : operations) {
+		bool isInternalOperation = operation.categoryIndex == 0;
+
+		if (!isInternalOperation && operation.year == year && operation.month == month && operation.categoryIndex == categoryIndex) {
+			amount += operation.amount;
+		}
+	}
+
+	return amount;
+}
+
+Amount BankAccount::GetYearlyAmount(int year) const
+{
+	Amount amount = 0;
+
+	for (const Operation& operation : operations) {
+		bool isInternalOperation = operation.categoryIndex == 0;
+
+		if (!isInternalOperation && operation.year == year) {
+			amount += operation.amount;
+		}
+	}
+
+	return amount;
+}
+
+Amount BankAccount::GetYearlyAmount(int year, int categoryIndex) const
+{
+	Amount amount = 0;
+
+	for (const Operation& operation : operations) {
+		bool isInternalOperation = operation.categoryIndex == 0;
+
+		if (!isInternalOperation && operation.year == year && operation.categoryIndex == categoryIndex) {
+			amount += operation.amount;
+		}
+	}
+
+	return amount;
+}
+
 void BankAccount::EditOperation(int id, const Operation& operation)
 {
 	for (Operation& oldOperation : operations) {

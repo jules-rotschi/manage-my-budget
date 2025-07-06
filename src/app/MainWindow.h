@@ -23,6 +23,9 @@ private:
 	QPushButton* m_manageCategoriesButton;
 	QPushButton* m_manageAccountsButton;
 
+	QPushButton* m_monthlyReviewButton;
+	QPushButton* m_yearlyReviewButton;
+
 	QWidget* m_currentAccountForm;
 	QFormLayout* m_currentAccountFormLayout;
 	QLabel* m_currentAccountLabel;
@@ -36,8 +39,10 @@ private:
 	void LoadAccountsToComboBox();
 
 private slots:
-	void HandleOperationAdd(const Operation& operation);
 	void HandleManageCategories();
 	void HandleManageAccounts();
+	void HandleMonthlyReview() const;
+	void HandleYearlyReview() const;
 	void HandleCurrentAccountChange();
+	void HandleOperationAdd(const Operation& operation);
 };

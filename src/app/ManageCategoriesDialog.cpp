@@ -19,7 +19,7 @@ ManageCategoriesDialog::ManageCategoriesDialog(QWidget* parent)
 
 	connect(m_newCategoryAddButton, &QPushButton::released, this, &ManageCategoriesDialog::HandleCategoryAdd);
 
-	m_defaultButton = new QPushButton("Retour");
+	m_defaultButton = new QPushButton("Terminé");
 	m_defaultButton->setDefault(true);
 
 	connect(m_defaultButton, &QPushButton::released, this, &ManageCategoriesDialog::accept);
