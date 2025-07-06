@@ -55,7 +55,7 @@ EditOperationDialog::EditOperationDialog(const Operation& operation, QWidget* pa
 	m_editButton = new QPushButton("Modifier");
 	m_cancelButton = new QPushButton("Annuler");
 
-	m_editButton->isDefault();
+	m_editButton->setDefault(true);
 
 	connect(m_editButton, &QPushButton::released, this, &EditOperationDialog::HandleConfirm);
 	connect(m_cancelButton, &QPushButton::released, this, &EditOperationDialog::reject);

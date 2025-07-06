@@ -7,7 +7,7 @@
 OperationsList::OperationsList(QWidget* parent)
 	: QWidget(parent)
 {
-	m_totalLabel = new QLabel(QString::fromStdString("Solde du compte : " + s_DataManager.r_CurrentBankAccount().GetTotalAmount().GetString()));
+	m_totalLabel = new QLabel();
 
 	m_operationsView = new QWidget();
 
@@ -24,7 +24,7 @@ void OperationsList::UpdateUI()
 {
 	ResetUI();
 
-	m_totalLabel->setText("Total : " + QString::fromStdString(s_DataManager.r_CurrentBankAccount().GetTotalAmount().GetString()));
+	m_totalLabel->setText("Solde du compte : " + QString::fromStdString(s_DataManager.r_CurrentBankAccount().GetTotalAmount().GetString()));
 
 	for (const Operation& operation : s_DataManager.r_CurrentBankAccount().operations)
 	{

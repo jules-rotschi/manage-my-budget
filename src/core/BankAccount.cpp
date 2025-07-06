@@ -32,6 +32,16 @@ Operation BankAccount::GetNewOperation(
 	return operation;
 }
 
+std::string BankAccount::GetTypeString() const
+{
+	if (type == AccountType::SAVING) {
+		return "Épargne";
+	}
+	else {
+		return "Compte courant";
+	}
+}
+
 Amount BankAccount::GetTotalAmount() const
 {
 	Amount total = initialAmount;
@@ -62,4 +72,11 @@ void BankAccount::DeleteOperation(int id)
 			operations.erase(operations.begin() + i);
 		}
 	}
+}
+
+void BankAccount::Edit(const BankAccount& account)
+{
+	name = account.name;
+	type = account.type;
+	initialAmount = account.initialAmount;
 }

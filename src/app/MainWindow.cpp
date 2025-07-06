@@ -8,6 +8,8 @@
 
 #include "app/DataManager.h"
 #include "app/EditOperationDialog.h"
+#include "app/ManageCategoriesDialog.h"
+#include "app/ManageAccountsDialog.h"
 
 MainWindow::MainWindow(QWidget* parent)
 	: QWidget(parent)
@@ -22,12 +24,12 @@ MainWindow::MainWindow(QWidget* parent)
 
 	m_manageAccountsButton = new QPushButton("Gérer les comptes");
 
+	connect(m_manageAccountsButton, &QPushButton::released, this, &MainWindow::HandleManageAccounts);
+
 	m_currentAccountLabel = new QLabel("Compte bancaire sélectionné");
 	m_currentAccountComboBox = new QComboBox();
-	for (const BankAccount& account : s_DataManager.bankAccounts) {
-		m_currentAccountComboBox->addItem(QString::fromStdString(account.name));
-	}
-	m_currentAccountComboBox->setCurrentText(QString::fromStdString(s_DataManager.r_CurrentBankAccount().name));
+	m_currentAccountComboBox->addItem("");
+	LoadAccountsToComboBox();
 
 	connect(m_currentAccountComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::HandleCurrentAccountChange);
 
@@ -66,6 +68,20 @@ void MainWindow::InitializeData() {
 	s_DataManager.SaveOperations();
 }
 
+void MainWindow::LoadAccountsToComboBox()
+{
+	for (int i = 1; i < m_currentAccountComboBox->count();) {
+		m_currentAccountComboBox->removeItem(i);
+	}
+
+	m_currentAccountComboBox->setItemText(0, QString::fromStdString(s_DataManager.bankAccounts[0].name));
+
+	for (int i = 1; i < s_DataManager.bankAccounts.size(); i++) {
+		const BankAccount& account = s_DataManager.bankAccounts[i];
+		m_currentAccountComboBox->addItem(QString::fromStdString(account.name));
+	}
+}
+
 void MainWindow::HandleOperationAdd(const Operation& operation)
 {
 	s_DataManager.r_CurrentBankAccount().operations.push_back(operation);
@@ -76,14 +92,24 @@ void MainWindow::HandleOperationAdd(const Operation& operation)
 
 void MainWindow::HandleManageCategories()
 {
-	ManageCategoriesDialog manageCategoriesDialog;
-	manageCategoriesDialog.exec();
+	ManageCategoriesDialog dialog;
+	dialog.exec();
 	UpdateUI();
 	m_addOperationForm->LoadCategories();
 }
 
+void MainWindow::HandleManageAccounts()
+{
+	int accountIndex = s_DataManager.GetCurrentAccountIndex();
+	ManageAccountsDialog dialog;
+	dialog.exec();
+	UpdateUI();
+	LoadAccountsToComboBox();
+	m_currentAccountComboBox->setCurrentIndex(accountIndex);
+}
+
 void MainWindow::HandleCurrentAccountChange()
 {
-	s_DataManager.r_CurrentBankAccount() = s_DataManager.bankAccounts[m_currentAccountComboBox->currentIndex()];
+	s_DataManager.SetCurrentAccountIndex(m_currentAccountComboBox->currentIndex());
 	UpdateUI();
 }

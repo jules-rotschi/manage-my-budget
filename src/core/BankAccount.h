@@ -32,9 +32,13 @@ public:
 		const std::string& description
 	);
 
+	std::string GetTypeString() const;
+
 	Amount GetTotalAmount() const;
 
 	void EditOperation(int id, const Operation& operation);
 	void DeleteOperation(int id);
+
+	void Edit(const BankAccount& account);
 };
 

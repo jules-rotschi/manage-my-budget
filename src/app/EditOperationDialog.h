@@ -35,6 +35,7 @@ private:
 	QPushButton* m_editButton;
 	QPushButton* m_cancelButton;
 
+private slots:
 	void HandleConfirm();
 };
 

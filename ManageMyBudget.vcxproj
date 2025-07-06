@@ -104,6 +104,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\app\EditAccountDialog.cpp" />
+    <ClCompile Include="src\app\AddAccountDialog.cpp" />
+    <ClCompile Include="src\app\ManageAccountsDialog.cpp" />
     <ClCompile Include="src\app\RenameCategoryDialog.cpp" />
     <ClCompile Include="src\app\ManageCategoriesDialog.cpp" />
     <ClCompile Include="src\core\BankAccount.cpp" />
@@ -125,6 +128,9 @@
     <QtMoc Include="src\app\AddOperationForm.h" />
     <QtMoc Include="src\app\ManageCategoriesDialog.h" />
     <QtMoc Include="src\app\RenameCategoryDialog.h" />
+    <QtMoc Include="src\app\ManageAccountsDialog.h" />
+    <QtMoc Include="src\app\AddAccountDialog.h" />
+    <QtMoc Include="src\app\EditAccountDialog.h" />
     <ClInclude Include="src\core\BankAccount.h" />
     <ClInclude Include="src\app\DataManager.h" />
     <ClInclude Include="src\core\Amount.h" />

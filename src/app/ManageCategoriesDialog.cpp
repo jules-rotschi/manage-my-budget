@@ -11,21 +11,27 @@ ManageCategoriesDialog::ManageCategoriesDialog(QWidget* parent)
 	m_categoriesWidget = new QWidget();
 	m_categoriesLayout = new QVBoxLayout(m_categoriesWidget);
 
-	m_newOperationFormWidget = new QWidget();
+	m_newCategoryFormWidget = new QWidget();
 
 	m_nameFieldLabel = new QLabel("Nouvelle catégorie");
 	m_nameLineEdit = new QLineEdit();
-	m_newOperationAddButton = new QPushButton("Ajouter");
+	m_newCategoryAddButton = new QPushButton("Ajouter");
 
-	connect(m_newOperationAddButton, &QPushButton::released, this, &ManageCategoriesDialog::HandleCategoryAdd);
+	connect(m_newCategoryAddButton, &QPushButton::released, this, &ManageCategoriesDialog::HandleCategoryAdd);
 
-	m_newOperationFormLayout = new QFormLayout(m_newOperationFormWidget);
-	m_newOperationFormLayout->addRow(m_nameFieldLabel, m_nameLineEdit);
-	m_newOperationFormLayout->addRow(m_newOperationAddButton);
+	m_defaultButton = new QPushButton("Retour");
+	m_defaultButton->setDefault(true);
+
+	connect(m_defaultButton, &QPushButton::released, this, &ManageCategoriesDialog::accept);
+
+	m_newCategoryFormLayout = new QFormLayout(m_newCategoryFormWidget);
+	m_newCategoryFormLayout->addRow(m_nameFieldLabel, m_nameLineEdit);
+	m_newCategoryFormLayout->addRow(m_newCategoryAddButton);
 
 	m_mainLayout = new QVBoxLayout(this);
 	m_mainLayout->addWidget(m_categoriesWidget);
-	m_mainLayout->addWidget(m_newOperationFormWidget);
+	m_mainLayout->addWidget(m_newCategoryFormWidget);
+	m_mainLayout->addWidget(m_defaultButton);
 
 	UpdateUI();
 }

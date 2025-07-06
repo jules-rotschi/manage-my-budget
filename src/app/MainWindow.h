@@ -8,7 +8,6 @@
 #include "core/Operation.h"
 #include "app/OperationsList.h"
 #include "app/AddOperationForm.h"
-#include "app/ManageCategoriesDialog.h"
 
 class MainWindow : public QWidget
 {
@@ -34,9 +33,11 @@ private:
 
 	void UpdateUI();
 	void InitializeData();
+	void LoadAccountsToComboBox();
 
 private slots:
 	void HandleOperationAdd(const Operation& operation);
 	void HandleManageCategories();
+	void HandleManageAccounts();
 	void HandleCurrentAccountChange();
 };

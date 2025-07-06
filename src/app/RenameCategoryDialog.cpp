@@ -5,13 +5,15 @@
 RenameCategoryDialog::RenameCategoryDialog(int categoryIndex, QWidget* parent)
 	: m_categoryIndex(categoryIndex), QDialog(parent)
 {
+	setWindowTitle(QString::fromStdString("Renommer \"" + s_DataManager.categories[categoryIndex] + "\""));
+
 	m_label = new QLabel("Nom");
 	m_lineEdit = new QLineEdit(QString::fromStdString(s_DataManager.categories[categoryIndex]));
 
 	m_confirmButton = new QPushButton("Renommer");
 	m_cancelButton = new QPushButton("Annuler");
 
-	m_confirmButton->isDefault();
+	m_confirmButton->setDefault(true);
 
 	connect(m_confirmButton, &QPushButton::released, this, &RenameCategoryDialog::HandleConfirm);
 	connect(m_cancelButton, &QPushButton::released, this, &RenameCategoryDialog::reject);

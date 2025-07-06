@@ -11,10 +11,20 @@ BankAccount& DataManager::r_CurrentBankAccount()
 	return bankAccounts[currentBankAccountIndex];
 }
 
+int DataManager::GetCurrentAccountIndex() const
+{
+	return currentBankAccountIndex;
+}
+
+void DataManager::SetCurrentAccountIndex(int index)
+{
+	currentBankAccountIndex = index;
+}
+
 void DataManager::SaveAccounts() const
 {
 	QDir directory;
-	directory.rmdir("data/accounts");
+	if (!RemoveDirectory("data/accounts")) return;
 	directory.mkdir("data");
 	directory.mkdir("data/accounts");
 
@@ -144,35 +154,43 @@ void DataManager::LoadData()
 	LoadOperations();
 }
 
-void DataManager::AddCategory(const std::string& newCategory)
+bool DataManager::AddCategory(const std::string& newCategory)
 {
 	for (const std::string& existingCategory : categories) {
 		if (newCategory == existingCategory) {
-			return;
+			return false;
 		}
 	}
 
 	categories.push_back(newCategory);
+	return true;
 }
 
-void DataManager::RenameCategory(int index, const std::string& newName)
+bool DataManager::RenameCategory(int index, const std::string& newName)
 {
+	for (const std::string& existingCategoryName : categories) {
+		if (newName == existingCategoryName) {
+			return false;
+		}
+	}
+
 	categories[index] = newName;
+	return true;
 }
 
-void DataManager::DeleteCategory(int index)
+bool DataManager::DeleteCategory(int index)
 {
 	if (categories.size() == 1) {
-		return;
+		return false;
 	}
 
 	if (categories[index] == "Opération interne") {
-		return;
+		return false;
 	}
 
 	for (Operation& operation : r_CurrentBankAccount().operations) {
 		if (operation.categoryIndex == index) {
-			return;
+			return false;
 		}
 
 		if (operation.categoryIndex > index) {
@@ -181,6 +199,60 @@ void DataManager::DeleteCategory(int index)
 	}
 
 	categories.erase(categories.begin() + index);
+	return true;
+}
+
+bool DataManager::AddAccount(const BankAccount& account)
+{
+	if (ToFileName(account.name).empty()) {
+		return false;
+	}
+
+	for (const BankAccount& existingAccount : bankAccounts) {
+		if (ToFileName(existingAccount.name) == ToFileName(account.name)) {
+			return false;
+		}
+	}
+
+	bankAccounts.push_back(account);
+	return true;
+}
+
+bool DataManager::EditAccount(int index, const BankAccount& account, const std::string& oldAccountName)
+{
+	if (ToFileName(account.name).empty()) {
+		return false;
+	}
+
+	for (int i = 0; i < bankAccounts.size(); i++) {
+		const BankAccount& existingAccount = bankAccounts[i];
+
+		bool isNameEdited = account.name != oldAccountName;
+
+		if (isNameEdited && ToFileName(existingAccount.name) == ToFileName(account.name)) {
+			return false;
+		}
+	}
+
+	bankAccounts[index].Edit(account);
+	return true;
+}
+
+bool DataManager::DeleteAccount(int index) {
+	if (bankAccounts.size() == 1) {
+		return false;
+	}
+
+	if (currentBankAccountIndex > index) {
+		currentBankAccountIndex--;
+	}
+
+	if (currentBankAccountIndex == index) {
+		SetCurrentAccountIndex(0);
+	}
+
+	bankAccounts.erase(bankAccounts.begin() + index);
+	return true;
 }
 
 void DataManager::LoadInternalCategory()
@@ -211,6 +283,34 @@ std::string DataManager::ToFileName(std::string str) const
 	}
 
 	return str;
+}
+
+bool DataManager::RemoveDirectory(const std::string& name) const
+{
+	bool isSuccessful = false;
+	QDir directory;
+
+	if (!directory.exists(QString::fromStdString(name))) return false;
+
+	QDir directoryToRemove(QString::fromStdString(name));
+
+	for (const QFileInfo& fileInfo : directoryToRemove.entryInfoList(
+		QDir::NoDotAndDotDot
+		| QDir::System
+		| QDir::Hidden
+		| QDir::AllDirs
+		| QDir::Files,
+		QDir::DirsFirst)
+	) {
+		if (fileInfo.isDir()) isSuccessful = RemoveDirectory(name + "/" + fileInfo.fileName().toStdString());
+		else isSuccessful = QFile::remove(QString::fromStdString(name) + "/" + fileInfo.fileName());
+
+		if (!isSuccessful) return isSuccessful;
+	}
+
+	directory.rmdir(QString::fromStdString(name));
+
+	return isSuccessful;
 }
 
 QDataStream& operator<<(QDataStream& stream, const BankAccount& account)

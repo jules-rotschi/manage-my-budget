@@ -33,6 +33,24 @@
     <Filter Include="Header Files\app">
       <UniqueIdentifier>{5494b434-e621-4432-9be2-573e5a85b6f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\app\Operation">
+      <UniqueIdentifier>{201be6f3-7764-4785-9730-ba91c84f57ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\app\Account">
+      <UniqueIdentifier>{1f206353-c9cd-4292-8c5e-335c313bceb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\app\Category">
+      <UniqueIdentifier>{cbe9e76b-1d70-45e9-a992-6ebb11439bb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\app\Account">
+      <UniqueIdentifier>{1723a43c-71a8-4941-9b81-cd257f453a3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\app\Category">
+      <UniqueIdentifier>{51c67f8f-92fd-4833-8507-f3031826c74f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\app\Operation">
+      <UniqueIdentifier>{969a1f96-fa0e-4bfc-8faa-febc735b5485}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\app\MainWindow.cpp">
@@ -50,43 +68,61 @@
     <ClCompile Include="src\app\DataManager.cpp">
       <Filter>Source Files\app</Filter>
     </ClCompile>
-    <ClCompile Include="src\app\EditOperationDialog.cpp">
-      <Filter>Source Files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\OperationsList.cpp">
-      <Filter>Source Files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\AddOperationForm.cpp">
-      <Filter>Source Files\app</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\BankAccount.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
+    <ClCompile Include="src\app\AddOperationForm.cpp">
+      <Filter>Source Files\app\Operation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\EditOperationDialog.cpp">
+      <Filter>Source Files\app\Operation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\ManageAccountsDialog.cpp">
+      <Filter>Source Files\app\Account</Filter>
+    </ClCompile>
     <ClCompile Include="src\app\ManageCategoriesDialog.cpp">
-      <Filter>Source Files\app</Filter>
+      <Filter>Source Files\app\Category</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\OperationsList.cpp">
+      <Filter>Source Files\app\Operation</Filter>
     </ClCompile>
     <ClCompile Include="src\app\RenameCategoryDialog.cpp">
-      <Filter>Source Files\app</Filter>
+      <Filter>Source Files\app\Category</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\AddAccountDialog.cpp">
+      <Filter>Source Files\app\Account</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\EditAccountDialog.cpp">
+      <Filter>Source Files\app\Account</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\app\MainWindow.h">
       <Filter>Header Files\app</Filter>
     </QtMoc>
+    <QtMoc Include="src\app\AddOperationForm.h">
+      <Filter>Header Files\app\Operation</Filter>
+    </QtMoc>
     <QtMoc Include="src\app\EditOperationDialog.h">
-      <Filter>Header Files\app</Filter>
+      <Filter>Header Files\app\Operation</Filter>
+    </QtMoc>
+    <QtMoc Include="src\app\ManageAccountsDialog.h">
+      <Filter>Header Files\app\Account</Filter>
     </QtMoc>
     <QtMoc Include="src\app\OperationsList.h">
-      <Filter>Header Files\app</Filter>
-    </QtMoc>
-    <QtMoc Include="src\app\AddOperationForm.h">
-      <Filter>Header Files\app</Filter>
-    </QtMoc>
-    <QtMoc Include="src\app\ManageCategoriesDialog.h">
-      <Filter>Header Files\app</Filter>
+      <Filter>Header Files\app\Operation</Filter>
     </QtMoc>
     <QtMoc Include="src\app\RenameCategoryDialog.h">
-      <Filter>Header Files\app</Filter>
+      <Filter>Header Files\app\Category</Filter>
+    </QtMoc>
+    <QtMoc Include="src\app\ManageCategoriesDialog.h">
+      <Filter>Header Files\app\Category</Filter>
+    </QtMoc>
+    <QtMoc Include="src\app\AddAccountDialog.h">
+      <Filter>Header Files\app\Account</Filter>
+    </QtMoc>
+    <QtMoc Include="src\app\EditAccountDialog.h">
+      <Filter>Header Files\app\Account</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

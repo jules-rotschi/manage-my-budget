@@ -13,6 +13,8 @@ public:
 	std::vector<BankAccount> bankAccounts;
 
 	BankAccount& r_CurrentBankAccount();
+	int GetCurrentAccountIndex() const;
+	void SetCurrentAccountIndex(int index);
 
 	void SaveAccounts() const;
 	void SaveOperations() const;
@@ -23,9 +25,13 @@ public:
 	void LoadCategories();
 	void LoadData();
 
-	void AddCategory(const std::string& category);
-	void RenameCategory(int index, const std::string& newName);
-	void DeleteCategory(int index);
+	bool AddCategory(const std::string& category);
+	bool RenameCategory(int index, const std::string& newName);
+	bool DeleteCategory(int index);
+
+	bool AddAccount(const BankAccount& account);
+	bool EditAccount(int index, const BankAccount& account, const std::string& oldAccountName);
+	bool DeleteAccount(int index);
 
 private:
 	int currentBankAccountIndex;
@@ -34,6 +40,8 @@ private:
 	void LoadDefaultAccount();
 
 	std::string ToFileName(std::string str) const;
+
+	bool RemoveDirectory(const std::string& name) const;
 };
 
 QDataStream& operator<<(QDataStream& stream, const BankAccount& account);

@@ -21,6 +21,8 @@ private:
 
 	QLayout* m_mainLayout;
 
+	QPushButton* m_defaultButton;
+
 	QWidget* m_categoriesWidget;
 	QVBoxLayout* m_categoriesLayout;
 	std::vector<QWidget*> m_categoryWidgets;
@@ -29,11 +31,11 @@ private:
 	std::vector<QPushButton*> m_categoryRenameButtons;
 	std::vector<QPushButton*> m_categoryDeleteButtons;
 
-	QWidget* m_newOperationFormWidget;
-	QFormLayout* m_newOperationFormLayout;
+	QWidget* m_newCategoryFormWidget;
+	QFormLayout* m_newCategoryFormLayout;
 	QLabel* m_nameFieldLabel;
 	QLineEdit* m_nameLineEdit;
-	QPushButton* m_newOperationAddButton;
+	QPushButton* m_newCategoryAddButton;
 
 	void ResetUI();
 	void UpdateUI();

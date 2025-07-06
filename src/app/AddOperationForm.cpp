@@ -48,6 +48,7 @@ AddOperationForm::AddOperationForm(QWidget* parent)
 	m_descriptionLineEdit = new QLineEdit();
 
 	m_addButton = new QPushButton("Ajouter l'opération");
+	m_addButton->setDefault(true);
 
 	connect(m_addButton, &QPushButton::released, this, &AddOperationForm::HandleAddButton);
 
