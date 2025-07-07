@@ -6,6 +6,7 @@
 #include <qlabel.h>
 #include <qcombobox.h>
 #include <qformlayout.h>
+#include <qlistwidget.h>
 
 class MonthlyReviewDialog : public QDialog
 {
@@ -24,9 +25,7 @@ private:
 	QLabel* m_yearLabel;
 	QComboBox* m_yearComboBox;
 
-	QWidget* m_categoriesWidget;
-	QVBoxLayout* m_categoriesLayout;
-	std::vector<QLabel*> m_categoryReviewLabels;
+	QListWidget* m_categoriesList;
 	QLabel* m_totalLabel;
 	QLabel* m_savingsLabel;
 

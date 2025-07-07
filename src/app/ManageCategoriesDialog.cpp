@@ -8,8 +8,7 @@ ManageCategoriesDialog::ManageCategoriesDialog(QWidget* parent)
 {
 	setWindowTitle("Catégories");
 
-	m_categoriesWidget = new QWidget();
-	m_categoriesLayout = new QVBoxLayout(m_categoriesWidget);
+	m_categoriesList = new QListWidget();
 
 	m_newCategoryFormWidget = new QWidget();
 
@@ -29,7 +28,7 @@ ManageCategoriesDialog::ManageCategoriesDialog(QWidget* parent)
 	m_newCategoryFormLayout->addRow(m_newCategoryAddButton);
 
 	m_mainLayout = new QVBoxLayout(this);
-	m_mainLayout->addWidget(m_categoriesWidget);
+	m_mainLayout->addWidget(m_categoriesList);
 	m_mainLayout->addWidget(m_newCategoryFormWidget);
 	m_mainLayout->addWidget(m_defaultButton);
 
@@ -38,15 +37,16 @@ ManageCategoriesDialog::ManageCategoriesDialog(QWidget* parent)
 
 void ManageCategoriesDialog::ResetUI()
 {
+	for (QListWidgetItem* item : m_categoryItems) {
+		delete item;
+	}
+
 	for (QWidget* widget : m_categoryWidgets) {
 		delete widget;
 	}
 
+	m_categoryItems.clear();
 	m_categoryWidgets.clear();
-	m_categoryLayouts.clear();
-	m_categoryLabels.clear();
-	m_categoryRenameButtons.clear();
-	m_categoryDeleteButtons.clear();
 }
 
 void ManageCategoriesDialog::UpdateUI()
@@ -56,6 +56,7 @@ void ManageCategoriesDialog::UpdateUI()
 	for (int i = 0; i < s_DataManager.categories.size(); i++) {
 		std::string category = s_DataManager.categories[i];
 
+		QListWidgetItem* categoryItem = new QListWidgetItem();
 		QWidget* categoryWidget = new QWidget();
 		QHBoxLayout* categoryLayout = new QHBoxLayout(categoryWidget);
 		QLabel* categoryLabel = new QLabel(QString::fromStdString(category));
@@ -74,17 +75,16 @@ void ManageCategoriesDialog::UpdateUI()
 			[this, i]() {HandleCategoryDelete(i); }
 		);
 
+		m_categoryItems.push_back(categoryItem);
 		m_categoryWidgets.push_back(categoryWidget);
-		m_categoryLayouts.push_back(categoryLayout);
-		m_categoryLabels.push_back(categoryLabel);
-		m_categoryRenameButtons.push_back(categoryRenameButton);
-		m_categoryDeleteButtons.push_back(categoryDeleteButton);
 
 		categoryLayout->addWidget(categoryLabel);
 		categoryLayout->addWidget(categoryRenameButton);
 		categoryLayout->addWidget(categoryDeleteButton);
 
-		m_categoriesLayout->addWidget(categoryWidget);
+		categoryItem->setSizeHint(categoryWidget->sizeHint());
+		m_categoriesList->addItem(categoryItem);
+		m_categoriesList->setItemWidget(categoryItem, categoryWidget);
 	}
 }
 

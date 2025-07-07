@@ -8,6 +8,7 @@
 #include <qboxlayout.h>
 #include <qformlayout.h>
 #include <qlineedit.h>
+#include <qlistwidget.h>
 
 class ManageCategoriesDialog : public QDialog
 {
@@ -23,13 +24,9 @@ private:
 
 	QPushButton* m_defaultButton;
 
-	QWidget* m_categoriesWidget;
-	QVBoxLayout* m_categoriesLayout;
+	QListWidget* m_categoriesList;
+	std::vector<QListWidgetItem*> m_categoryItems;
 	std::vector<QWidget*> m_categoryWidgets;
-	std::vector<QHBoxLayout*> m_categoryLayouts;
-	std::vector<QLabel*> m_categoryLabels;
-	std::vector<QPushButton*> m_categoryRenameButtons;
-	std::vector<QPushButton*> m_categoryDeleteButtons;
 
 	QWidget* m_newCategoryFormWidget;
 	QFormLayout* m_newCategoryFormLayout;

@@ -18,7 +18,7 @@ public:
 	OperationsList(QWidget* parent = nullptr);
 	~OperationsList();
 
-	void UpdateUI();
+	void UpdateUI(bool scrollDown = false);
 
 private:
 	int m_displayOperationsSinceMonths = 2;

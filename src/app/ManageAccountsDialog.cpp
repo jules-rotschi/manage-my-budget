@@ -10,8 +10,7 @@ ManageAccountsDialog::ManageAccountsDialog(QWidget* parent)
 {
 	setWindowTitle("Comptes bancaires");
 
-	m_accountsWidget = new QWidget();
-	m_accountsLayout = new QVBoxLayout(m_accountsWidget);
+	m_accountsList = new QListWidget();
 
 	m_addButton = new QPushButton("Ajouter un compte");
 
@@ -23,7 +22,7 @@ ManageAccountsDialog::ManageAccountsDialog(QWidget* parent)
 	connect(m_defaultButton, &QPushButton::released, this, &ManageAccountsDialog::accept);
 
 	m_mainLayout = new QVBoxLayout(this);
-	m_mainLayout->addWidget(m_accountsWidget);
+	m_mainLayout->addWidget(m_accountsList);
 	m_mainLayout->addWidget(m_addButton);
 	m_mainLayout->addWidget(m_defaultButton);
 
@@ -32,15 +31,16 @@ ManageAccountsDialog::ManageAccountsDialog(QWidget* parent)
 
 void ManageAccountsDialog::ResetUI()
 {
+	for (QListWidgetItem* item : m_accountItems) {
+		delete item;
+	}
+
 	for (QWidget* widget : m_accountWidgets) {
 		delete widget;
 	}
 
+	m_accountItems.clear();
 	m_accountWidgets.clear();
-	m_accountLayouts.clear();
-	m_accountLabels.clear();
-	m_accountEditButtons.clear();
-	m_accountDeleteButtons.clear();
 }
 
 void ManageAccountsDialog::UpdateUI()
@@ -50,6 +50,7 @@ void ManageAccountsDialog::UpdateUI()
 	for (int i = 0; i < s_DataManager.bankAccounts.size(); i++) {
 		BankAccount account = s_DataManager.bankAccounts[i];
 
+		QListWidgetItem* accountItem = new QListWidgetItem();
 		QWidget* accountWidget = new QWidget();
 		QHBoxLayout* accountLayout = new QHBoxLayout(accountWidget);
 		QLabel* accountLabel = new QLabel(QString::fromStdString(account.name + " (" + account.GetTypeString() + ") | " + account.GetTotalAmount().GetString()));
@@ -68,17 +69,16 @@ void ManageAccountsDialog::UpdateUI()
 			[this, i]() {HandleAccountDelete(i); }
 		);
 
+		m_accountItems.push_back(accountItem);
 		m_accountWidgets.push_back(accountWidget);
-		m_accountLayouts.push_back(accountLayout);
-		m_accountLabels.push_back(accountLabel);
-		m_accountEditButtons.push_back(accountEditButton);
-		m_accountDeleteButtons.push_back(accountDeleteButton);
 
 		accountLayout->addWidget(accountLabel);
 		accountLayout->addWidget(accountEditButton);
 		accountLayout->addWidget(accountDeleteButton);
 
-		m_accountsLayout->addWidget(accountWidget);
+		accountItem->setSizeHint(accountWidget->sizeHint());
+		m_accountsList->addItem(accountItem);
+		m_accountsList->setItemWidget(accountItem, accountWidget);
 	}
 }
 

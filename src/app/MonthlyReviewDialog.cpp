@@ -50,9 +50,7 @@ MonthlyReviewDialog::MonthlyReviewDialog(QWidget* parent)
 	m_monthSelectorLayout->addRow(m_yearLabel, m_yearComboBox);
 	m_monthSelectorLayout->addRow(m_monthLabel, m_monthComboBox);
 
-	m_categoriesWidget = new QWidget();
-
-	m_categoriesLayout = new QVBoxLayout(m_categoriesWidget);
+	m_categoriesList = new QListWidget();
 
 	m_totalLabel = new QLabel();
 
@@ -75,14 +73,9 @@ void MonthlyReviewDialog::UpdateUI()
 	Accountant accountant(s_DataManager.bankAccounts);
 
 	for (int i = 1; i < s_DataManager.categories.size(); i++) {
-		QLabel* categoryReviewLabel =
-			new QLabel(QString::fromStdString(
-				s_DataManager.categories[i] + " : " + accountant.GetMonthlyAmount(m_year, m_month, i).GetString()
-			));
-
-		m_categoryReviewLabels.push_back(categoryReviewLabel);
-
-		m_categoriesLayout->addWidget(categoryReviewLabel);
+		m_categoriesList->addItem(QString::fromStdString(
+			s_DataManager.categories[i] + " : " + accountant.GetMonthlyAmount(m_year, m_month, i).GetString()
+		));
 	}
 
 	m_totalLabel->setText(QString::fromStdString("Total : " + accountant.GetMonthlyAmount(m_year, m_month).GetString()));
@@ -90,7 +83,7 @@ void MonthlyReviewDialog::UpdateUI()
 	m_savingsLabel->setText(QString::fromStdString("Montant épargné : " + accountant.GetMonthlySavings(m_year, m_month).GetString()));
 	
 	m_mainLayout->addWidget(m_monthSelectorWidget);
-	m_mainLayout->addWidget(m_categoriesWidget);
+	m_mainLayout->addWidget(m_categoriesList);
 	m_mainLayout->addWidget(m_totalLabel);
 	m_mainLayout->addWidget(m_savingsLabel);
 	m_mainLayout->addWidget(m_defaultButton);
@@ -98,10 +91,7 @@ void MonthlyReviewDialog::UpdateUI()
 
 void MonthlyReviewDialog::ResetUI()
 {
-	for (QLabel* label : m_categoryReviewLabels) {
-		delete label;
-	}
-	m_categoryReviewLabels.clear();
+	m_categoriesList->clear();
 }
 
 void MonthlyReviewDialog::HandleMonthSelectorChange()

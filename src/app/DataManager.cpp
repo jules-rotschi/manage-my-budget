@@ -156,6 +156,10 @@ void DataManager::LoadData()
 
 bool DataManager::AddCategory(const std::string& newCategory)
 {
+	if (newCategory.empty()) {
+		return false;
+	}
+
 	for (const std::string& existingCategory : categories) {
 		if (newCategory == existingCategory) {
 			return false;
@@ -163,12 +167,16 @@ bool DataManager::AddCategory(const std::string& newCategory)
 	}
 
 	categories.push_back(newCategory);
-	std::sort(categories.begin(), categories.end());
+	//std::sort(categories.begin(), categories.end());
 	return true;
 }
 
 bool DataManager::RenameCategory(int index, const std::string& newName)
 {
+	if (newName.empty()) {
+		return false;
+	}
+
 	for (const std::string& existingCategoryName : categories) {
 		if (newName == existingCategoryName) {
 			return false;
@@ -176,6 +184,7 @@ bool DataManager::RenameCategory(int index, const std::string& newName)
 	}
 
 	categories[index] = newName;
+	//std::sort(categories.begin(), categories.end());
 	return true;
 }
 

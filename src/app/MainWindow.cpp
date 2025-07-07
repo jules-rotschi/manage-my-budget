@@ -58,15 +58,15 @@ MainWindow::MainWindow(QWidget* parent)
 	m_mainLayout->addWidget(m_operationsList);
 	m_mainLayout->addWidget(m_addOperationForm);
 
-	UpdateUI();
+	UpdateUI(true);
 }
 
 MainWindow::~MainWindow()
 {}
 
-void MainWindow::UpdateUI()
+void MainWindow::UpdateUI(bool scrollDown)
 {
-	m_operationsList->UpdateUI();
+	m_operationsList->UpdateUI(scrollDown);
 }
 
 void MainWindow::InitializeData() {
@@ -95,8 +95,7 @@ void MainWindow::HandleOperationAdd(const Operation& operation)
 {
 	s_DataManager.AddOperation(operation);
 	s_DataManager.SaveAccounts();
-
-	UpdateUI();
+	UpdateUI(true);
 }
 
 void MainWindow::HandleManageCategories()
@@ -120,7 +119,7 @@ void MainWindow::HandleManageAccounts()
 void MainWindow::HandleCurrentAccountChange()
 {
 	s_DataManager.SetCurrentAccountIndex(m_currentAccountComboBox->currentIndex());
-	UpdateUI();
+	UpdateUI(true);
 }
 
 void MainWindow::HandleMonthlyReview() const

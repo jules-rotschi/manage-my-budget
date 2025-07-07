@@ -34,7 +34,7 @@ private:
 	OperationsList* m_operationsList;
 	AddOperationForm* m_addOperationForm;
 
-	void UpdateUI();
+	void UpdateUI(bool scrollDown = false);
 	void InitializeData();
 	void LoadAccountsToComboBox();
 

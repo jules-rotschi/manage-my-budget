@@ -48,8 +48,9 @@ OperationsList::OperationsList(QWidget* parent)
 
 OperationsList::~OperationsList() {}
 
-void OperationsList::UpdateUI()
+void OperationsList::UpdateUI(bool scrollDown)
 {
+	std::cout << "Sould update list (scrollDown = " << scrollDown << std::endl;
 	ResetUI();
 
 	m_totalLabel->setText("Solde du compte : " + QString::fromStdString(s_DataManager.r_CurrentBankAccount().GetTotalAmount().GetString()));
@@ -62,7 +63,7 @@ void OperationsList::UpdateUI()
 			continue;
 		}
 
-		QString descriptionString = operation.description.size() > 0
+		QString descriptionString = !operation.description.empty()
 			? " (" + QString::fromStdString(operation.description) + ")"
 			: "";
 
@@ -112,7 +113,11 @@ void OperationsList::UpdateUI()
 		m_operationsList->setItemWidget(operationItem, operationWidget);
 	}
 
-	m_operationsList->scrollToBottom();
+	if (scrollDown) {
+		std::cout << "Should";
+		m_operationsList->scrollToBottom();
+		std::cout << " scroll down" << std::endl;
+	}
 }
 
 void OperationsList::ResetUI()
@@ -198,5 +203,5 @@ void OperationsList::HandleDisplayFromChange()
 		break;
 	}
 
-	UpdateUI();
+	UpdateUI(true);
 }

@@ -8,6 +8,7 @@
 #include <qboxlayout.h>
 #include <qformlayout.h>
 #include <qlineedit.h>
+#include <qlistwidget.h>
 
 class ManageAccountsDialog : public QDialog
 {
@@ -21,13 +22,9 @@ private:
 
 	QLayout* m_mainLayout;
 
-	QWidget* m_accountsWidget;
-	QVBoxLayout* m_accountsLayout;
+	QListWidget* m_accountsList;
+	std::vector<QListWidgetItem*> m_accountItems;
 	std::vector<QWidget*> m_accountWidgets;
-	std::vector<QHBoxLayout*> m_accountLayouts;
-	std::vector<QLabel*> m_accountLabels;
-	std::vector<QPushButton*> m_accountEditButtons;
-	std::vector<QPushButton*> m_accountDeleteButtons;
 
 	QPushButton* m_addButton;
 

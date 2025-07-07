@@ -36,9 +36,7 @@ YearlyReviewDialog::YearlyReviewDialog(QWidget* parent)
 	m_yearSelectorLayout = new QFormLayout(m_yearSelectorWidget);
 	m_yearSelectorLayout->addRow(m_yearLabel, m_yearComboBox);
 
-	m_categoriesWidget = new QWidget();
-
-	m_categoriesLayout = new QVBoxLayout(m_categoriesWidget);
+	m_categoriesList = new QListWidget();
 
 	m_totalLabel = new QLabel();
 
@@ -61,14 +59,10 @@ void YearlyReviewDialog::UpdateUI()
 	Accountant accountant(s_DataManager.bankAccounts);
 
 	for (int i = 1; i < s_DataManager.categories.size(); i++) {
-		QLabel* categoryReviewLabel =
-			new QLabel(QString::fromStdString(
+		m_categoriesList->addItem(QString::fromStdString(
 				s_DataManager.categories[i] + " : " + accountant.GetYearlyAmount(m_year, i).GetString()
 			));
 
-		m_categoryReviewLabels.push_back(categoryReviewLabel);
-
-		m_categoriesLayout->addWidget(categoryReviewLabel);
 	}
 
 	m_totalLabel->setText(QString::fromStdString("Total : " + accountant.GetYearlyAmount(m_year).GetString()));
@@ -76,7 +70,7 @@ void YearlyReviewDialog::UpdateUI()
 	m_savingsLabel->setText(QString::fromStdString("Montant épargné : " + accountant.GetYearlySavings(m_year).GetString()));
 
 	m_mainLayout->addWidget(m_yearSelectorWidget);
-	m_mainLayout->addWidget(m_categoriesWidget);
+	m_mainLayout->addWidget(m_categoriesList);
 	m_mainLayout->addWidget(m_totalLabel);
 	m_mainLayout->addWidget(m_savingsLabel);
 	m_mainLayout->addWidget(m_defaultButton);
@@ -84,10 +78,7 @@ void YearlyReviewDialog::UpdateUI()
 
 void YearlyReviewDialog::ResetUI()
 {
-	for (QLabel* label : m_categoryReviewLabels) {
-		delete label;
-	}
-	m_categoryReviewLabels.clear();
+	m_categoriesList->clear();
 }
 
 void YearlyReviewDialog::HandleYearSelectorChange()
