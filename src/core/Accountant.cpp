@@ -8,9 +8,7 @@ Amount Accountant::GetMonthlyAmount(int year, int month) const
 	Amount amount = 0;
 
 	for (const BankAccount& account : m_accounts) {
-		if (account.type == AccountType::CURRENT) {
 			amount += account.GetMonthlyAmount(year, month);
-		}
 	}
 
 	return amount;
@@ -21,9 +19,7 @@ Amount Accountant::GetMonthlyAmount(int year, int month, int categoryIndex) cons
 	Amount amount = 0;
 
 	for (const BankAccount& account : m_accounts) {
-		if (account.type == AccountType::CURRENT) {
 			amount += account.GetMonthlyAmount(year, month, categoryIndex);
-		}
 	}
 
 	return amount;
@@ -34,9 +30,7 @@ Amount Accountant::GetYearlyAmount(int year) const
 	Amount amount = 0;
 
 	for (const BankAccount& account : m_accounts) {
-		if (account.type == AccountType::CURRENT) {
 			amount += account.GetYearlyAmount(year);
-		}
 	}
 
 	return amount;
@@ -47,9 +41,7 @@ Amount Accountant::GetYearlyAmount(int year, int categoryIndex) const
 	Amount amount = 0;
 
 	for (const BankAccount& account : m_accounts) {
-		if (account.type == AccountType::CURRENT) {
 			amount += account.GetYearlyAmount(year, categoryIndex);
-		}
 	}
 
 	return amount;

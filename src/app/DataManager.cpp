@@ -163,6 +163,7 @@ bool DataManager::AddCategory(const std::string& newCategory)
 	}
 
 	categories.push_back(newCategory);
+	std::sort(categories.begin(), categories.end());
 	return true;
 }
 
@@ -252,6 +253,13 @@ bool DataManager::DeleteAccount(int index) {
 	}
 
 	bankAccounts.erase(bankAccounts.begin() + index);
+	return true;
+}
+
+bool DataManager::AddOperation(const Operation& operation)
+{
+	r_CurrentBankAccount().AddOperation(operation);
+
 	return true;
 }
 

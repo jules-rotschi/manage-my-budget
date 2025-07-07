@@ -1,5 +1,7 @@
 ﻿#include "BankAccount.h"
 
+#include <algorithm>
+
 int BankAccount::GetNextIdAndIncrement()
 {
 	int id = nextId;
@@ -30,6 +32,21 @@ Operation BankAccount::GetNewOperation(
 	operation.description = description;
 
 	return operation;
+}
+
+void BankAccount::SortOperations()
+{
+	std::sort(operations.begin(), operations.end(), [](const Operation& op1, const Operation& op2) {
+		if (op1.year != op2.year) {
+			return op1.year < op2.year;
+		}
+
+		if (op1.month != op2.month) {
+			return op1.month < op2.month;
+		}
+
+		return op1.id < op2.id;
+	});
 }
 
 std::string BankAccount::GetTypeString() const
@@ -114,11 +131,18 @@ Amount BankAccount::GetYearlyAmount(int year, int categoryIndex) const
 	return amount;
 }
 
+void BankAccount::AddOperation(const Operation& operation)
+{
+	operations.push_back(operation);
+	SortOperations();
+}
+
 void BankAccount::EditOperation(int id, const Operation& operation)
 {
 	for (Operation& oldOperation : operations) {
 		if (oldOperation.id == id) {
 			oldOperation.Edit(operation);
+			SortOperations();
 			return;
 		}
 	}

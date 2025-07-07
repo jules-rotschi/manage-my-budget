@@ -17,12 +17,8 @@ public:
 	void SetCurrentAccountIndex(int index);
 
 	void SaveAccounts() const;
-	void SaveOperations() const;
 	void SaveCategories() const;
 
-	void LoadAccounts();
-	void LoadOperations();
-	void LoadCategories();
 	void LoadData();
 
 	bool AddCategory(const std::string& category);
@@ -33,8 +29,17 @@ public:
 	bool EditAccount(int index, const BankAccount& account, const std::string& oldAccountName);
 	bool DeleteAccount(int index);
 
+	bool AddOperation(const Operation& operation);
+	bool EditOperation(const Operation& operation);
+
 private:
 	int currentBankAccountIndex;
+
+	void LoadCategories();
+	void LoadAccounts();
+	void LoadOperations();
+
+	void SaveOperations() const;
 
 	void LoadInternalCategory();
 	void LoadDefaultAccount();

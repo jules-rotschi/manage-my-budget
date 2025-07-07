@@ -114,5 +114,5 @@ void ManageCategoriesDialog::HandleCategoryDelete(int index)
 	UpdateUI();
 
 	s_DataManager.SaveCategories();
-	s_DataManager.SaveOperations();
+	s_DataManager.SaveAccounts();
 }

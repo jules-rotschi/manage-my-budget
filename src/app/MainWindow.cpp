@@ -73,7 +73,6 @@ void MainWindow::InitializeData() {
 	s_DataManager.LoadData();
 	s_DataManager.SaveCategories();
 	s_DataManager.SaveAccounts();
-	s_DataManager.SaveOperations();
 }
 
 void MainWindow::LoadAccountsToComboBox()
@@ -82,17 +81,19 @@ void MainWindow::LoadAccountsToComboBox()
 		m_currentAccountComboBox->removeItem(i);
 	}
 
-	m_currentAccountComboBox->setItemText(0, QString::fromStdString(s_DataManager.bankAccounts[0].name));
+	m_currentAccountComboBox->setItemText(
+		0, QString::fromStdString(s_DataManager.bankAccounts[0].name + " (" + s_DataManager.bankAccounts[0].GetTypeString() + ")")
+	);
 
 	for (int i = 1; i < s_DataManager.bankAccounts.size(); i++) {
 		const BankAccount& account = s_DataManager.bankAccounts[i];
-		m_currentAccountComboBox->addItem(QString::fromStdString(account.name));
+		m_currentAccountComboBox->addItem(QString::fromStdString(account.name + " (" + account.GetTypeString() + ")"));
 	}
 }
 
 void MainWindow::HandleOperationAdd(const Operation& operation)
 {
-	s_DataManager.r_CurrentBankAccount().operations.push_back(operation);
+	s_DataManager.AddOperation(operation);
 	s_DataManager.SaveAccounts();
 
 	UpdateUI();

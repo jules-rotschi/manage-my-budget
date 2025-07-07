@@ -32,6 +32,8 @@ public:
 		const std::string& description
 	);
 
+	void SortOperations();
+
 	std::string GetTypeString() const;
 
 	Amount GetTotalAmount() const;
@@ -41,6 +43,7 @@ public:
 	Amount GetYearlyAmount(int year) const;
 	Amount GetYearlyAmount(int year, int categoryIndex) const;
 
+	void AddOperation(const Operation& operation);
 	void EditOperation(int id, const Operation& operation);
 	void DeleteOperation(int id);
 

@@ -4,6 +4,9 @@
 #include <qlabel.h>
 #include <qboxlayout.h>
 #include <qpushbutton.h>
+#include <qlistwidget.h>
+#include <qformlayout.h>
+#include <qcombobox.h>
 
 #include <core/Operation.h>
 
@@ -18,12 +21,19 @@ public:
 	void UpdateUI();
 
 private:
+	int m_displayOperationsSinceMonths = 2;
+
 	QVBoxLayout* m_mainLayout;
+
+	QWidget* m_displaySinceWidget;
+	QFormLayout* m_displaySinceLayout;
+	QLabel* m_displaySinceLabel;
+	QComboBox* m_displaySinceComboBox;
 
 	QLabel* m_totalLabel;
 
-	QWidget* m_operationsView;
-	QVBoxLayout* m_operationsLayout;
+	QListWidget* m_operationsList;
+	std::vector<QListWidgetItem*> m_operationItems;
 	std::vector<QWidget*> m_operationWidgets;
 	std::vector<QHBoxLayout*> m_operationLayouts;
 	std::vector<QLabel*> m_operationLabels;
@@ -32,8 +42,12 @@ private:
 
 	void ResetUI();
 
+	bool IsOperationInDisplayableMonth(const Operation& operation, const QDate& currentDate) const;
+
 private slots:
 	void HandleOperationEdit(const Operation& operation);
 	void HandleOperationDelete(int id);
+
+	void HandleDisplayFromChange();
 };
 
