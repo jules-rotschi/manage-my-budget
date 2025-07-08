@@ -47,8 +47,8 @@ void ManageAccountsDialog::UpdateUI()
 {
 	ResetUI();
 
-	for (int i = 0; i < s_DataManager.bankAccounts.size(); i++) {
-		BankAccount account = s_DataManager.bankAccounts[i];
+	for (int i = 0; i < s_DataManager.r_CurrentProfile().bankAccounts.size(); i++) {
+		BankAccount account = s_DataManager.r_CurrentProfile().bankAccounts[i];
 
 		QListWidgetItem* accountItem = new QListWidgetItem();
 		QWidget* accountWidget = new QWidget();
@@ -90,7 +90,7 @@ void ManageAccountsDialog::HandleAccountAdd()
 
 	if (dialog.exec()) {
 		UpdateUI();
-		s_DataManager.SaveAccounts();
+		s_DataManager.SaveProfiles();
 	}
 }
 
@@ -100,14 +100,14 @@ void ManageAccountsDialog::HandleAccountEdit(int index)
 
 	if (dialog.exec()) {
 		UpdateUI();
-		s_DataManager.SaveAccounts();
+		s_DataManager.SaveProfiles();
 	}
 }
 
 void ManageAccountsDialog::HandleAccountDelete(int index)
 {
-	if (s_DataManager.DeleteAccount(index)) {
+	if (s_DataManager.r_CurrentProfile().DeleteAccount(index)) {
 		UpdateUI();
-		s_DataManager.SaveAccounts();
+		s_DataManager.SaveProfiles();
 	}
 }

@@ -6,29 +6,29 @@
 #include <qdir.h>
 #include <qdebug.h>
 
-BankAccount& DataManager::r_CurrentBankAccount()
+Profile& DataManager::r_CurrentProfile()
 {
-	return bankAccounts[currentBankAccountIndex];
+	return profiles[currentProfileIndex];
 }
 
-int DataManager::GetCurrentAccountIndex() const
+int DataManager::GetCurrentProfileIndex() const
 {
-	return currentBankAccountIndex;
+	return currentProfileIndex;
 }
 
-void DataManager::SetCurrentAccountIndex(int index)
+void DataManager::SetCurrentProfileIndex(int index)
 {
-	currentBankAccountIndex = index;
+	currentProfileIndex = index;
 }
 
-void DataManager::SaveAccounts() const
+void DataManager::SaveProfiles() const
 {
 	QDir directory;
-	if (!RemoveDirectory("data/accounts")) return;
+	RemoveDirectory("data/profiles");
 	directory.mkdir("data");
-	directory.mkdir("data/accounts");
+	directory.mkdir("data/profiles");
 
-	QFile file("data/accounts/accounts.dat");
+	QFile file("data/profiles/profiles.dat");
 
 	if (!file.open(QIODeviceBase::WriteOnly)) {
 		return;
@@ -36,8 +36,36 @@ void DataManager::SaveAccounts() const
 
 	QDataStream stream(&file);
 
-	for (const BankAccount& account : bankAccounts) {
-		stream << account;
+	for (const Profile& profile : profiles) {
+		stream << profile;
+		directory.mkdir(QString::fromStdString("data/profiles/" + ToFileName(profile.name)));
+	}
+
+	SaveCategories();
+	SaveAccounts();
+}
+
+void DataManager::SaveAccounts() const
+{
+	QDir directory;
+	directory.mkdir("data");
+	directory.mkdir("data/profiles");
+
+	for (const Profile& profile : profiles) {
+		RemoveDirectory("data/profiles/" + ToFileName(profile.name) + "/accounts");
+		directory.mkdir(QString::fromStdString("data/profiles/" + ToFileName(profile.name) + "/accounts"));
+		QFile file(QString::fromStdString("data/profiles/" + ToFileName(profile.name) + "/accounts/accounts.dat"));
+
+		if (!file.open(QIODeviceBase::WriteOnly)) {
+			return;
+		}
+
+		QDataStream stream(&file);
+
+		for (const BankAccount& account : profile.bankAccounts) {
+			stream << account;
+			directory.mkdir(QString::fromStdString("data/profiles/" + ToFileName(profile.name) + "/accounts/" + ToFileName(account.name)));
+		}
 	}
 
 	SaveOperations();
@@ -47,21 +75,23 @@ void DataManager::SaveOperations() const
 {
 	QDir directory;
 	directory.mkdir("data");
-	directory.mkdir("data/accounts");
+	directory.mkdir("data/profiles");
 
-	for (const BankAccount& account : bankAccounts) {
-		directory.mkdir(QString::fromStdString("data/accounts/" + ToFileName(account.name)));
+	for (const Profile& profile : profiles) {
+		directory.mkdir(QString::fromStdString("data/profiles/" + ToFileName(profile.name) + "/accounts"));
 
-		QFile file(QString::fromStdString("data/accounts/" + ToFileName(account.name) + "/operations.dat"));
+		for (const BankAccount& account : profile.bankAccounts) {
+			QFile file(QString::fromStdString("data/profiles/" + ToFileName(profile.name) + "/accounts/" + ToFileName(account.name) + "/operations.dat"));
 
-		if (!file.open(QIODeviceBase::WriteOnly)) {
-			return;
-		}
+			if (!file.open(QIODeviceBase::WriteOnly)) {
+				return;
+			}
 
-		QDataStream stream(&file);
+			QDataStream stream(&file);
 
-		for (const Operation& operation : account.operations) {
-			stream << operation;
+			for (const Operation& operation : account.operations) {
+				stream << operation;
+			}
 		}
 	}
 }
@@ -70,218 +100,171 @@ void DataManager::SaveCategories() const
 {
 	QDir directory;
 	directory.mkdir("data");
+	directory.mkdir("data/profiles");
 
-	QFile file("data/categories.dat");
+	for (const Profile& profile : profiles) {
+		QFile file(QString::fromStdString("data/profiles/" + ToFileName(profile.name) + "/categories.dat"));
 
-	if (!file.open(QIODeviceBase::WriteOnly)) {
-		return;
-	}
+		if (!file.open(QIODeviceBase::WriteOnly)) {
+			return;
+		}
 
-	QDataStream stream(&file);
+		QDataStream stream(&file);
 
-	for (const std::string& category : categories) {
-		stream << QString::fromStdString(category);
+		for (const std::string& category : profile.categories) {
+			stream << QString::fromStdString(category);
+		}
 	}
 }
 
-void DataManager::LoadAccounts()
+void DataManager::LoadProfiles()
 {
-	QFile file("data/accounts/accounts.dat");
+	QFile file("data/profiles/profiles.dat");
 
 	if (!file.open(QIODeviceBase::ReadOnly)) {
-		LoadDefaultAccount();
+		LoadDefaultProfile();
 		return;
 	}
 
 	QDataStream stream(&file);
 
 	while (!file.atEnd()) {
-		BankAccount account;
-		stream >> account;
-		bankAccounts.push_back(account);
+		Profile profile;
+		stream >> profile;
+		profiles.push_back(profile);
 	}
 
-	if (bankAccounts.empty()) {
-		LoadDefaultAccount();
+	if (profiles.empty()) {
+		LoadDefaultProfile();
 	}
 }
 
-void DataManager::LoadOperations()
+void DataManager::LoadAccounts()
 {
-	for (BankAccount& account : bankAccounts) {
-		QFile file(QString::fromStdString("data/accounts/" + ToFileName(account.name) + "/operations.dat"));
+	for (Profile& profile : profiles) {
+		QFile file(QString::fromStdString("data/profiles/" + ToFileName(profile.name) + "/accounts/accounts.dat"));
 
 		if (!file.open(QIODeviceBase::ReadOnly)) {
-			return;
+			profile.bankAccounts.push_back(BankAccount::Default());
 		}
 
 		QDataStream stream(&file);
 
 		while (!file.atEnd()) {
-			Operation operation;
-			stream >> operation;
-			account.operations.push_back(operation);
+			BankAccount account;
+			stream >> account;
+			profile.bankAccounts.push_back(account);
+		}
+	}
+}
+
+void DataManager::LoadOperations()
+{
+	for (Profile& profile : profiles) {
+		for (BankAccount& account : profile.bankAccounts) {
+			QFile file(QString::fromStdString("data/profiles/" + ToFileName(profile.name) + "/accounts/" + ToFileName(account.name) + "/operations.dat"));
+
+			if (!file.open(QIODeviceBase::ReadOnly)) {
+				return;
+			}
+
+			QDataStream stream(&file);
+
+			while (!file.atEnd()) {
+				Operation operation;
+				stream >> operation;
+				account.operations.push_back(operation);
+			}
 		}
 	}
 }
 
 void DataManager::LoadCategories()
 {
-	QFile file("data/categories.dat");
+	for (Profile& profile : profiles) {
+		QFile file(QString::fromStdString("data/profiles/" + ToFileName(profile.name) + "/categories.dat"));
 
-	if (!file.open(QIODeviceBase::ReadOnly)) {
-		LoadInternalCategory();
-		return;
-	}
+		if (!file.open(QIODeviceBase::ReadOnly)) {
+			profile.categories.push_back("Opération interne");
+			return;
+		}
 
-	QDataStream dataStream(&file);
+		QDataStream dataStream(&file);
 
-	while (!file.atEnd()) {
-		QString category;
-		dataStream >> category;
-		categories.push_back(category.toStdString());
-	}
-
-	if (categories.empty()) {
-		LoadInternalCategory();
+		while (!file.atEnd()) {
+			QString category;
+			dataStream >> category;
+			profile.categories.push_back(category.toStdString());
+		}
 	}
 }
 
 void DataManager::LoadData()
 {
+	LoadProfiles();
 	LoadCategories();
 	LoadAccounts();
 	LoadOperations();
 }
 
-bool DataManager::AddCategory(const std::string& newCategory)
+bool DataManager::AddProfile(const Profile& profile)
 {
-	if (newCategory.empty()) {
+	if (ToFileName(profile.name).empty()) {
 		return false;
 	}
 
-	for (const std::string& existingCategory : categories) {
-		if (newCategory == existingCategory) {
+	for (const Profile& existingProfile : profiles) {
+		if (ToFileName(existingProfile.name) == ToFileName(profile.name)) {
 			return false;
 		}
 	}
 
-	categories.push_back(newCategory);
-	//std::sort(categories.begin(), categories.end());
+	profiles.push_back(profile);
 	return true;
 }
 
-bool DataManager::RenameCategory(int index, const std::string& newName)
+bool DataManager::EditProfile(int index, const Profile& profile, const std::string& oldName)
 {
-	if (newName.empty()) {
+	if (ToFileName(profile.name).empty()) {
 		return false;
 	}
 
-	for (const std::string& existingCategoryName : categories) {
-		if (newName == existingCategoryName) {
+	for (int i = 0; i < profiles.size(); i++) {
+		const Profile& existingProfile = profiles[i];
+
+		bool isNameEdited = profile.name != oldName;
+
+		if (isNameEdited && ToFileName(existingProfile.name) == ToFileName(profile.name)) {
 			return false;
 		}
 	}
 
-	categories[index] = newName;
-	//std::sort(categories.begin(), categories.end());
+	profiles[index].Rename(profile.name);
 	return true;
 }
 
-bool DataManager::DeleteCategory(int index)
-{
-	if (categories.size() == 1) {
+bool DataManager::DeleteProfile(int index) {
+	if (profiles.size() == 1) {
 		return false;
 	}
 
-	if (categories[index] == "Opération interne") {
-		return false;
+	if (currentProfileIndex > index) {
+		currentProfileIndex--;
 	}
 
-	for (Operation& operation : r_CurrentBankAccount().operations) {
-		if (operation.categoryIndex == index) {
-			return false;
-		}
-
-		if (operation.categoryIndex > index) {
-			operation.categoryIndex--;
-		}
+	if (currentProfileIndex == index) {
+		SetCurrentProfileIndex(0);
 	}
 
-	categories.erase(categories.begin() + index);
+	profiles.erase(profiles.begin() + index);
 	return true;
 }
 
-bool DataManager::AddAccount(const BankAccount& account)
+void DataManager::LoadDefaultProfile()
 {
-	if (ToFileName(account.name).empty()) {
-		return false;
-	}
-
-	for (const BankAccount& existingAccount : bankAccounts) {
-		if (ToFileName(existingAccount.name) == ToFileName(account.name)) {
-			return false;
-		}
-	}
-
-	bankAccounts.push_back(account);
-	return true;
-}
-
-bool DataManager::EditAccount(int index, const BankAccount& account, const std::string& oldAccountName)
-{
-	if (ToFileName(account.name).empty()) {
-		return false;
-	}
-
-	for (int i = 0; i < bankAccounts.size(); i++) {
-		const BankAccount& existingAccount = bankAccounts[i];
-
-		bool isNameEdited = account.name != oldAccountName;
-
-		if (isNameEdited && ToFileName(existingAccount.name) == ToFileName(account.name)) {
-			return false;
-		}
-	}
-
-	bankAccounts[index].Edit(account);
-	return true;
-}
-
-bool DataManager::DeleteAccount(int index) {
-	if (bankAccounts.size() == 1) {
-		return false;
-	}
-
-	if (currentBankAccountIndex > index) {
-		currentBankAccountIndex--;
-	}
-
-	if (currentBankAccountIndex == index) {
-		SetCurrentAccountIndex(0);
-	}
-
-	bankAccounts.erase(bankAccounts.begin() + index);
-	return true;
-}
-
-bool DataManager::AddOperation(const Operation& operation)
-{
-	r_CurrentBankAccount().AddOperation(operation);
-
-	return true;
-}
-
-void DataManager::LoadInternalCategory()
-{
-	categories.emplace_back("Opération interne");
-}
-
-void DataManager::LoadDefaultAccount()
-{
-	BankAccount defaultAccount;
-	defaultAccount.name = "Mon premier compte";
-	bankAccounts.push_back(defaultAccount);
+	Profile defaultProfile;
+	defaultProfile.name = "Profil principal";
+	profiles.push_back(defaultProfile);
 }
 
 std::string DataManager::ToFileName(std::string str) const
@@ -328,6 +311,26 @@ bool DataManager::RemoveDirectory(const std::string& name) const
 	directory.rmdir(QString::fromStdString(name));
 
 	return isSuccessful;
+}
+
+QDataStream& operator<<(QDataStream& stream, const Profile& profile)
+{
+	stream
+		<< QString::fromStdString(profile.name);
+
+	return stream;
+}
+
+QDataStream& operator>>(QDataStream& stream, Profile& profile)
+{
+	QString name;
+
+	stream
+		>> name;
+
+	profile.name = name.toStdString();
+
+	return stream;
 }
 
 QDataStream& operator<<(QDataStream& stream, const BankAccount& account)

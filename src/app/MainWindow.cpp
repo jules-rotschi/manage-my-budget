@@ -9,6 +9,7 @@
 #include "app/DataManager.h"
 #include "app/EditOperationDialog.h"
 #include "app/ManageCategoriesDialog.h"
+#include "app/ManageProfilesDialog.h"
 #include "app/ManageAccountsDialog.h"
 #include "app/MonthlyReviewDialog.h"
 #include "app/YearlyReviewDialog.h"
@@ -19,6 +20,21 @@ MainWindow::MainWindow(QWidget* parent)
 	setWindowTitle("Manage my budget");
 
 	InitializeData();
+
+	m_manageProfilesButton = new QPushButton("Gérer les profils");
+
+	connect(m_manageProfilesButton, &QPushButton::released, this, &MainWindow::HandleManageProfiles);
+
+	m_currentProfileLabel = new QLabel("Profil");
+	m_currentProfileComboBox = new QComboBox();
+	m_currentProfileComboBox->addItem("");
+	LoadProfilesToComboBox();
+
+	connect(m_currentProfileComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::HandleCurrentProfileChange);
+
+	m_currentProfileForm = new QWidget();
+	m_currentProfileFormLayout = new QFormLayout(m_currentProfileForm);
+	m_currentProfileFormLayout->addRow(m_currentProfileLabel, m_currentProfileComboBox);
 
 	m_manageCategoriesButton = new QPushButton("Gérer les catégories");
 	m_manageAccountsButton = new QPushButton("Gérer les comptes");
@@ -50,6 +66,8 @@ MainWindow::MainWindow(QWidget* parent)
 	connect(m_addOperationForm, &AddOperationForm::OperationAdd, this, &MainWindow::HandleOperationAdd);
 
 	m_mainLayout = new QVBoxLayout(this);
+	m_mainLayout->addWidget(m_manageProfilesButton);
+	m_mainLayout->addWidget(m_currentProfileForm);
 	m_mainLayout->addWidget(m_manageCategoriesButton);
 	m_mainLayout->addWidget(m_manageAccountsButton);
 	m_mainLayout->addWidget(m_monthlyReviewButton);
@@ -71,8 +89,23 @@ void MainWindow::UpdateUI(bool scrollDown)
 
 void MainWindow::InitializeData() {
 	s_DataManager.LoadData();
-	s_DataManager.SaveCategories();
-	s_DataManager.SaveAccounts();
+	s_DataManager.SaveProfiles();
+}
+
+void MainWindow::LoadProfilesToComboBox()
+{
+	for (int i = 1; i < m_currentProfileComboBox->count();) {
+		m_currentProfileComboBox->removeItem(i);
+	}
+
+	m_currentProfileComboBox->setItemText(
+		0, QString::fromStdString(s_DataManager.profiles[0].name)
+	);
+
+	for (int i = 1; i < s_DataManager.profiles.size(); i++) {
+		const Profile& profile = s_DataManager.profiles[i];
+		m_currentProfileComboBox->addItem(QString::fromStdString(profile.name));
+	}
 }
 
 void MainWindow::LoadAccountsToComboBox()
@@ -82,20 +115,30 @@ void MainWindow::LoadAccountsToComboBox()
 	}
 
 	m_currentAccountComboBox->setItemText(
-		0, QString::fromStdString(s_DataManager.bankAccounts[0].name + " (" + s_DataManager.bankAccounts[0].GetTypeString() + ")")
+		0, QString::fromStdString(s_DataManager.r_CurrentProfile().bankAccounts[0].name + " (" + s_DataManager.r_CurrentProfile().bankAccounts[0].GetTypeString() + ")")
 	);
 
-	for (int i = 1; i < s_DataManager.bankAccounts.size(); i++) {
-		const BankAccount& account = s_DataManager.bankAccounts[i];
+	for (int i = 1; i < s_DataManager.r_CurrentProfile().bankAccounts.size(); i++) {
+		const BankAccount& account = s_DataManager.r_CurrentProfile().bankAccounts[i];
 		m_currentAccountComboBox->addItem(QString::fromStdString(account.name + " (" + account.GetTypeString() + ")"));
 	}
 }
 
 void MainWindow::HandleOperationAdd(const Operation& operation)
 {
-	s_DataManager.AddOperation(operation);
-	s_DataManager.SaveAccounts();
+	s_DataManager.r_CurrentProfile().r_CurrentBankAccount().AddOperation(operation);
+	s_DataManager.SaveProfiles();
 	UpdateUI(true);
+}
+
+void MainWindow::HandleManageProfiles()
+{
+	int profileIndex = s_DataManager.GetCurrentProfileIndex();
+	ManageProfilesDialog dialog;
+	dialog.exec();
+	UpdateUI();
+	LoadProfilesToComboBox();
+	m_currentProfileComboBox->setCurrentIndex(profileIndex);
 }
 
 void MainWindow::HandleManageCategories()
@@ -108,7 +151,7 @@ void MainWindow::HandleManageCategories()
 
 void MainWindow::HandleManageAccounts()
 {
-	int accountIndex = s_DataManager.GetCurrentAccountIndex();
+	int accountIndex = s_DataManager.r_CurrentProfile().GetCurrentAccountIndex();
 	ManageAccountsDialog dialog;
 	dialog.exec();
 	UpdateUI();
@@ -116,9 +159,17 @@ void MainWindow::HandleManageAccounts()
 	m_currentAccountComboBox->setCurrentIndex(accountIndex);
 }
 
+void MainWindow::HandleCurrentProfileChange()
+{
+	s_DataManager.SetCurrentProfileIndex(m_currentProfileComboBox->currentIndex());
+	LoadAccountsToComboBox();
+	UpdateUI(true);
+	m_addOperationForm->LoadCategories();
+}
+
 void MainWindow::HandleCurrentAccountChange()
 {
-	s_DataManager.SetCurrentAccountIndex(m_currentAccountComboBox->currentIndex());
+	s_DataManager.r_CurrentProfile().SetCurrentAccountIndex(m_currentAccountComboBox->currentIndex());
 	UpdateUI(true);
 }
 

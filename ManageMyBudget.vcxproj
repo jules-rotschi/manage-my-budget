@@ -104,6 +104,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\app\AddProfileDialog.cpp" />
+    <ClCompile Include="src\app\RenameProfileDialog.cpp" />
+    <ClCompile Include="src\app\ManageProfilesDialog.cpp" />
+    <ClCompile Include="src\app\Profile.cpp" />
     <ClCompile Include="src\app\MonthlyReviewDialog.cpp" />
     <ClCompile Include="src\core\Accountant.cpp" />
     <ClCompile Include="src\app\EditAccountDialog.cpp" />
@@ -136,6 +140,10 @@
     <QtMoc Include="src\app\AddAccountDialog.h" />
     <QtMoc Include="src\app\EditAccountDialog.h" />
     <QtMoc Include="src\app\MonthlyReviewDialog.h" />
+    <QtMoc Include="src\app\ManageProfilesDialog.h" />
+    <QtMoc Include="src\app\AddProfileDialog.h" />
+    <QtMoc Include="src\app\RenameProfileDialog.h" />
+    <ClInclude Include="src\app\Profile.h" />
     <ClInclude Include="src\core\Accountant.h" />
     <ClInclude Include="src\core\BankAccount.h" />
     <ClInclude Include="src\app\DataManager.h" />

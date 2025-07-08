@@ -48,5 +48,7 @@ public:
 	void DeleteOperation(int id);
 
 	void Edit(const BankAccount& account);
+
+	static BankAccount Default();
 };
 

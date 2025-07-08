@@ -7,7 +7,7 @@ EditAccountDialog::EditAccountDialog(int index, QWidget* parent)
 {
 	setWindowTitle("Modifier le compte");
 
-	BankAccount account = s_DataManager.bankAccounts[index];
+	BankAccount account = s_DataManager.r_CurrentProfile().bankAccounts[index];
 
 	m_nameLabel = new QLabel("Nom du compte");
 	m_nameLineEdit = new QLineEdit(QString::fromStdString(account.name));
@@ -76,9 +76,9 @@ void EditAccountDialog::HandleConfirm()
 		account.type = AccountType::CURRENT;
 	}
 
-	std::string oldAccountName = s_DataManager.bankAccounts[index].name;
+	std::string oldAccountName = s_DataManager.r_CurrentProfile().bankAccounts[index].name;
 
-	if (!s_DataManager.EditAccount(index, account, oldAccountName)) {
+	if (!s_DataManager.r_CurrentProfile().EditAccount(index, account, oldAccountName)) {
 		return;
 	}
 

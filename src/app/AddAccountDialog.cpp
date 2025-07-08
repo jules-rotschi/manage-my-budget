@@ -69,7 +69,7 @@ void AddAccountDialog::HandleConfirm()
 		newAccount.type = AccountType::CURRENT;
 	}
 
-	if (!s_DataManager.AddAccount(newAccount)) {
+	if (!s_DataManager.r_CurrentProfile().AddAccount(newAccount)) {
 		return;
 	}
 	

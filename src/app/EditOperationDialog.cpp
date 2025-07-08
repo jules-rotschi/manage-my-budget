@@ -43,7 +43,7 @@ EditOperationDialog::EditOperationDialog(const Operation& operation, QWidget* pa
 	m_categoryLabel = new QLabel("Catégorie");
 
 	m_categoryCombobox = new QComboBox();
-	for (std::string category : s_DataManager.categories) {
+	for (std::string category : s_DataManager.r_CurrentProfile().categories) {
 		m_categoryCombobox->addItem(QString::fromStdString(category));
 	}
 	m_categoryCombobox->setCurrentIndex(operation.categoryIndex);
@@ -90,7 +90,7 @@ void EditOperationDialog::HandleConfirm()
 		return;
 	}
 
-	Operation newOperation = s_DataManager.r_CurrentBankAccount().GetNewOperation(
+	Operation newOperation = s_DataManager.r_CurrentProfile().r_CurrentBankAccount().GetNewOperation(
 		year,
 		month,
 		amount,
@@ -98,7 +98,7 @@ void EditOperationDialog::HandleConfirm()
 		description
 	);
 
-	s_DataManager.r_CurrentBankAccount().EditOperation(operation.id, newOperation);
+	s_DataManager.r_CurrentProfile().r_CurrentBankAccount().EditOperation(operation.id, newOperation);
 
 	accept();
 }

@@ -18,7 +18,7 @@ MonthlyReviewDialog::MonthlyReviewDialog(QWidget* parent)
 	m_month = currentDate.month();
 	m_year = currentDate.year();
 
-	Accountant accountant(s_DataManager.bankAccounts);
+	Accountant accountant(s_DataManager.r_CurrentProfile().bankAccounts);
 
 	m_mainLayout = new QVBoxLayout();
 
@@ -70,11 +70,11 @@ void MonthlyReviewDialog::UpdateUI()
 {
 	ResetUI();
 
-	Accountant accountant(s_DataManager.bankAccounts);
+	Accountant accountant(s_DataManager.r_CurrentProfile().bankAccounts);
 
-	for (int i = 1; i < s_DataManager.categories.size(); i++) {
+	for (int i = 1; i < s_DataManager.r_CurrentProfile().categories.size(); i++) {
 		m_categoriesList->addItem(QString::fromStdString(
-			s_DataManager.categories[i] + " : " + accountant.GetMonthlyAmount(m_year, m_month, i).GetString()
+			s_DataManager.r_CurrentProfile().categories[i] + " : " + accountant.GetMonthlyAmount(m_year, m_month, i).GetString()
 		));
 	}
 

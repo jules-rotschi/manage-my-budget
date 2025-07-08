@@ -57,6 +57,12 @@
     <Filter Include="Header Files\app\Review">
       <UniqueIdentifier>{6abd86ee-dfb7-429d-9735-0a3603d29a8b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\app\Profile">
+      <UniqueIdentifier>{b852e35d-9d92-40c5-a189-51dc9a114bf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\app\Profile">
+      <UniqueIdentifier>{8105d01e-724a-46cc-a7c3-44d08b3883de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\app\MainWindow.cpp">
@@ -110,6 +116,18 @@
     <ClCompile Include="src\app\YearlyReviewDialog.cpp">
       <Filter>Source Files\app\Review</Filter>
     </ClCompile>
+    <ClCompile Include="src\app\Profile.cpp">
+      <Filter>Source Files\app\Profile</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\ManageProfilesDialog.cpp">
+      <Filter>Source Files\app\Profile</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\AddProfileDialog.cpp">
+      <Filter>Source Files\app\Profile</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\RenameProfileDialog.cpp">
+      <Filter>Source Files\app\Profile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\app\MainWindow.h">
@@ -145,6 +163,15 @@
     <QtMoc Include="src\app\YearlyReviewDialog.h">
       <Filter>Header Files\app\Review</Filter>
     </QtMoc>
+    <QtMoc Include="src\app\ManageProfilesDialog.h">
+      <Filter>Header Files\app\Profile</Filter>
+    </QtMoc>
+    <QtMoc Include="src\app\AddProfileDialog.h">
+      <Filter>Header Files\app\Profile</Filter>
+    </QtMoc>
+    <QtMoc Include="src\app\RenameProfileDialog.h">
+      <Filter>Header Files\app\Profile</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Operation.h">
@@ -161,6 +188,9 @@
     </ClInclude>
     <ClInclude Include="src\core\Accountant.h">
       <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\Profile.h">
+      <Filter>Header Files\app\Profile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

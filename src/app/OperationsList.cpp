@@ -53,11 +53,11 @@ void OperationsList::UpdateUI(bool scrollDown)
 	std::cout << "Sould update list (scrollDown = " << scrollDown << std::endl;
 	ResetUI();
 
-	m_totalLabel->setText("Solde du compte : " + QString::fromStdString(s_DataManager.r_CurrentBankAccount().GetTotalAmount().GetString()));
+	m_totalLabel->setText("Solde du compte : " + QString::fromStdString(s_DataManager.r_CurrentProfile().r_CurrentBankAccount().GetTotalAmount().GetString()));
 		
 	QDate currentDate = QDate::currentDate();
 
-	for (const Operation& operation : s_DataManager.r_CurrentBankAccount().operations)
+	for (const Operation& operation : s_DataManager.r_CurrentProfile().r_CurrentBankAccount().operations)
 	{
 		if (!IsOperationInDisplayableMonth(operation, currentDate)) {
 			continue;
@@ -76,7 +76,7 @@ void OperationsList::UpdateUI(bool scrollDown)
 			+ QString::fromStdString(operation.amount.GetString())
 			+ " | "
 			+ QString::fromStdString(std::to_string(operation.categoryIndex)) + " "
-			+ QString::fromStdString(s_DataManager.categories[operation.categoryIndex])
+			+ QString::fromStdString(s_DataManager.r_CurrentProfile().categories[operation.categoryIndex])
 			+ descriptionString;
 
 		QLabel* operationLabel = new QLabel(operationString);
@@ -178,15 +178,15 @@ void OperationsList::HandleOperationEdit(const Operation& operation)
 	if (dialog.exec())
 	{
 		UpdateUI();
-		s_DataManager.SaveAccounts();
+		s_DataManager.SaveProfiles();
 	}
 }
 
 void OperationsList::HandleOperationDelete(int id)
 {
-	s_DataManager.r_CurrentBankAccount().DeleteOperation(id);
+	s_DataManager.r_CurrentProfile().r_CurrentBankAccount().DeleteOperation(id);
 	UpdateUI();
-	s_DataManager.SaveAccounts();
+	s_DataManager.SaveProfiles();
 }
 
 void OperationsList::HandleDisplayFromChange()

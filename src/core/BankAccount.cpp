@@ -165,3 +165,10 @@ void BankAccount::Edit(const BankAccount& account)
 	type = account.type;
 	initialAmount = account.initialAmount;
 }
+
+BankAccount BankAccount::Default()
+{
+	BankAccount defaultBankAccount;
+	defaultBankAccount.name = "Mon compte bancaire";
+	return defaultBankAccount;
+}

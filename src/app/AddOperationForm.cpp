@@ -66,7 +66,7 @@ AddOperationForm::~AddOperationForm() {}
 void AddOperationForm::LoadCategories()
 {
 	m_categoryCombobox->clear();
-	for (std::string category : s_DataManager.categories) {
+	for (std::string category : s_DataManager.r_CurrentProfile().categories) {
 		m_categoryCombobox->addItem(QString::fromStdString(category));
 	}
 }
@@ -97,7 +97,7 @@ void AddOperationForm::HandleAddButton()
 	m_amountLineEdit->setText("");
 	m_descriptionLineEdit->setText("");
 
-	Operation operation = s_DataManager.r_CurrentBankAccount().GetNewOperation(
+	Operation operation = s_DataManager.r_CurrentProfile().r_CurrentBankAccount().GetNewOperation(
 		year,
 		month,
 		amount,

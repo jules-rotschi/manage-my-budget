@@ -53,8 +53,8 @@ void ManageCategoriesDialog::UpdateUI()
 {
 	ResetUI();
 
-	for (int i = 0; i < s_DataManager.categories.size(); i++) {
-		std::string category = s_DataManager.categories[i];
+	for (int i = 0; i < s_DataManager.r_CurrentProfile().categories.size(); i++) {
+		std::string category = s_DataManager.r_CurrentProfile().categories[i];
 
 		QListWidgetItem* categoryItem = new QListWidgetItem();
 		QWidget* categoryWidget = new QWidget();
@@ -92,11 +92,11 @@ ManageCategoriesDialog::~ManageCategoriesDialog() {}
 
 void ManageCategoriesDialog::HandleCategoryAdd()
 {
-	s_DataManager.AddCategory(m_nameLineEdit->text().toStdString());
+	s_DataManager.r_CurrentProfile().AddCategory(m_nameLineEdit->text().toStdString());
 	UpdateUI();
 	m_nameLineEdit->setText("");
 
-	s_DataManager.SaveCategories();
+	s_DataManager.SaveProfiles();
 }
 
 void ManageCategoriesDialog::HandleCategoryRename(int index)
@@ -104,15 +104,14 @@ void ManageCategoriesDialog::HandleCategoryRename(int index)
 	RenameCategoryDialog dialog(index);
 	if (dialog.exec()) {
 		UpdateUI();
-		s_DataManager.SaveCategories();
+		s_DataManager.SaveProfiles();
 	}
 }
 
 void ManageCategoriesDialog::HandleCategoryDelete(int index)
 {
-	s_DataManager.DeleteCategory(index);
+	s_DataManager.r_CurrentProfile().DeleteCategory(index);
 	UpdateUI();
 
-	s_DataManager.SaveCategories();
-	s_DataManager.SaveAccounts();
+	s_DataManager.SaveProfiles();
 }
