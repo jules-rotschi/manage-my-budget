@@ -54,7 +54,7 @@ Amount Accountant::GetMonthlySavings(int year, int month)
 	for (const BankAccount& account : m_accounts) {
 		if (account.type != AccountType::SAVING) continue;
 
-		for (const Operation& operation : account.operations) {
+		for (const Operation& operation : account.r_operations()) {
 			if (operation.year != year || operation.month != month) continue;
 
 			savings += operation.amount;
@@ -71,7 +71,7 @@ Amount Accountant::GetYearlySavings(int year)
 	for (const BankAccount& account : m_accounts) {
 		if (account.type != AccountType::SAVING) continue;
 
-		for (const Operation& operation : account.operations) {
+		for (const Operation& operation : account.r_operations()) {
 			if (operation.year != year) continue;
 
 			savings += operation.amount;

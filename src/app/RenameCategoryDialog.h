@@ -17,11 +17,12 @@ private:
 	int m_categoryIndex;
 
 	QFormLayout* m_layout;
+
 	QLabel* m_label;
 	QLineEdit* m_lineEdit;
+
 	QPushButton* m_confirmButton;
 	QPushButton* m_cancelButton;
 
 	void HandleConfirm();
 };
-

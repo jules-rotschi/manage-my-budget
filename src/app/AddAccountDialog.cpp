@@ -3,8 +3,8 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 
-#include "app/DataManager.h"
-#include "core/BankAccount.h"
+#include "DataManager.h"
+#include "ExceptionHandler.h"
 
 AddAccountDialog::AddAccountDialog(QWidget* parent)
 	: QDialog(parent)
@@ -31,45 +31,37 @@ AddAccountDialog::AddAccountDialog(QWidget* parent)
 	m_typeCombobox->addItem("Épargne");
 
 	m_addButton = new QPushButton("Ajouter le compte");
+	connect(m_addButton, &QPushButton::released, this, &AddAccountDialog::HandleConfirm);
+
 	m_cancelButton = new QPushButton("Annuler");
+	connect(m_cancelButton, &QPushButton::released, this, &AddAccountDialog::reject);
 
 	m_addButton->setDefault(true);
 
-	connect(m_addButton, &QPushButton::released, this, &AddAccountDialog::HandleConfirm);
-	connect(m_cancelButton, &QPushButton::released, this, &AddAccountDialog::reject);
-
-	m_formLayout = new QFormLayout();
+	m_formLayout = new QFormLayout(this);
 	m_formLayout->addRow(m_nameLabel, m_nameLineEdit);
 	m_formLayout->addRow(m_initialAmountLabel, m_initialAmountLineEdit);
 	m_formLayout->addRow(m_typeLabel, m_typeCombobox);
 	m_formLayout->addRow(m_addButton, m_cancelButton);
-
-	setLayout(m_formLayout);
 }
 
 void AddAccountDialog::HandleConfirm()
 {
+	std::string name = m_nameLineEdit->text().toStdString();
+	std::string type = m_typeCombobox->currentText().toStdString();
+	
 	bool isInitialAmountOk = false;
-	int initialAmount = m_initialAmountLineEdit->text().toDouble(&isInitialAmountOk) * 100;
+	int initialAmountValue = QLocale::system().toDouble(m_initialAmountLineEdit->text(), &isInitialAmountOk) * 100;
 
 	if (!isInitialAmountOk) {
 		return;
 	}
 
-	BankAccount newAccount;
-	newAccount.name = m_nameLineEdit->text().toStdString();
-	newAccount.initialAmount = initialAmount;
-	
-	switch (m_typeCombobox->currentIndex()) {
-	case 1:
-		newAccount.type = AccountType::SAVING;
-		break;
-	case 0:
-	default:
-		newAccount.type = AccountType::CURRENT;
+	try {
+		s_DataManager.AddAccount(name, type, initialAmountValue);
 	}
-
-	if (!s_DataManager.r_CurrentProfile().AddAccount(newAccount)) {
+	catch (const CustomException& e) {
+		HandleException(e);
 		return;
 	}
 	

@@ -5,7 +5,7 @@
 #include <qdatetime.h>
 #include <qpushbutton.h>
 
-#include "app/DataManager.h"
+#include "DataManager.h"
 #include "core/Accountant.h"
 
 YearlyReviewDialog::YearlyReviewDialog(QWidget* parent)
@@ -17,20 +17,13 @@ YearlyReviewDialog::YearlyReviewDialog(QWidget* parent)
 
 	m_year = currentDate.year();
 
-	Accountant accountant(s_DataManager.r_CurrentProfile().bankAccounts);
-
-	m_mainLayout = new QVBoxLayout();
-
 	m_yearSelectorWidget = new QWidget();
 
 	m_yearLabel = new QLabel("Année");
-
 	m_yearComboBox = new QComboBox();
-
 	for (int i = 0; i < 3; i++) {
 		m_yearComboBox->addItem(QString::fromStdString(std::to_string(m_year - i)));
 	}
-
 	connect(m_yearComboBox, &QComboBox::currentIndexChanged, this, &YearlyReviewDialog::HandleYearSelectorChange);
 
 	m_yearSelectorLayout = new QFormLayout(m_yearSelectorWidget);
@@ -44,17 +37,16 @@ YearlyReviewDialog::YearlyReviewDialog(QWidget* parent)
 
 	m_defaultButton = new QPushButton("Fermer");
 	m_defaultButton->setDefault(true);
-
 	connect(m_defaultButton, &QPushButton::released, this, &YearlyReviewDialog::accept);
 
-	UpdateUI();
+	m_mainLayout = new QVBoxLayout(this);
 
-	setLayout(m_mainLayout);
+	UpdateUI();
 }
 
 void YearlyReviewDialog::UpdateUI()
 {
-	ResetUI();
+	m_categoriesList->clear();
 
 	Accountant accountant(s_DataManager.r_CurrentProfile().bankAccounts);
 
@@ -74,11 +66,6 @@ void YearlyReviewDialog::UpdateUI()
 	m_mainLayout->addWidget(m_totalLabel);
 	m_mainLayout->addWidget(m_savingsLabel);
 	m_mainLayout->addWidget(m_defaultButton);
-}
-
-void YearlyReviewDialog::ResetUI()
-{
-	m_categoriesList->clear();
 }
 
 void YearlyReviewDialog::HandleYearSelectorChange()

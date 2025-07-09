@@ -16,25 +16,22 @@ class ManageCategoriesDialog : public QDialog
 
 public:
 	ManageCategoriesDialog(QWidget* parent = nullptr);
-	~ManageCategoriesDialog();
 
 private:
-
 	QLayout* m_mainLayout;
 
-	QPushButton* m_defaultButton;
-
 	QListWidget* m_categoriesList;
-	std::vector<QListWidgetItem*> m_categoryItems;
-	std::vector<QWidget*> m_categoryWidgets;
 
 	QWidget* m_newCategoryFormWidget;
 	QFormLayout* m_newCategoryFormLayout;
+	
 	QLabel* m_nameFieldLabel;
 	QLineEdit* m_nameLineEdit;
+	
 	QPushButton* m_newCategoryAddButton;
 
-	void ResetUI();
+	QPushButton* m_defaultButton;
+	
 	void UpdateUI();
 
 private slots:

@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-#include "core/Operation.h"
+#include "Operation.h"
 
 enum class AccountType
 {
@@ -17,22 +17,8 @@ public:
 	std::string name;
 	AccountType type = AccountType::CURRENT;
 	Amount initialAmount;
-	std::vector<Operation> operations;
 
-	int nextId = 1;
-
-	int GetNextIdAndIncrement();
-
-	Operation GetNewOperation();
-	Operation GetNewOperation(
-		int year,
-		int month,
-		Amount amount,
-		int categoryIndex,
-		const std::string& description
-	);
-
-	void SortOperations();
+	const std::vector<Operation>& r_operations() const;
 
 	std::string GetTypeString() const;
 
@@ -47,8 +33,27 @@ public:
 	void EditOperation(int id, const Operation& operation);
 	void DeleteOperation(int id);
 
+	void HandleCategoryDelete(int index);
+
 	void Edit(const BankAccount& account);
 
 	static BankAccount Default();
+
+private:
+	std::vector<Operation> m_operations;
+	int m_nextId = 1;
+
+	Operation GetNewOperation();
+	Operation GetNewOperation(
+		int year,
+		int month,
+		Amount amount,
+		int categoryIndex,
+		const std::string& description
+	);
+
+	int GetNextIdAndIncrement();
+	
+	void SortOperations();
 };
 

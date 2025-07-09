@@ -14,13 +14,17 @@ public:
 
 private:
 	QFormLayout* m_formLayout;
+
 	QLabel* m_nameLabel;
 	QLineEdit* m_nameLineEdit;
+
 	QLabel* m_initialAmountLabel;
 	QLineEdit* m_initialAmountLineEdit;
 	QDoubleValidator* m_initialAmountValidator;
+
 	QLabel* m_typeLabel;
 	QComboBox* m_typeCombobox;
+
 	QPushButton* m_addButton;
 	QPushButton* m_cancelButton;
 

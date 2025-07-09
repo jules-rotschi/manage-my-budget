@@ -1,6 +1,7 @@
 ﻿#include "RenameCategoryDialog.h"
 
-#include <app/DataManager.h>
+#include "DataManager.h"
+#include "ExceptionHandler.h"
 
 RenameCategoryDialog::RenameCategoryDialog(int categoryIndex, QWidget* parent)
 	: m_categoryIndex(categoryIndex), QDialog(parent)
@@ -11,11 +12,10 @@ RenameCategoryDialog::RenameCategoryDialog(int categoryIndex, QWidget* parent)
 	m_lineEdit = new QLineEdit(QString::fromStdString(s_DataManager.r_CurrentProfile().categories[categoryIndex]));
 
 	m_confirmButton = new QPushButton("Renommer");
-	m_cancelButton = new QPushButton("Annuler");
-
 	m_confirmButton->setDefault(true);
-
 	connect(m_confirmButton, &QPushButton::released, this, &RenameCategoryDialog::HandleConfirm);
+
+	m_cancelButton = new QPushButton("Annuler");
 	connect(m_cancelButton, &QPushButton::released, this, &RenameCategoryDialog::reject);
 
 	m_layout = new QFormLayout(this);
@@ -25,6 +25,13 @@ RenameCategoryDialog::RenameCategoryDialog(int categoryIndex, QWidget* parent)
 
 void RenameCategoryDialog::HandleConfirm()
 {
-	s_DataManager.r_CurrentProfile().RenameCategory(m_categoryIndex, m_lineEdit->text().toStdString());
+	try {
+		s_DataManager.RenameCategory(m_categoryIndex, m_lineEdit->text().toStdString());
+	}
+	catch (const CustomException& e) {
+		HandleException(e);
+		return;
+	}
+
 	accept();
 }

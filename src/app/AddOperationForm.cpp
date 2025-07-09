@@ -6,7 +6,7 @@
 #include <qlineedit.h>
 
 #include "DataManager.h"
-#include "core/Operation.h"
+#include "ExceptionHandler.h"
 
 AddOperationForm::AddOperationForm(QWidget* parent)
 	: QWidget(parent)
@@ -14,14 +14,12 @@ AddOperationForm::AddOperationForm(QWidget* parent)
 	QDate currentDate = QDate::currentDate();
 
 	m_yearLabel = new QLabel("Année");
-
 	m_yearCombobox = new QComboBox();
 	for (int i = 0; i <= 2; i++) {
 		m_yearCombobox->addItem(QString::fromStdString(std::to_string(currentDate.year() - i)));
 	}
 
 	m_monthLabel = new QLabel("Mois");
-
 	m_monthCombobox = new QComboBox();
 	for (int i = 0; i < 12; i++) {
 		m_monthCombobox->addItem(QString::fromStdString(std::to_string(i + 1)));
@@ -39,17 +37,14 @@ AddOperationForm::AddOperationForm(QWidget* parent)
 	m_amountLineEdit->setValidator(m_amountValidator);
 
 	m_categoryLabel = new QLabel("Catégorie");
-
 	m_categoryCombobox = new QComboBox();
 	LoadCategories();
 
 	m_descriptionLabel = new QLabel("Description");
-
 	m_descriptionLineEdit = new QLineEdit();
 
 	m_addButton = new QPushButton("Ajouter l'opération");
 	m_addButton->setDefault(true);
-
 	connect(m_addButton, &QPushButton::released, this, &AddOperationForm::HandleAddButton);
 
 	m_mainLayout = new QFormLayout(this);
@@ -61,12 +56,10 @@ AddOperationForm::AddOperationForm(QWidget* parent)
 	m_mainLayout->addWidget(m_addButton);
 }
 
-AddOperationForm::~AddOperationForm() {}
-
 void AddOperationForm::LoadCategories()
 {
 	m_categoryCombobox->clear();
-	for (std::string category : s_DataManager.r_CurrentProfile().categories) {
+	for (const std::string& category : s_DataManager.r_CurrentProfile().categories) {
 		m_categoryCombobox->addItem(QString::fromStdString(category));
 	}
 }
@@ -79,33 +72,27 @@ void AddOperationForm::ResetForm()
 
 void AddOperationForm::HandleAddButton()
 {
-	bool isYearOk = false;
 	bool isAmountOk = false;
 
-	int year = m_yearCombobox->currentText().toInt(&isYearOk);
+	int year = m_yearCombobox->currentText().toInt();
 	int month = m_monthCombobox->currentIndex() + 1;
-	int amount = m_amountLineEdit->text().toDouble(&isAmountOk) * 100;
 	int categoryIndex = m_categoryCombobox->currentIndex();
+	int amountValue = QLocale::system().toDouble(m_amountLineEdit->text(), &isAmountOk) * 100;
 	std::string description = m_descriptionLineEdit->text().toStdString();
 
-	std::cout << categoryIndex << std::endl;
-
-	if (!isYearOk || !isAmountOk) {
+	if (!isAmountOk) {
 		return;
 	}
 
-	m_amountLineEdit->setText("");
-	m_descriptionLineEdit->setText("");
+	try {
+		s_DataManager.AddOperation(year, month, amountValue, categoryIndex, description);
+	}
+	catch (const CustomException& e) {
+		HandleException(e);
+		return;
+	}
 
-	Operation operation = s_DataManager.r_CurrentProfile().r_CurrentBankAccount().GetNewOperation(
-		year,
-		month,
-		amount,
-		categoryIndex,
-		description
-	);
-
-	emit OperationAdd(operation);
+	emit OperationAdd();
 
 	ResetForm();
 }

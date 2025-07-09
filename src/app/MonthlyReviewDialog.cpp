@@ -5,7 +5,7 @@
 #include <qdatetime.h>
 #include <qpushbutton.h>
 
-#include "app/DataManager.h"
+#include "DataManager.h"
 #include "core/Accountant.h"
 
 MonthlyReviewDialog::MonthlyReviewDialog(QWidget* parent)
@@ -18,32 +18,21 @@ MonthlyReviewDialog::MonthlyReviewDialog(QWidget* parent)
 	m_month = currentDate.month();
 	m_year = currentDate.year();
 
-	Accountant accountant(s_DataManager.r_CurrentProfile().bankAccounts);
-
-	m_mainLayout = new QVBoxLayout();
-
 	m_monthSelectorWidget = new QWidget();
 
 	m_monthLabel = new QLabel("Mois");
-
 	m_monthComboBox = new QComboBox();
-
 	for (int i = 0; i < 12; i++) {
 		m_monthComboBox->addItem(QString::fromStdString(std::to_string(i + 1)));
 	}
-
 	m_monthComboBox->setCurrentIndex(m_month - 1);
-
 	connect(m_monthComboBox, &QComboBox::currentIndexChanged, this, &MonthlyReviewDialog::HandleMonthSelectorChange);
 
 	m_yearLabel = new QLabel("Année");
-
 	m_yearComboBox = new QComboBox();
-
 	for (int i = 0; i < 3; i++) {
 		m_yearComboBox->addItem(QString::fromStdString(std::to_string(m_year - i)));
 	}
-
 	connect(m_yearComboBox, &QComboBox::currentIndexChanged, this, &MonthlyReviewDialog::HandleMonthSelectorChange);
 
 	m_monthSelectorLayout = new QFormLayout(m_monthSelectorWidget);
@@ -58,17 +47,16 @@ MonthlyReviewDialog::MonthlyReviewDialog(QWidget* parent)
 
 	m_defaultButton = new QPushButton("Fermer");
 	m_defaultButton->setDefault(true);
-
 	connect(m_defaultButton, &QPushButton::released, this, &MonthlyReviewDialog::accept);
 
+	m_mainLayout = new QVBoxLayout(this);
+	
 	UpdateUI();
-
-	setLayout(m_mainLayout);
 }
 
 void MonthlyReviewDialog::UpdateUI()
 {
-	ResetUI();
+	m_categoriesList->clear();
 
 	Accountant accountant(s_DataManager.r_CurrentProfile().bankAccounts);
 
@@ -87,11 +75,6 @@ void MonthlyReviewDialog::UpdateUI()
 	m_mainLayout->addWidget(m_totalLabel);
 	m_mainLayout->addWidget(m_savingsLabel);
 	m_mainLayout->addWidget(m_defaultButton);
-}
-
-void MonthlyReviewDialog::ResetUI()
-{
-	m_categoriesList->clear();
 }
 
 void MonthlyReviewDialog::HandleMonthSelectorChange()

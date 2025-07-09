@@ -1,9 +1,10 @@
 ﻿#include "ManageProfilesDialog.h"
 
-#include "app/DataManager.h"
-#include "app/RenameCategoryDialog.h"
-#include "app/AddProfileDialog.h"
-#include "app/RenameProfileDialog.h"
+#include "DataManager.h"
+#include "RenameCategoryDialog.h"
+#include "AddProfileDialog.h"
+#include "RenameProfileDialog.h"
+#include "ExceptionHandler.h"
 
 ManageProfilesDialog::ManageProfilesDialog(QWidget* parent)
 	: QDialog(parent)
@@ -13,12 +14,10 @@ ManageProfilesDialog::ManageProfilesDialog(QWidget* parent)
 	m_profilesList = new QListWidget();
 
 	m_addButton = new QPushButton("Ajouter un profil");
-
 	connect(m_addButton, &QPushButton::released, this, &ManageProfilesDialog::HandleProfileAdd);
 
 	m_defaultButton = new QPushButton("Terminé");
 	m_defaultButton->setDefault(true);
-
 	connect(m_defaultButton, &QPushButton::released, this, &ManageProfilesDialog::accept);
 
 	m_mainLayout = new QVBoxLayout(this);
@@ -29,53 +28,37 @@ ManageProfilesDialog::ManageProfilesDialog(QWidget* parent)
 	UpdateUI();
 }
 
-void ManageProfilesDialog::ResetUI()
-{
-	for (QListWidgetItem* item : m_profileItems) {
-		delete item;
-	}
-
-	for (QWidget* widget : m_profileWidgets) {
-		delete widget;
-	}
-
-	m_profileItems.clear();
-	m_profileWidgets.clear();
-}
-
 void ManageProfilesDialog::UpdateUI()
 {
-	ResetUI();
+	m_profilesList->clear();
 
 	for (int i = 0; i < s_DataManager.profiles.size(); i++) {
 		const Profile& profile = s_DataManager.profiles[i];
 
-		QListWidgetItem* profileItem = new QListWidgetItem();
 		QWidget* profileWidget = new QWidget();
-		QHBoxLayout* profileLayout = new QHBoxLayout(profileWidget);
-		QLabel* profileLabel = new QLabel(QString::fromStdString(profile.name));
-		QPushButton* profileEditButton = new QPushButton("Renommer");
-		QPushButton* profileDeleteButton = new QPushButton("Supprimer");
 
+		QLabel* profileLabel = new QLabel(QString::fromStdString(profile.name));
+
+		QPushButton* profileEditButton = new QPushButton("Renommer");
 		connect(
 			profileEditButton,
 			&QPushButton::released,
 			[this, i]() {HandleProfileEdit(i); }
 		);
 
+		QPushButton* profileDeleteButton = new QPushButton("Supprimer");
 		connect(
 			profileDeleteButton,
 			&QPushButton::released,
 			[this, i]() {HandleProfileDelete(i); }
 		);
 
-		m_profileItems.push_back(profileItem);
-		m_profileWidgets.push_back(profileWidget);
-
+		QHBoxLayout* profileLayout = new QHBoxLayout(profileWidget);
 		profileLayout->addWidget(profileLabel);
 		profileLayout->addWidget(profileEditButton);
 		profileLayout->addWidget(profileDeleteButton);
 
+		QListWidgetItem* profileItem = new QListWidgetItem();
 		profileItem->setSizeHint(profileWidget->sizeHint());
 		m_profilesList->addItem(profileItem);
 		m_profilesList->setItemWidget(profileItem, profileWidget);
@@ -88,7 +71,6 @@ void ManageProfilesDialog::HandleProfileAdd()
 
 	if (dialog.exec()) {
 		UpdateUI();
-		s_DataManager.SaveProfiles();
 	}
 }
 
@@ -98,14 +80,18 @@ void ManageProfilesDialog::HandleProfileEdit(int index)
 
 	if (dialog.exec()) {
 		UpdateUI();
-		s_DataManager.SaveProfiles();
 	}
 }
 
 void ManageProfilesDialog::HandleProfileDelete(int index)
 {
-	if (s_DataManager.DeleteProfile(index)) {
-		UpdateUI();
-		s_DataManager.SaveProfiles();
+	try {
+		s_DataManager.DeleteProfile(index);
 	}
+	catch (const CustomException& e) {
+		HandleException(e);
+		return;
+	}
+
+	UpdateUI();
 }

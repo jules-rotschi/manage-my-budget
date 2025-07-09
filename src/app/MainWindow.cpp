@@ -6,63 +6,65 @@
 #include <qdatetime.h>
 #include <qevent.h>
 
-#include "app/DataManager.h"
-#include "app/EditOperationDialog.h"
-#include "app/ManageCategoriesDialog.h"
-#include "app/ManageProfilesDialog.h"
-#include "app/ManageAccountsDialog.h"
-#include "app/MonthlyReviewDialog.h"
-#include "app/YearlyReviewDialog.h"
+#include "DataManager.h"
+#include "EditOperationDialog.h"
+#include "ManageCategoriesDialog.h"
+#include "ManageProfilesDialog.h"
+#include "ManageAccountsDialog.h"
+#include "MonthlyReviewDialog.h"
+#include "YearlyReviewDialog.h"
+#include "CustomException.h"
+#include "ExceptionHandler.h"
 
 MainWindow::MainWindow(QWidget* parent)
 	: QWidget(parent)
 {
 	setWindowTitle("Manage my budget");
 
-	InitializeData();
+	s_DataManager.InitializeData();
 
 	m_manageProfilesButton = new QPushButton("Gérer les profils");
-
 	connect(m_manageProfilesButton, &QPushButton::released, this, &MainWindow::HandleManageProfiles);
 
+	m_currentProfileForm = new QWidget();
+	
 	m_currentProfileLabel = new QLabel("Profil");
+
 	m_currentProfileComboBox = new QComboBox();
 	m_currentProfileComboBox->addItem("");
 	LoadProfilesToComboBox();
-
 	connect(m_currentProfileComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::HandleCurrentProfileChange);
 
-	m_currentProfileForm = new QWidget();
 	m_currentProfileFormLayout = new QFormLayout(m_currentProfileForm);
 	m_currentProfileFormLayout->addRow(m_currentProfileLabel, m_currentProfileComboBox);
 
 	m_manageCategoriesButton = new QPushButton("Gérer les catégories");
-	m_manageAccountsButton = new QPushButton("Gérer les comptes");
-
 	connect(m_manageCategoriesButton, &QPushButton::released, this, &MainWindow::HandleManageCategories);
+	
+	m_manageAccountsButton = new QPushButton("Gérer les comptes");
 	connect(m_manageAccountsButton, &QPushButton::released, this, &MainWindow::HandleManageAccounts);
 
 	m_monthlyReviewButton = new QPushButton("Bilans mensuels");
-	m_yearlyReviewButton = new QPushButton("Bilans annuels");
-
 	connect(m_monthlyReviewButton, &QPushButton::released, this, &MainWindow::HandleMonthlyReview);
+	
+	m_yearlyReviewButton = new QPushButton("Bilans annuels");
 	connect(m_yearlyReviewButton, &QPushButton::released, this, &MainWindow::HandleYearlyReview);
 
+	m_currentAccountForm = new QWidget();
+	
 	m_currentAccountLabel = new QLabel("Compte bancaire sélectionné");
+	
 	m_currentAccountComboBox = new QComboBox();
 	m_currentAccountComboBox->addItem("");
 	LoadAccountsToComboBox();
-
 	connect(m_currentAccountComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::HandleCurrentAccountChange);
 
-	m_currentAccountForm = new QWidget();
 	m_currentAccountFormLayout = new QFormLayout(m_currentAccountForm);
 	m_currentAccountFormLayout->addRow(m_currentAccountLabel, m_currentAccountComboBox);
 
 	m_operationsList = new OperationsList();
 
 	m_addOperationForm = new AddOperationForm();
-
 	connect(m_addOperationForm, &AddOperationForm::OperationAdd, this, &MainWindow::HandleOperationAdd);
 
 	m_mainLayout = new QVBoxLayout(this);
@@ -79,17 +81,9 @@ MainWindow::MainWindow(QWidget* parent)
 	UpdateUI(true);
 }
 
-MainWindow::~MainWindow()
-{}
-
 void MainWindow::UpdateUI(bool scrollDown)
 {
 	m_operationsList->UpdateUI(scrollDown);
-}
-
-void MainWindow::InitializeData() {
-	s_DataManager.LoadData();
-	s_DataManager.SaveProfiles();
 }
 
 void MainWindow::LoadProfilesToComboBox()
@@ -124,52 +118,60 @@ void MainWindow::LoadAccountsToComboBox()
 	}
 }
 
-void MainWindow::HandleOperationAdd(const Operation& operation)
-{
-	s_DataManager.r_CurrentProfile().r_CurrentBankAccount().AddOperation(operation);
-	s_DataManager.SaveProfiles();
-	UpdateUI(true);
-}
-
 void MainWindow::HandleManageProfiles()
 {
 	int profileIndex = s_DataManager.GetCurrentProfileIndex();
+
 	ManageProfilesDialog dialog;
 	dialog.exec();
-	UpdateUI();
+
 	LoadProfilesToComboBox();
 	m_currentProfileComboBox->setCurrentIndex(profileIndex);
+
+	UpdateUI();
 }
 
 void MainWindow::HandleManageCategories()
 {
 	ManageCategoriesDialog dialog;
 	dialog.exec();
-	UpdateUI();
+
 	m_addOperationForm->LoadCategories();
+	
+	UpdateUI();
 }
 
 void MainWindow::HandleManageAccounts()
 {
 	int accountIndex = s_DataManager.r_CurrentProfile().GetCurrentAccountIndex();
+
 	ManageAccountsDialog dialog;
 	dialog.exec();
-	UpdateUI();
+
 	LoadAccountsToComboBox();
 	m_currentAccountComboBox->setCurrentIndex(accountIndex);
+	
+	UpdateUI();
 }
 
 void MainWindow::HandleCurrentProfileChange()
 {
 	s_DataManager.SetCurrentProfileIndex(m_currentProfileComboBox->currentIndex());
+	
 	LoadAccountsToComboBox();
-	UpdateUI(true);
 	m_addOperationForm->LoadCategories();
+	
+	UpdateUI(true);
 }
 
 void MainWindow::HandleCurrentAccountChange()
 {
 	s_DataManager.r_CurrentProfile().SetCurrentAccountIndex(m_currentAccountComboBox->currentIndex());
+	UpdateUI(true);
+}
+
+void MainWindow::HandleOperationAdd()
+{		
 	UpdateUI(true);
 }
 

@@ -5,13 +5,15 @@
 class Amount
 {
 public:
-	int value = 0;
-
 	Amount() = default;
 	Amount(int value);
+	
+	int GetValue() const;
 
 	std::string GetString() const;
 
 	Amount& operator+=(const Amount& amount);
-};
 
+private:
+	int m_value = 0;
+};

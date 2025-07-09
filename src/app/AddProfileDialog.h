@@ -14,8 +14,10 @@ public:
 
 private:
 	QFormLayout* m_formLayout;
+
 	QLabel* m_nameLabel;
 	QLineEdit* m_nameLineEdit;
+
 	QPushButton* m_addButton;
 	QPushButton* m_cancelButton;
 

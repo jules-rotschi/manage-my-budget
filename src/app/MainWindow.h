@@ -5,9 +5,8 @@
 #include <qwidget.h>
 #include <qpushbutton.h>
 
-#include "core/Operation.h"
-#include "app/OperationsList.h"
-#include "app/AddOperationForm.h"
+#include "OperationsList.h"
+#include "AddOperationForm.h"
 
 class MainWindow : public QWidget
 {
@@ -15,7 +14,6 @@ class MainWindow : public QWidget
 
 public:
 	MainWindow(QWidget* parent = nullptr);
-	~MainWindow();
 
 private:
 	QVBoxLayout* m_mainLayout;
@@ -28,6 +26,7 @@ private:
 	QComboBox* m_currentProfileComboBox;
 
 	QPushButton* m_manageCategoriesButton;
+
 	QPushButton* m_manageAccountsButton;
 
 	QPushButton* m_monthlyReviewButton;
@@ -39,10 +38,10 @@ private:
 	QComboBox* m_currentAccountComboBox;
 
 	OperationsList* m_operationsList;
+	
 	AddOperationForm* m_addOperationForm;
 
 	void UpdateUI(bool scrollDown = false);
-	void InitializeData();
 	void LoadProfilesToComboBox();
 	void LoadAccountsToComboBox();
 
@@ -50,9 +49,9 @@ private slots:
 	void HandleManageProfiles();
 	void HandleManageCategories();
 	void HandleManageAccounts();
-	void HandleMonthlyReview() const;
-	void HandleYearlyReview() const;
 	void HandleCurrentProfileChange();
 	void HandleCurrentAccountChange();
-	void HandleOperationAdd(const Operation& operation);
+	void HandleOperationAdd();
+	void HandleMonthlyReview() const;
+	void HandleYearlyReview() const;
 };

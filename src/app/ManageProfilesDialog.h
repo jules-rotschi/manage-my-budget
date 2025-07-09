@@ -18,18 +18,11 @@ public:
 	ManageProfilesDialog(QWidget* parent = nullptr);
 
 private:
-
 	QLayout* m_mainLayout;
-
 	QListWidget* m_profilesList;
-	std::vector<QListWidgetItem*> m_profileItems;
-	std::vector<QWidget*> m_profileWidgets;
-
 	QPushButton* m_addButton;
-
 	QPushButton* m_defaultButton;
 
-	void ResetUI();
 	void UpdateUI();
 
 private slots:

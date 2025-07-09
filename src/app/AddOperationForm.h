@@ -7,31 +7,34 @@
 #include <qvalidator.h>
 #include <qpushbutton.h>
 
-#include "core/Operation.h"
-
 class AddOperationForm : public QWidget
 {
 	Q_OBJECT
 
 public:
 	AddOperationForm(QWidget* parent = nullptr);
-	~AddOperationForm();
 
 	void LoadCategories();
 
 private:
 	QFormLayout* m_mainLayout;
+
 	QLabel* m_yearLabel;
 	QComboBox* m_yearCombobox;
+
 	QLabel* m_monthLabel;
 	QComboBox* m_monthCombobox;
+
 	QLabel* m_categoryLabel;
 	QComboBox* m_categoryCombobox;
+
 	QLabel* m_amountLabel;
 	QLineEdit* m_amountLineEdit;
 	QDoubleValidator* m_amountValidator;
+
 	QLabel* m_descriptionLabel;
 	QLineEdit* m_descriptionLineEdit;
+
 	QPushButton* m_addButton;
 
 	void ResetForm();
@@ -39,5 +42,5 @@ private:
 	void HandleAddButton();
 
 signals:
-	void OperationAdd(const Operation& operation);
+	void OperationAdd();
 };

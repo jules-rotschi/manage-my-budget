@@ -5,8 +5,8 @@
 #include <qdatetime.h>
 
 #include "DataManager.h"
-
-#include "app/EditOperationDialog.h"
+#include "EditOperationDialog.h"
+#include "ExceptionHandler.h"
 
 OperationsList::OperationsList(QWidget* parent)
 	: QWidget(parent)
@@ -14,12 +14,12 @@ OperationsList::OperationsList(QWidget* parent)
 	m_totalLabel = new QLabel();
 
 	m_displaySinceWidget = new QWidget();
-
 	m_displaySinceLabel = new QLabel("Afficher les opérations depuis");
 	m_displaySinceComboBox = new QComboBox();
 	m_displaySinceComboBox->addItem("2 mois");
 	m_displaySinceComboBox->addItem("6 mois");
 	m_displaySinceComboBox->addItem("1 an");
+	m_displaySinceComboBox->addItem("Toujours");
 
 	switch (m_displayOperationsSinceMonths) {
 	case 2:
@@ -30,6 +30,9 @@ OperationsList::OperationsList(QWidget* parent)
 		break;
 	case 12:
 		m_displaySinceComboBox->setCurrentIndex(2);
+		break;
+	case -1:
+		m_displaySinceComboBox->setCurrentIndex(3);
 		break;
 	}
 
@@ -46,118 +49,88 @@ OperationsList::OperationsList(QWidget* parent)
 	m_mainLayout->addWidget(m_operationsList);
 }
 
-OperationsList::~OperationsList() {}
-
 void OperationsList::UpdateUI(bool scrollDown)
 {
-	std::cout << "Sould update list (scrollDown = " << scrollDown << std::endl;
-	ResetUI();
+	m_operationsList->clear();
 
-	m_totalLabel->setText("Solde du compte : " + QString::fromStdString(s_DataManager.r_CurrentProfile().r_CurrentBankAccount().GetTotalAmount().GetString()));
+	m_totalLabel->setText(
+		QString::fromStdString("Solde du compte : " + s_DataManager.r_CurrentProfile().r_CurrentBankAccount().GetTotalAmount().GetString())
+	);
 		
 	QDate currentDate = QDate::currentDate();
 
-	for (const Operation& operation : s_DataManager.r_CurrentProfile().r_CurrentBankAccount().operations)
+	for (const Operation& operation : s_DataManager.r_CurrentProfile().r_CurrentBankAccount().r_operations())
 	{
-		if (!IsOperationInDisplayableMonth(operation, currentDate)) {
+		if (!IsOperationInDisplayableMonth(operation.year, operation.month, currentDate)) {
 			continue;
 		}
+
+		QWidget* operationWidget = new QWidget();
 
 		QString descriptionString = !operation.description.empty()
 			? " (" + QString::fromStdString(operation.description) + ")"
 			: "";
 
 		QString operationString =
-			QString::fromStdString(std::to_string(operation.id)) + " " +
 			QString::fromStdString(std::to_string(operation.month))
 			+ '/'
 			+ QString::fromStdString(std::to_string(operation.year))
 			+ " : "
 			+ QString::fromStdString(operation.amount.GetString())
 			+ " | "
-			+ QString::fromStdString(std::to_string(operation.categoryIndex)) + " "
 			+ QString::fromStdString(s_DataManager.r_CurrentProfile().categories[operation.categoryIndex])
 			+ descriptionString;
 
 		QLabel* operationLabel = new QLabel(operationString);
-		m_operationLabels.push_back(operationLabel);
 
 		QPushButton* editOperationButton = new QPushButton("Modifier");
-		m_editOperationButtons.push_back(editOperationButton);
-		QPushButton* deleteOperationButton = new QPushButton("Supprimer");
-		m_deleteOperationButtons.push_back(deleteOperationButton);
-
 		connect(editOperationButton, &QPushButton::released, [this, operation]() {
-			HandleOperationEdit(operation);
-			});
+			HandleOperationEdit(operation.id);
+		});
 
+		QPushButton* deleteOperationButton = new QPushButton("Supprimer");
 		connect(deleteOperationButton, &QPushButton::released, [this, operation]() {
 			HandleOperationDelete(operation.id);
-			});
+		});
 
-		QListWidgetItem* operationItem = new QListWidgetItem();
-		m_operationItems.push_back(operationItem);
-		QWidget* operationWidget = new QWidget();
-		m_operationWidgets.push_back(operationWidget);
-		QHBoxLayout* operationLayout = new QHBoxLayout();
-		m_operationLayouts.push_back(operationLayout);
-
+		QHBoxLayout* operationLayout = new QHBoxLayout(operationWidget);
 		operationLayout->addWidget(operationLabel);
 		operationLayout->addWidget(editOperationButton);
 		operationLayout->addWidget(deleteOperationButton);
-
-		operationWidget->setLayout(operationLayout);
 		
+		QListWidgetItem* operationItem = new QListWidgetItem();
 		operationItem->setSizeHint(operationWidget->sizeHint());
 		m_operationsList->addItem(operationItem);
 		m_operationsList->setItemWidget(operationItem, operationWidget);
 	}
 
 	if (scrollDown) {
-		std::cout << "Should";
 		m_operationsList->scrollToBottom();
-		std::cout << " scroll down" << std::endl;
 	}
 }
 
-void OperationsList::ResetUI()
+bool OperationsList::IsOperationInDisplayableMonth(int operationYear, int operationMonth, const QDate& currentDate) const
 {
-	for (QListWidgetItem* item : m_operationItems) {
-		delete item;
+	if (m_displayOperationsSinceMonths < 0) {
+		return true;
 	}
 
-	for (QWidget* widget : m_operationWidgets) {
-		delete widget;
-	}
-
-	m_operationItems.clear();
-	m_operationWidgets.clear();
-	m_operationLayouts.clear();
-	m_operationLabels.clear();
-	m_editOperationButtons.clear();
-	m_deleteOperationButtons.clear();
-}
-
-bool OperationsList::IsOperationInDisplayableMonth(const Operation& operation, const QDate& currentDate) const
-{
 	int monthsInAYear = 12;
 
-	assert(m_displayOperationsSinceMonths <= monthsInAYear && "Impossible d'afficher une opération datant de plus d'un an.");
-
-	bool isOperationInAFutureYear = operation.year > currentDate.year();
+	bool isOperationInAFutureYear = operationYear > currentDate.year();
 
 	if (isOperationInAFutureYear) {
 		return true;
 	}
 
-	bool isOperationInCurrentYear = operation.year == currentDate.year();
+	bool isOperationInCurrentYear = operationYear == currentDate.year();
 
 	bool isEveryDisplayableMonthInCurrentYear = currentDate.month() >= m_displayOperationsSinceMonths;
 
 	if (isEveryDisplayableMonthInCurrentYear) {
 		int firstDisplayableMonthOfCurrentYear = currentDate.month() - m_displayOperationsSinceMonths + 1;
 
-		return isOperationInCurrentYear && operation.month >= firstDisplayableMonthOfCurrentYear;
+		return isOperationInCurrentYear && operationMonth >= firstDisplayableMonthOfCurrentYear;
 	}
 
 	// Every month of current year is displayable
@@ -165,28 +138,35 @@ bool OperationsList::IsOperationInDisplayableMonth(const Operation& operation, c
 		return true;
 	}
 
-	bool isOperationInLastYear = operation.year == currentDate.year() - 1;
+	bool isOperationInLastYear = operationYear == currentDate.year() - 1;
 
 	int firstDisplayableMonthOfLastYear = currentDate.month() - m_displayOperationsSinceMonths + monthsInAYear + 1;
 
-	return isOperationInLastYear && operation.month >= firstDisplayableMonthOfLastYear;
+	return isOperationInLastYear && operationMonth >= firstDisplayableMonthOfLastYear;
 }
 
-void OperationsList::HandleOperationEdit(const Operation& operation)
+void OperationsList::HandleOperationEdit(int id)
 {
-	EditOperationDialog dialog(operation);
-	if (dialog.exec())
-	{
+	EditOperationDialog dialog(id);
+	
+	if (dialog.exec()) {
 		UpdateUI();
-		s_DataManager.SaveProfiles();
 	}
 }
 
 void OperationsList::HandleOperationDelete(int id)
 {
-	s_DataManager.r_CurrentProfile().r_CurrentBankAccount().DeleteOperation(id);
+	s_DataManager.DeleteOperation(id);
+
+	try {
+		UpdateUI();
+	}
+	catch (const CustomException& e) {
+		HandleException(e);
+		return;
+	}
+
 	UpdateUI();
-	s_DataManager.SaveProfiles();
 }
 
 void OperationsList::HandleDisplayFromChange()
@@ -200,6 +180,9 @@ void OperationsList::HandleDisplayFromChange()
 		break;
 	case 2:
 		m_displayOperationsSinceMonths = 12;
+		break;
+	case 3:
+		m_displayOperationsSinceMonths = -1;
 		break;
 	}
 

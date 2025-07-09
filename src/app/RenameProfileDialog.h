@@ -12,14 +12,17 @@ class RenameProfileDialog : public QDialog
 	Q_OBJECT
 
 public:
-	int index;
 
 	RenameProfileDialog(int index, QWidget* parent = nullptr);
 
 private:
+	int m_index;
+
 	QFormLayout* m_formLayout;
+	
 	QLabel* m_nameLabel;
 	QLineEdit* m_nameLineEdit;
+	
 	QPushButton* m_editButton;
 	QPushButton* m_cancelButton;
 

@@ -16,21 +16,13 @@ class ManageAccountsDialog : public QDialog
 
 public:
 	ManageAccountsDialog(QWidget* parent = nullptr);
-	~ManageAccountsDialog();
 
 private:
-
 	QLayout* m_mainLayout;
-
 	QListWidget* m_accountsList;
-	std::vector<QListWidgetItem*> m_accountItems;
-	std::vector<QWidget*> m_accountWidgets;
-
 	QPushButton* m_addButton;
-
 	QPushButton* m_defaultButton;
 
-	void ResetUI();
 	void UpdateUI();
 
 private slots:
