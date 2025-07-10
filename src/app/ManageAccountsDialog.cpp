@@ -93,7 +93,7 @@ void ManageAccountsDialog::HandleAccountDelete(int index)
 	try {
 		s_DataManager.DeleteAccount(index);
 	}
-	catch (const CustomException& e) {
+	catch (const ApplicationException& e) {
 		HandleException(e);
 		return;
 	}

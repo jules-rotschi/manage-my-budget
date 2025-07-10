@@ -2,7 +2,7 @@
 
 #include <qmessagebox.h>
 
-int HandleException(const CustomException& exception)
+int HandleException(const ApplicationException& exception)
 {
 	QMessageBox box;
 	box.setText(exception.what());

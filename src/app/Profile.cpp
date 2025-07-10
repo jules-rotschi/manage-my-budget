@@ -1,8 +1,8 @@
 ﻿#include "Profile.h"
 
-#include "app/DataManager.h"
-#include "app/InvalidInputException.h"
-#include "app/ForbiddenActionException.h"
+#include <assert.h>
+
+#include "DataManager.h"
 
 Profile::Profile(bool populateDefault)
 {
@@ -29,6 +29,8 @@ int Profile::GetCurrentAccountIndex() const
 
 void Profile::SetCurrentAccountIndex(int index)
 {
+	assert((index < bankAccounts.size()) && "Account index must be less or equal to last account index.");
+
 	m_currentBankAccountIndex = index;
 }
 

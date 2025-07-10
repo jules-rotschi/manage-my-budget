@@ -1,5 +1,5 @@
 ﻿#pragma once
 
-#include "CustomException.h"
+#include "ApplicationException.h"
 
-int HandleException(const CustomException& exception);
+int HandleException(const ApplicationException& exception);

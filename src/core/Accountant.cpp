@@ -1,10 +1,14 @@
 ﻿#include "Accountant.h"
 
+#include <assert.h>
+
 Accountant::Accountant(const std::vector<BankAccount>& accounts)
 	: m_accounts(accounts) {}
 
 Amount Accountant::GetMonthlyAmount(int year, int month) const
 {
+	assert((month >= 1 && month <= 12) && "Month argument must be within [1;12].");
+
 	Amount amount = 0;
 
 	for (const BankAccount& account : m_accounts) {
@@ -16,6 +20,8 @@ Amount Accountant::GetMonthlyAmount(int year, int month) const
 
 Amount Accountant::GetMonthlyAmount(int year, int month, int categoryIndex) const
 {
+	assert((month >= 1 && month <= 12) && "Month argument must be within [1;12].");
+
 	Amount amount = 0;
 
 	for (const BankAccount& account : m_accounts) {
@@ -49,6 +55,8 @@ Amount Accountant::GetYearlyAmount(int year, int categoryIndex) const
 
 Amount Accountant::GetMonthlySavings(int year, int month)
 {
+	assert((month >= 1 && month <= 12) && "Month argument must be within [1;12].");
+
 	Amount savings = 0;
 
 	for (const BankAccount& account : m_accounts) {

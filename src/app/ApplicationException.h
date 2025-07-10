@@ -3,10 +3,10 @@
 #include <exception>
 #include <string>
 
-class CustomException : public std::exception
+class ApplicationException : public std::exception
 {
 public:
-	CustomException(const std::string& typeIndicator, const std::string& description);
+	ApplicationException(const std::string& typeIndicator, const std::string& description);
 
 	const char* what() const noexcept override;
 

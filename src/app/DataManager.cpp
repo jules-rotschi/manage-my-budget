@@ -1,13 +1,13 @@
 ﻿#include "DataManager.h"
 
 #include <iostream>
+#include <assert.h>
 
 #include <qfile.h>
 #include <qdir.h>
-#include <qdebug.h>
 
-#include "app/InvalidInputException.h"
-#include "app/ForbiddenActionException.h"
+#include "InvalidInputException.h"
+#include "ForbiddenActionException.h"
 
 const std::vector<Profile>& DataManager::r_Profiles() const
 {
@@ -26,11 +26,15 @@ int DataManager::GetCurrentProfileIndex() const
 
 void DataManager::SetCurrentProfileIndex(int index)
 {
+	assert((index < m_profiles.size()) && "Profile index must be less or equal to last profile index.");
+
 	m_currentProfileIndex = index;
 }
 
 void DataManager::SetCurrentProfileCurrentAccountIndex(int index)
 {
+	assert((index < r_CurrentProfile().bankAccounts.size()) && "Account index must be less or equal to last account index.");
+
 	m_profiles[m_currentProfileIndex].SetCurrentAccountIndex(index);
 }
 
@@ -57,11 +61,15 @@ void DataManager::AddProfile(const std::string& name)
 	SaveProfiles();
 }
 
-void DataManager::RenameProfile(int index, const std::string& newName, const std::string& oldName)
+void DataManager::RenameProfile(int index, const std::string& newName)
 {
+	assert((index < m_profiles.size()) && "Profile index must be less or equal to last profile index.");
+
 	if (ToFileName(newName).empty()) {
 		throw InvalidInputException("Le nom du profil doit contenir au moins un caractère (hors caractères spéciaux).");
 	}
+
+	std::string oldName = m_profiles[index].name;
 
 	for (int i = 0; i < m_profiles.size(); i++) {
 		const Profile& existingProfile = m_profiles[i];
@@ -83,6 +91,8 @@ void DataManager::RenameProfile(int index, const std::string& newName, const std
 
 void DataManager::DeleteProfile(int index)
 {
+	assert((index < m_profiles.size()) && "Profile index must be less or equal to last profile index.");
+
 	if (m_profiles.size() == 1) {
 		throw ForbiddenActionException("Vous ne pouvez pas supprimer le seul profil existant.");
 	}
@@ -119,6 +129,8 @@ void DataManager::AddCategory(const std::string& category)
 
 void DataManager::RenameCategory(int index, const std::string& newName)
 {
+	assert((index < r_CurrentProfile().categories.size()) && "Category index must be less or equal to last category index.");
+
 	if (r_CurrentProfile().categories[index] == "Opération interne") {
 		throw ForbiddenActionException("Vous ne pouvez pas renommer cette catégorie.");
 	}
@@ -140,6 +152,8 @@ void DataManager::RenameCategory(int index, const std::string& newName)
 
 void DataManager::DeleteCategory(int index)
 {
+	assert((index < r_CurrentProfile().categories.size()) && "Category index must be less or equal to last category index.");
+
 	if (r_CurrentProfile().categories[index] == "Opération interne") {
 		throw ForbiddenActionException(
 			"Vous ne pouvez pas supprimer la catégorie \"Opération interne\". Cette catégorie permet de classer les opérations entre vos différents comptes."
@@ -197,11 +211,15 @@ void DataManager::AddAccount(const std::string& name, const std::string& type, i
 	SaveAccounts(r_CurrentProfile());
 }
 
-void DataManager::EditAccount(int index, const std::string& name, const std::string& type, int initialAmountValue, const std::string& oldAccountName)
+void DataManager::EditAccount(int index, const std::string& name, const std::string& type, int initialAmountValue)
 {
+	assert((index < r_CurrentProfile().bankAccounts.size()) && "Account index must be less or equal to last account index.");
+
 	if (s_DataManager.ToFileName(name).empty()) {
 		throw InvalidInputException("Le nom du compte doit contenir au moins un caractère (hors caractères spéciaux).");
 	}
+
+	std::string oldAccountName = r_CurrentProfile().bankAccounts[index].name;
 
 	for (int i = 0; i < r_CurrentProfile().bankAccounts.size(); i++) {
 		const BankAccount& existingAccount = r_CurrentProfile().bankAccounts[i];
@@ -222,9 +240,11 @@ void DataManager::EditAccount(int index, const std::string& name, const std::str
 	if (type == "Compte courant") {
 		account.type = AccountType::CURRENT;
 	}
-
-	if (type == "Épargne") {
+	else if (type == "Épargne") {
 		account.type = AccountType::SAVING;
+	}
+	else {
+		throw InvalidInputException("Type du compte invalide.");
 	}
 
 	account.initialAmount = initialAmountValue;
@@ -236,6 +256,8 @@ void DataManager::EditAccount(int index, const std::string& name, const std::str
 
 void DataManager::DeleteAccount(int index)
 {
+	assert((index < r_CurrentProfile().bankAccounts.size()) && "Account index must be less or equal to last account index.");
+	
 	if (r_CurrentProfile().bankAccounts.size() == 1) {
 		throw ForbiddenActionException("Vous ne pouvez pas supprimer le seul compte du profil.");
 	}
@@ -253,8 +275,16 @@ void DataManager::DeleteAccount(int index)
 	SaveAccounts(r_CurrentProfile());
 }
 
-void DataManager::AddOperation(int year, int month, int amountValue, int categoryIndex, std::string description)
+void DataManager::AddOperation(int year, int month, int amountValue, int categoryIndex, const std::string& description)
 {
+	if (month < 1 || month > 12) {
+		throw InvalidInputException("Le mois doit être compris entre 1 et 12.");
+	}
+
+	if (categoryIndex >= r_CurrentProfile().categories.size()) {
+		throw InvalidInputException("La catégorie n'existe pas.");
+	}
+
 	Operation operation;
 	operation.year = year;
 	operation.month = month;
@@ -267,8 +297,16 @@ void DataManager::AddOperation(int year, int month, int amountValue, int categor
 	SaveOperations(r_CurrentProfile(), m_profiles[m_currentProfileIndex].r_CurrentBankAccount());
 }
 
-void DataManager::EditOperation(int id, int year, int month, int amountValue, int categoryIndex, std::string description)
+void DataManager::EditOperation(int id, int year, int month, int amountValue, int categoryIndex, const std::string& description)
 {
+	if (month < 1 || month > 12) {
+		throw InvalidInputException("Le mois doit être compris entre 1 et 12.");
+	}
+
+	if (categoryIndex >= r_CurrentProfile().categories.size()) {
+		throw InvalidInputException("La catégorie n'existe pas.");
+	}
+
 	Operation operation;
 	operation.year = year;
 	operation.month = month;
@@ -288,22 +326,22 @@ void DataManager::DeleteOperation(int id)
 	SaveOperations(r_CurrentProfile(), m_profiles[m_currentProfileIndex].r_CurrentBankAccount());
 }
 
-std::string DataManager::ToFileName(std::string str) const
+std::string DataManager::ToFileName(std::string strCopy) const
 {
-	std::transform(str.begin(), str.end(), str.begin(), tolower);
+	std::transform(strCopy.begin(), strCopy.end(), strCopy.begin(), tolower);
 
-	std::replace(str.begin(), str.end(), ' ', '-');
+	std::replace(strCopy.begin(), strCopy.end(), ' ', '-');
 
-	for (int i = 0; i < str.size(); i++) {
-		char c = str[i];
+	for (int i = 0; i < strCopy.size(); i++) {
+		char c = strCopy[i];
 
 		if ((c < 97 || c > 122) && c != '-') {
-			str.erase(i, 1);
+			strCopy.erase(i, 1);
 			i--;
 		}
 	}
 
-	return str;
+	return strCopy;
 }
 
 void DataManager::InitializeData()

@@ -2,9 +2,9 @@
 
 #include <string>
 
-#include "app/CustomException.h"
+#include "ApplicationException.h"
 
-class ForbiddenActionException : public CustomException
+class ForbiddenActionException : public ApplicationException
 {
 public:
 	ForbiddenActionException(const std::string& description);

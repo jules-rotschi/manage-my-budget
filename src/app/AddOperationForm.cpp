@@ -87,7 +87,7 @@ void AddOperationForm::HandleAddButton()
 	try {
 		s_DataManager.AddOperation(year, month, amountValue, categoryIndex, description);
 	}
-	catch (const CustomException& e) {
+	catch (const ApplicationException& e) {
 		HandleException(e);
 		return;
 	}

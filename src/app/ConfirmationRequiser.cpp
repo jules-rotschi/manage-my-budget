@@ -9,6 +9,7 @@ bool ConfirmAction(const std::string& message, const std::string& confirmButtonT
 {
 	QMessageBox box;
 	box.setText(QString::fromStdString(message));
+
 	QPushButton* confirmButton = box.addButton(QString::fromStdString(confirmButtonText), QMessageBox::AcceptRole);
 	QPushButton* cancelButton = box.addButton("Annuler", QMessageBox::RejectRole);
 	box.setDefaultButton(cancelButton);

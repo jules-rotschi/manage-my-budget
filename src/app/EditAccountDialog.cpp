@@ -64,12 +64,10 @@ void EditAccountDialog::HandleConfirm()
 		return;
 	}
 
-	std::string oldAccountName = s_DataManager.r_CurrentProfile().bankAccounts[m_index].name;
-
 	try {
-		s_DataManager.EditAccount(m_index, name, type, initialAmountValue, oldAccountName);
+		s_DataManager.EditAccount(m_index, name, type, initialAmountValue);
 	}
-	catch (const CustomException& e) {
+	catch (const ApplicationException& e) {
 		HandleException(e);
 		return;
 	}

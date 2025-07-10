@@ -60,7 +60,7 @@ void AddAccountDialog::HandleConfirm()
 	try {
 		s_DataManager.AddAccount(name, type, initialAmountValue);
 	}
-	catch (const CustomException& e) {
+	catch (const ApplicationException& e) {
 		HandleException(e);
 		return;
 	}

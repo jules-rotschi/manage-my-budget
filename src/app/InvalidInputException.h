@@ -2,9 +2,9 @@
 
 #include <string>
 
-#include "app/CustomException.h"
+#include "ApplicationException.h"
 
-class InvalidInputException : public CustomException
+class InvalidInputException : public ApplicationException
 {
 public:
 	InvalidInputException(const std::string& description);

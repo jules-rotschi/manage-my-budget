@@ -140,7 +140,7 @@
     <ClCompile Include="src\app\ForbiddenActionException.cpp">
       <Filter>Source Files\app\Exceptions</Filter>
     </ClCompile>
-    <ClCompile Include="src\app\CustomException.cpp">
+    <ClCompile Include="src\app\ApplicationException.cpp">
       <Filter>Source Files\app\Exceptions</Filter>
     </ClCompile>
     <ClCompile Include="src\app\Profile.cpp">
@@ -156,7 +156,7 @@
       <Filter>Source Files\app\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\app\ConfirmationRequiser.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\app\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -225,7 +225,7 @@
     <ClInclude Include="src\app\ForbiddenActionException.h">
       <Filter>Header Files\app\Exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="src\app\CustomException.h">
+    <ClInclude Include="src\app\ApplicationException.h">
       <Filter>Header Files\app\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="src\app\Profile.h">

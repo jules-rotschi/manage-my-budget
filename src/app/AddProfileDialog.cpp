@@ -31,7 +31,7 @@ void AddProfileDialog::HandleConfirm()
 	try {
 		s_DataManager.AddProfile(m_nameLineEdit->text().toStdString());
 	}
-	catch (const CustomException& e) {
+	catch (const ApplicationException& e) {
 		HandleException(e);
 		return;
 	}

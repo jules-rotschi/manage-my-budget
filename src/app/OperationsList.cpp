@@ -156,12 +156,10 @@ void OperationsList::HandleOperationEdit(int id)
 
 void OperationsList::HandleOperationDelete(int id)
 {
-	s_DataManager.DeleteOperation(id);
-
 	try {
-		UpdateUI();
+		s_DataManager.DeleteOperation(id);
 	}
-	catch (const CustomException& e) {
+	catch (const ApplicationException& e) {
 		HandleException(e);
 		return;
 	}

@@ -77,7 +77,7 @@ void ManageCategoriesDialog::HandleCategoryAdd()
 	try {
 		s_DataManager.AddCategory(m_nameLineEdit->text().toStdString());
 	}
-	catch (const CustomException& e) {
+	catch (const ApplicationException& e) {
 		HandleException(e);
 		return;
 	}
@@ -100,7 +100,7 @@ void ManageCategoriesDialog::HandleCategoryDelete(int index)
 	try {
 		s_DataManager.DeleteCategory(index);
 	}
-	catch (const CustomException& e) {
+	catch (const ApplicationException& e) {
 		HandleException(e);
 		return;
 	}

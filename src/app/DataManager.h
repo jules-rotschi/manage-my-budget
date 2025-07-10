@@ -20,7 +20,7 @@ public:
 	void InitializeData();
 
 	void AddProfile(const std::string& name);
-	void RenameProfile(int index, const std::string& newName, const std::string& oldName);
+	void RenameProfile(int index, const std::string& newName);
 	void DeleteProfile(int index);
 
 	void AddCategory(const std::string& category);
@@ -28,14 +28,14 @@ public:
 	void DeleteCategory(int index);
 
 	void AddAccount(const std::string& name, const std::string& type, int initialAmountValue);
-	void EditAccount(int index, const std::string& name, const std::string& type, int initialAmountValue, const std::string& oldAccountName);
+	void EditAccount(int index, const std::string& name, const std::string& type, int initialAmountValue);
 	void DeleteAccount(int index);
 
-	void AddOperation(int year, int month, int amountValue, int categoryIndex, std::string description);
-	void EditOperation(int id, int year, int month, int amountValue, int categoryIndex, std::string description);
+	void AddOperation(int year, int month, int amountValue, int categoryIndex, const std::string& description);
+	void EditOperation(int id, int year, int month, int amountValue, int categoryIndex, const std::string& description);
 	void DeleteOperation(int id);
 
-	std::string ToFileName(std::string str) const;
+	std::string ToFileName(std::string strCopy) const;
 
 private:
 	std::vector<Profile> m_profiles;

@@ -92,7 +92,7 @@ void EditOperationDialog::HandleConfirm()
 	try {
 		s_DataManager.EditOperation(m_id, year, month, amount, categoryIndex, description);
 	}
-	catch (const CustomException& e) {
+	catch (const ApplicationException& e) {
 		HandleException(e);
 		return;
 	}

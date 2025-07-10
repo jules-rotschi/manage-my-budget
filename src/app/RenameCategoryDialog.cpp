@@ -28,7 +28,7 @@ void RenameCategoryDialog::HandleConfirm()
 	try {
 		s_DataManager.RenameCategory(m_categoryIndex, m_lineEdit->text().toStdString());
 	}
-	catch (const CustomException& e) {
+	catch (const ApplicationException& e) {
 		HandleException(e);
 		return;
 	}

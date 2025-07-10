@@ -28,12 +28,11 @@ RenameProfileDialog::RenameProfileDialog(int index, QWidget* parent)
 void RenameProfileDialog::HandleConfirm()
 {
 	std::string newName = m_nameLineEdit->text().toStdString();
-	std::string oldName = s_DataManager.r_Profiles()[m_index].name;
 
 	try {
-		s_DataManager.RenameProfile(m_index, newName, oldName);
+		s_DataManager.RenameProfile(m_index, newName);
 	}
-	catch (const CustomException& e) {
+	catch (const ApplicationException& e) {
 		HandleException(e);
 		return;
 	}

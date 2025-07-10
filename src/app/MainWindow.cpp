@@ -4,7 +4,7 @@
 
 #include <qstring.h>
 #include <qdatetime.h>
-#include <qevent.h>
+
 
 #include "DataManager.h"
 #include "EditOperationDialog.h"
@@ -13,7 +13,6 @@
 #include "ManageAccountsDialog.h"
 #include "MonthlyReviewDialog.h"
 #include "YearlyReviewDialog.h"
-#include "CustomException.h"
 #include "ExceptionHandler.h"
 
 MainWindow::MainWindow(QWidget* parent)

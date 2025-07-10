@@ -1,6 +1,7 @@
 ﻿#include "BankAccount.h"
 
 #include <algorithm>
+#include <assert.h>
 
 const std::vector<Operation>& BankAccount::r_Operations() const
 {
@@ -9,11 +10,16 @@ const std::vector<Operation>& BankAccount::r_Operations() const
 
 std::string BankAccount::GetTypeString() const
 {
-	if (type == AccountType::SAVING) {
-		return "Épargne";
-	}
-	else {
+	switch (type)
+	{
+	case AccountType::CURRENT:
 		return "Compte courant";
+
+	case AccountType::SAVING:
+		return "Épargne";
+		
+	default:
+		return "Type inconnu";
 	}
 }
 
@@ -30,6 +36,8 @@ Amount BankAccount::GetTotalAmount() const
 
 Amount BankAccount::GetMonthlyAmount(int year, int month) const
 {
+	assert((month >= 1 && month <= 12) && "Month argument must be within [1;12].");
+
 	Amount amount = 0;
 
 	for (const Operation& operation : m_operations) {
@@ -46,6 +54,8 @@ Amount BankAccount::GetMonthlyAmount(int year, int month) const
 
 Amount BankAccount::GetMonthlyAmount(int year, int month, int categoryIndex) const
 {
+	assert((month >= 1 && month <= 12) && "Month argument must be within [1;12].");
+
 	Amount amount = 0;
 
 	for (const Operation& operation : m_operations) {
@@ -91,6 +101,8 @@ Amount BankAccount::GetYearlyAmount(int year, int categoryIndex) const
 
 void BankAccount::AddOperation(const Operation& operation)
 {
+	assert((operation.month >= 1 && operation.month <= 12) && "Operation month must be within [1;12].");
+
 	Operation newOperation = GetNewOperation(
 		operation.year,
 		operation.month,
@@ -104,6 +116,8 @@ void BankAccount::AddOperation(const Operation& operation)
 
 void BankAccount::EditOperation(int id, const Operation& operation)
 {
+	assert((operation.month >= 1 && operation.month <= 12) && "Operation month must be within [1;12].");
+
 	for (Operation& oldOperation : m_operations) {
 		if (oldOperation.id == id) {
 			oldOperation.Edit(operation);
@@ -111,6 +125,8 @@ void BankAccount::EditOperation(int id, const Operation& operation)
 			return;
 		}
 	}
+
+	assert((false) && "The given id does not correspond to any existing operation on this account.");
 }
 
 void BankAccount::DeleteOperation(int id)
@@ -123,6 +139,8 @@ void BankAccount::DeleteOperation(int id)
 			return;
 		}
 	}
+
+	assert((false) && "The given id does not correspond to any existing operation on this account.");
 }
 
 void BankAccount::HandleCategoryDelete(int index)
@@ -132,10 +150,14 @@ void BankAccount::HandleCategoryDelete(int index)
 			operation.categoryIndex--;
 		}
 	}
+
+	assert((false) && "The given id does not correspond to any existing category of the current profile.");
 }
 
 void BankAccount::Edit(const BankAccount& account)
 {
+	assert((account.type == AccountType::CURRENT || account.type == AccountType::SAVING) && "The given account type is incorrect.");
+
 	name = account.name;
 	type = account.type;
 	initialAmount = account.initialAmount;
@@ -163,6 +185,8 @@ Operation BankAccount::GetNewOperation(
 	const std::string& description
 )
 {
+	assert((month >= 1 && month <= 12) && "Month argument must be within [1;12].");
+
 	Operation operation = GetNewOperation();
 	operation.year = year;
 	operation.month = month;
@@ -192,7 +216,7 @@ void BankAccount::SortOperations()
 		}
 
 		return op1.id < op2.id;
-		});
+	});
 }
 
 bool operator==(const BankAccount& a1, const BankAccount& a2)
