@@ -104,6 +104,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\app\ConfirmationRequiser.cpp" />
     <ClCompile Include="src\app\AmountValueFormatter.cpp" />
     <ClCompile Include="src\app\ExceptionHandler.cpp" />
     <ClCompile Include="src\app\CustomException.cpp" />
@@ -148,6 +149,7 @@
     <QtMoc Include="src\app\ManageProfilesDialog.h" />
     <QtMoc Include="src\app\AddProfileDialog.h" />
     <QtMoc Include="src\app\RenameProfileDialog.h" />
+    <ClInclude Include="src\app\ConfirmationRequiser.h" />
     <ClInclude Include="src\app\AmountValueFormatter.h" />
     <ClInclude Include="src\app\ExceptionHandler.h" />
     <ClInclude Include="src\app\CustomException.h" />

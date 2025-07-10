@@ -194,3 +194,13 @@ void BankAccount::SortOperations()
 		return op1.id < op2.id;
 		});
 }
+
+bool operator==(const BankAccount& a1, const BankAccount& a2)
+{
+	return a1.name == a2.name;
+}
+
+bool operator!=(const BankAccount& a1, const BankAccount& a2)
+{
+	return !(a1 == a2);
+}

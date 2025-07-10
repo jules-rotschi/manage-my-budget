@@ -57,3 +57,5 @@ private:
 	void SortOperations();
 };
 
+bool operator==(const BankAccount& a1, const BankAccount& a2);
+bool operator!=(const BankAccount& a1, const BankAccount& a2);

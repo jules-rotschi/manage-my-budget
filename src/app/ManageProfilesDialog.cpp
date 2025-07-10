@@ -5,6 +5,7 @@
 #include "AddProfileDialog.h"
 #include "RenameProfileDialog.h"
 #include "ExceptionHandler.h"
+#include "ConfirmationRequiser.h"
 
 ManageProfilesDialog::ManageProfilesDialog(QWidget* parent)
 	: QDialog(parent)
@@ -85,6 +86,10 @@ void ManageProfilesDialog::HandleProfileEdit(int index)
 
 void ManageProfilesDialog::HandleProfileDelete(int index)
 {
+	if (!ConfirmAction("Voulez-vous vraiment supprimer le profil \"" + s_DataManager.profiles[index].name + "\" ?", "Supprimer")) {
+		return;
+	}
+
 	try {
 		s_DataManager.DeleteProfile(index);
 	}

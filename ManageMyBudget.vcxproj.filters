@@ -155,6 +155,9 @@
     <ClCompile Include="src\app\AmountValueFormatter.cpp">
       <Filter>Source Files\app\UI</Filter>
     </ClCompile>
+    <ClCompile Include="src\app\ConfirmationRequiser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\app\AddOperationForm.h">
@@ -232,6 +235,9 @@
       <Filter>Header Files\app\UI</Filter>
     </ClInclude>
     <ClInclude Include="src\app\AmountValueFormatter.h">
+      <Filter>Header Files\app\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\ConfirmationRequiser.h">
       <Filter>Header Files\app\UI</Filter>
     </ClInclude>
   </ItemGroup>

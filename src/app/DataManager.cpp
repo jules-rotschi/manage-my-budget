@@ -71,17 +71,18 @@ void DataManager::RenameProfile(int index, const std::string& newName, const std
 	SaveProfiles();
 }
 
-void DataManager::DeleteProfile(int index) {
+void DataManager::DeleteProfile(int index)
+{
 	if (profiles.size() == 1) {
 		throw ForbiddenActionException("Vous ne pouvez pas supprimer le seul profil existant.");
 	}
 
-	if (m_currentProfileIndex > index) {
-		m_currentProfileIndex--;
-	}
-
 	if (m_currentProfileIndex == index) {
 		SetCurrentProfileIndex(0);
+	}
+
+	if (m_currentProfileIndex > index) {
+		m_currentProfileIndex--;
 	}
 
 	profiles.erase(profiles.begin() + index);
@@ -225,21 +226,19 @@ void DataManager::EditAccount(int index, const std::string& name, const std::str
 
 void DataManager::DeleteAccount(int index)
 {
-	Profile& currentProfile = r_CurrentProfile();
-
-	if (currentProfile.bankAccounts.size() == 1) {
+	if (r_CurrentProfile().bankAccounts.size() == 1) {
 		throw ForbiddenActionException("Vous ne pouvez pas supprimer le seul compte du profil.");
 	}
 
-	if (currentProfile.GetCurrentAccountIndex() > index) {
-		currentProfile.SetCurrentAccountIndex(currentProfile.GetCurrentAccountIndex() - 1);
+	if (r_CurrentProfile().GetCurrentAccountIndex() == index) {
+		r_CurrentProfile().SetCurrentAccountIndex(0);
 	}
 
-	if (currentProfile.GetCurrentAccountIndex() == index) {
-		currentProfile.SetCurrentAccountIndex(0);
+	if (r_CurrentProfile().GetCurrentAccountIndex() > index) {
+		r_CurrentProfile().SetCurrentAccountIndex(r_CurrentProfile().GetCurrentAccountIndex() - 1);
 	}
 
-	currentProfile.bankAccounts.erase(currentProfile.bankAccounts.begin() + index);
+	r_CurrentProfile().bankAccounts.erase(r_CurrentProfile().bankAccounts.begin() + index);
 
 	SaveAccounts(r_CurrentProfile());
 }

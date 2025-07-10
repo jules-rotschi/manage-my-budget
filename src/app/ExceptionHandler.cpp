@@ -1,4 +1,4 @@
-﻿#include "app/ExceptionHandler.h"
+﻿#include "ExceptionHandler.h"
 
 #include <qmessagebox.h>
 

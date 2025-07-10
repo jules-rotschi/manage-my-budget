@@ -120,13 +120,16 @@ void MainWindow::LoadAccountsToComboBox()
 
 void MainWindow::HandleManageProfiles()
 {
-	int profileIndex = s_DataManager.GetCurrentProfileIndex();
-
 	ManageProfilesDialog dialog;
 	dialog.exec();
 
+	disconnect(m_currentProfileComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::HandleCurrentProfileChange);
+
 	LoadProfilesToComboBox();
-	m_currentProfileComboBox->setCurrentIndex(profileIndex);
+
+	connect(m_currentProfileComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::HandleCurrentProfileChange);
+	
+	m_currentProfileComboBox->setCurrentIndex(s_DataManager.GetCurrentProfileIndex());
 
 	UpdateUI();
 }
@@ -143,13 +146,16 @@ void MainWindow::HandleManageCategories()
 
 void MainWindow::HandleManageAccounts()
 {
-	int accountIndex = s_DataManager.r_CurrentProfile().GetCurrentAccountIndex();
-
 	ManageAccountsDialog dialog;
 	dialog.exec();
 
+	disconnect(m_currentAccountComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::HandleCurrentAccountChange);
+	
 	LoadAccountsToComboBox();
-	m_currentAccountComboBox->setCurrentIndex(accountIndex);
+	
+	connect(m_currentAccountComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::HandleCurrentAccountChange);
+	
+	m_currentAccountComboBox->setCurrentIndex(s_DataManager.r_CurrentProfile().GetCurrentAccountIndex());
 	
 	UpdateUI();
 }

@@ -5,6 +5,7 @@
 #include "AddAccountDialog.h"
 #include "EditAccountDialog.h"
 #include "ExceptionHandler.h"
+#include "ConfirmationRequiser.h"
 
 ManageAccountsDialog::ManageAccountsDialog(QWidget* parent)
 	: QDialog(parent)
@@ -85,6 +86,10 @@ void ManageAccountsDialog::HandleAccountEdit(int index)
 
 void ManageAccountsDialog::HandleAccountDelete(int index)
 {
+	if (!ConfirmAction("Voulez-vous vraiment supprimer le compte \"" + s_DataManager.r_CurrentProfile().bankAccounts[index].name + "\" ?", "Supprimer")) {
+		return;
+	}
+
 	try {
 		s_DataManager.DeleteAccount(index);
 	}

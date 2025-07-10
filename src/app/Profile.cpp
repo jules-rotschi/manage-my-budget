@@ -31,3 +31,13 @@ void Profile::Rename(const std::string& newName)
 {
 	name = newName;
 }
+
+bool operator==(const Profile& p1, const Profile& p2)
+{
+	return p1.name == p2.name;
+}
+
+bool operator!=(const Profile& p1, const Profile& p2)
+{
+	return !(p1 == p2);
+}

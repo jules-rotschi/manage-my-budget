@@ -24,3 +24,5 @@ private:
 	int m_currentBankAccountIndex = 0;
 };
 
+bool operator==(const Profile& p1, const Profile& p2);
+bool operator!=(const Profile& p1, const Profile& p2);
