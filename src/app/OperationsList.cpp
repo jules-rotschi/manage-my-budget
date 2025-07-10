@@ -54,12 +54,12 @@ void OperationsList::UpdateUI(bool scrollDown)
 	m_operationsList->clear();
 
 	m_totalLabel->setText(
-		QString::fromStdString("Solde du compte : " + s_DataManager.r_CurrentProfile().r_CurrentBankAccount().GetTotalAmount().GetString())
+		QString::fromStdString("Solde du compte : " + s_DataManager.r_CurrentProfile().r_ConstCurrentBankAccount().GetTotalAmount().GetString())
 	);
 		
 	QDate currentDate = QDate::currentDate();
 
-	for (const Operation& operation : s_DataManager.r_CurrentProfile().r_CurrentBankAccount().r_operations())
+	for (const Operation& operation : s_DataManager.r_CurrentProfile().r_ConstCurrentBankAccount().r_Operations())
 	{
 		if (!IsOperationInDisplayableMonth(operation.year, operation.month, currentDate)) {
 			continue;

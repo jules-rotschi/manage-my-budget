@@ -93,11 +93,11 @@ void MainWindow::LoadProfilesToComboBox()
 	}
 
 	m_currentProfileComboBox->setItemText(
-		0, QString::fromStdString(s_DataManager.profiles[0].name)
+		0, QString::fromStdString(s_DataManager.r_Profiles()[0].name)
 	);
 
-	for (int i = 1; i < s_DataManager.profiles.size(); i++) {
-		const Profile& profile = s_DataManager.profiles[i];
+	for (int i = 1; i < s_DataManager.r_Profiles().size(); i++) {
+		const Profile& profile = s_DataManager.r_Profiles()[i];
 		m_currentProfileComboBox->addItem(QString::fromStdString(profile.name));
 	}
 }
@@ -172,7 +172,7 @@ void MainWindow::HandleCurrentProfileChange()
 
 void MainWindow::HandleCurrentAccountChange()
 {
-	s_DataManager.r_CurrentProfile().SetCurrentAccountIndex(m_currentAccountComboBox->currentIndex());
+	s_DataManager.SetCurrentProfileCurrentAccountIndex(m_currentAccountComboBox->currentIndex());
 	UpdateUI(true);
 }
 

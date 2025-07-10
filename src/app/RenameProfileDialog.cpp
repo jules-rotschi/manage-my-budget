@@ -6,7 +6,7 @@
 RenameProfileDialog::RenameProfileDialog(int index, QWidget* parent)
 	: m_index(index), QDialog(parent)
 {
-	Profile profile = s_DataManager.profiles[index];
+	const Profile& profile = s_DataManager.r_Profiles()[index];
 
 	setWindowTitle(QString::fromStdString("Renommer le profil \"" + profile.name + "\""));
 
@@ -28,7 +28,7 @@ RenameProfileDialog::RenameProfileDialog(int index, QWidget* parent)
 void RenameProfileDialog::HandleConfirm()
 {
 	std::string newName = m_nameLineEdit->text().toStdString();
-	std::string oldName = s_DataManager.profiles[m_index].name;
+	std::string oldName = s_DataManager.r_Profiles()[m_index].name;
 
 	try {
 		s_DataManager.RenameProfile(m_index, newName, oldName);

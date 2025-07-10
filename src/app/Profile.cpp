@@ -17,6 +17,11 @@ BankAccount& Profile::r_CurrentBankAccount()
 	return bankAccounts[m_currentBankAccountIndex];
 }
 
+const BankAccount& Profile::r_ConstCurrentBankAccount() const
+{
+	return bankAccounts[m_currentBankAccountIndex];
+}
+
 int Profile::GetCurrentAccountIndex() const
 {
 	return m_currentBankAccountIndex;

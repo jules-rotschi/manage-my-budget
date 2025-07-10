@@ -9,9 +9,14 @@
 #include "app/InvalidInputException.h"
 #include "app/ForbiddenActionException.h"
 
-Profile& DataManager::r_CurrentProfile()
+const std::vector<Profile>& DataManager::r_Profiles() const
 {
-	return profiles[m_currentProfileIndex];
+	return m_profiles;
+}
+
+const Profile& DataManager::r_CurrentProfile()
+{
+	return m_profiles[m_currentProfileIndex];
 }
 
 int DataManager::GetCurrentProfileIndex() const
@@ -24,13 +29,18 @@ void DataManager::SetCurrentProfileIndex(int index)
 	m_currentProfileIndex = index;
 }
 
+void DataManager::SetCurrentProfileCurrentAccountIndex(int index)
+{
+	m_profiles[m_currentProfileIndex].SetCurrentAccountIndex(index);
+}
+
 void DataManager::AddProfile(const std::string& name)
 {
 	if (ToFileName(name).empty()) {
 		throw InvalidInputException("Le nom du profil doit contenir au moins un caractère (hors caractères spéciaux).");
 	}
 
-	for (const Profile& existingProfile : profiles) {
+	for (const Profile& existingProfile : m_profiles) {
 		if (ToFileName(existingProfile.name) == ToFileName(name)) {
 			if (existingProfile.name == name) {
 				throw InvalidInputException("Un profil du même nom existe déjà.");
@@ -42,7 +52,7 @@ void DataManager::AddProfile(const std::string& name)
 	Profile profile(true);
 	profile.name = name;
 
-	profiles.push_back(profile);
+	m_profiles.push_back(profile);
 
 	SaveProfiles();
 }
@@ -53,8 +63,8 @@ void DataManager::RenameProfile(int index, const std::string& newName, const std
 		throw InvalidInputException("Le nom du profil doit contenir au moins un caractère (hors caractères spéciaux).");
 	}
 
-	for (int i = 0; i < profiles.size(); i++) {
-		const Profile& existingProfile = profiles[i];
+	for (int i = 0; i < m_profiles.size(); i++) {
+		const Profile& existingProfile = m_profiles[i];
 
 		bool isNameEdited = newName != oldName;
 
@@ -66,14 +76,14 @@ void DataManager::RenameProfile(int index, const std::string& newName, const std
 		}
 	}
 
-	profiles[index].Rename(newName);
+	m_profiles[index].Rename(newName);
 
 	SaveProfiles();
 }
 
 void DataManager::DeleteProfile(int index)
 {
-	if (profiles.size() == 1) {
+	if (m_profiles.size() == 1) {
 		throw ForbiddenActionException("Vous ne pouvez pas supprimer le seul profil existant.");
 	}
 
@@ -85,7 +95,7 @@ void DataManager::DeleteProfile(int index)
 		m_currentProfileIndex--;
 	}
 
-	profiles.erase(profiles.begin() + index);
+	m_profiles.erase(m_profiles.begin() + index);
 
 	SaveProfiles();
 }
@@ -102,7 +112,7 @@ void DataManager::AddCategory(const std::string& category)
 		}
 	}
 
-	r_CurrentProfile().categories.push_back(category);
+	m_profiles[m_currentProfileIndex].categories.push_back(category);
 
 	SaveCategories(r_CurrentProfile());
 }
@@ -123,7 +133,7 @@ void DataManager::RenameCategory(int index, const std::string& newName)
 		}
 	}
 
-	r_CurrentProfile().categories[index] = newName;
+	m_profiles[m_currentProfileIndex].categories[index] = newName;
 
 	SaveCategories(r_CurrentProfile());
 }
@@ -141,15 +151,15 @@ void DataManager::DeleteCategory(int index)
 	}
 
 	for (const BankAccount& account : r_CurrentProfile().bankAccounts) {
-		for (const Operation& operation : account.r_operations()) {
+		for (const Operation& operation : account.r_Operations()) {
 			if (operation.categoryIndex == index) {
 				throw ForbiddenActionException("Cette catégorie est utilisée par au moins une opération.");
 			}
 		}
 	}
 	
-	r_CurrentProfile().r_CurrentBankAccount().HandleCategoryDelete(index);
-	r_CurrentProfile().categories.erase(r_CurrentProfile().categories.begin() + index);
+	m_profiles[m_currentProfileIndex].r_CurrentBankAccount().HandleCategoryDelete(index);
+	m_profiles[m_currentProfileIndex].categories.erase(r_CurrentProfile().categories.begin() + index);
 
 	SaveCategories(r_CurrentProfile());
 }
@@ -182,7 +192,7 @@ void DataManager::AddAccount(const std::string& name, const std::string& type, i
 
 	account.initialAmount = initialAmountValue;
 
-	r_CurrentProfile().bankAccounts.push_back(account);
+	m_profiles[m_currentProfileIndex].bankAccounts.push_back(account);
 
 	SaveAccounts(r_CurrentProfile());
 }
@@ -219,7 +229,7 @@ void DataManager::EditAccount(int index, const std::string& name, const std::str
 
 	account.initialAmount = initialAmountValue;
 
-	r_CurrentProfile().bankAccounts[index].Edit(account);
+	m_profiles[m_currentProfileIndex].bankAccounts[index].Edit(account);
 
 	SaveAccounts(r_CurrentProfile());
 }
@@ -231,14 +241,14 @@ void DataManager::DeleteAccount(int index)
 	}
 
 	if (r_CurrentProfile().GetCurrentAccountIndex() == index) {
-		r_CurrentProfile().SetCurrentAccountIndex(0);
+		m_profiles[m_currentProfileIndex].SetCurrentAccountIndex(0);
 	}
 
 	if (r_CurrentProfile().GetCurrentAccountIndex() > index) {
-		r_CurrentProfile().SetCurrentAccountIndex(r_CurrentProfile().GetCurrentAccountIndex() - 1);
+		m_profiles[m_currentProfileIndex].SetCurrentAccountIndex(r_CurrentProfile().GetCurrentAccountIndex() - 1);
 	}
 
-	r_CurrentProfile().bankAccounts.erase(r_CurrentProfile().bankAccounts.begin() + index);
+	m_profiles[m_currentProfileIndex].bankAccounts.erase(r_CurrentProfile().bankAccounts.begin() + index);
 
 	SaveAccounts(r_CurrentProfile());
 }
@@ -252,9 +262,9 @@ void DataManager::AddOperation(int year, int month, int amountValue, int categor
 	operation.categoryIndex = categoryIndex;
 	operation.description = description;
 
-	r_CurrentProfile().r_CurrentBankAccount().AddOperation(operation);
+	m_profiles[m_currentProfileIndex].r_CurrentBankAccount().AddOperation(operation);
 
-	SaveOperations(r_CurrentProfile(), r_CurrentProfile().r_CurrentBankAccount());
+	SaveOperations(r_CurrentProfile(), m_profiles[m_currentProfileIndex].r_CurrentBankAccount());
 }
 
 void DataManager::EditOperation(int id, int year, int month, int amountValue, int categoryIndex, std::string description)
@@ -266,16 +276,16 @@ void DataManager::EditOperation(int id, int year, int month, int amountValue, in
 	operation.amount = amountValue;
 	operation.description = description;
 
-	r_CurrentProfile().r_CurrentBankAccount().EditOperation(id, operation);
+	m_profiles[m_currentProfileIndex].r_CurrentBankAccount().EditOperation(id, operation);
 
-	SaveOperations(r_CurrentProfile(), r_CurrentProfile().r_CurrentBankAccount());
+	SaveOperations(r_CurrentProfile(), m_profiles[m_currentProfileIndex].r_CurrentBankAccount());
 }
 
 void DataManager::DeleteOperation(int id)
 {
-	r_CurrentProfile().r_CurrentBankAccount().DeleteOperation(id);
+	m_profiles[m_currentProfileIndex].r_CurrentBankAccount().DeleteOperation(id);
 
-	SaveOperations(r_CurrentProfile(), r_CurrentProfile().r_CurrentBankAccount());
+	SaveOperations(r_CurrentProfile(), m_profiles[m_currentProfileIndex].r_CurrentBankAccount());
 }
 
 std::string DataManager::ToFileName(std::string str) const
@@ -317,14 +327,14 @@ void DataManager::LoadProfiles()
 		while (!file.atEnd()) {
 			Profile profile;
 			stream >> profile;
-			profiles.push_back(profile);
+			m_profiles.push_back(profile);
 		}
 	}
 	else {
 		LoadDefaultProfile();
 	}
 
-	for (Profile& profile : profiles) {
+	for (Profile& profile : m_profiles) {
 		LoadCategories(profile);
 		LoadAccounts(profile);
 	}
@@ -408,7 +418,7 @@ void DataManager::SaveProfiles() const
 
 	QDataStream stream(&file);
 
-	for (const Profile& profile : profiles) {
+	for (const Profile& profile : m_profiles) {
 		stream << profile;
 		directory.mkdir(QString::fromStdString("data/profiles/" + ToFileName(profile.name)));
 		SaveCategories(profile);
@@ -464,7 +474,7 @@ void DataManager::SaveOperations(const Profile& profile, const BankAccount& acco
 
 	QDataStream stream(&file);
 
-	for (const Operation& operation : account.r_operations()) {
+	for (const Operation& operation : account.r_Operations()) {
 		stream << operation;
 	}
 }
@@ -473,7 +483,7 @@ void DataManager::LoadDefaultProfile()
 {
 	Profile defaultProfile;
 	defaultProfile.name = "Profil principal";
-	profiles.push_back(defaultProfile);
+	m_profiles.push_back(defaultProfile);
 }
 
 bool DataManager::RemoveDirectory(const std::string& name) const

@@ -18,7 +18,7 @@ public:
 	AccountType type = AccountType::CURRENT;
 	Amount initialAmount;
 
-	const std::vector<Operation>& r_operations() const;
+	const std::vector<Operation>& r_Operations() const;
 
 	std::string GetTypeString() const;
 

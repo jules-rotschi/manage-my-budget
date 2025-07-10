@@ -9,11 +9,13 @@
 class DataManager
 {
 public:
-	std::vector<Profile> profiles;
+	const std::vector<Profile>& r_Profiles() const;
 
-	Profile& r_CurrentProfile();
+	const Profile& r_CurrentProfile();
 	int GetCurrentProfileIndex() const;
 	void SetCurrentProfileIndex(int index);
+
+	void SetCurrentProfileCurrentAccountIndex(int index);
 
 	void InitializeData();
 
@@ -36,6 +38,8 @@ public:
 	std::string ToFileName(std::string str) const;
 
 private:
+	std::vector<Profile> m_profiles;
+
 	int m_currentProfileIndex = 0;
 
 	void LoadData();

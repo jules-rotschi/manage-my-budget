@@ -13,7 +13,7 @@ EditOperationDialog::EditOperationDialog(int id, QWidget* parent)
 {
 	Operation operationToEdit;
 
-	for (const Operation& operation : s_DataManager.r_CurrentProfile().r_CurrentBankAccount().r_operations()) {
+	for (const Operation& operation : s_DataManager.r_CurrentProfile().r_ConstCurrentBankAccount().r_Operations()) {
 		if (operation.id == id) {
 			operationToEdit = operation;
 			break;

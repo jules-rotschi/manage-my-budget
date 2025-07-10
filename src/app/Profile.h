@@ -15,6 +15,7 @@ public:
 	Profile(bool populateDefault = false);
 
 	BankAccount& r_CurrentBankAccount();
+	const BankAccount& r_ConstCurrentBankAccount() const;
 	int GetCurrentAccountIndex() const;
 	void SetCurrentAccountIndex(int index);
 

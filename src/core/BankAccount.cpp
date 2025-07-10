@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-const std::vector<Operation>& BankAccount::r_operations() const
+const std::vector<Operation>& BankAccount::r_Operations() const
 {
 	return m_operations;
 }
