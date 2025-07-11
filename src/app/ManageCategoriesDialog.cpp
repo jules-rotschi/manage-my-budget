@@ -3,11 +3,14 @@
 #include "DataManager.h"
 #include "RenameCategoryDialog.h"
 #include "ExceptionHandler.h"
+#include "StringFormatter.h"
 
 ManageCategoriesDialog::ManageCategoriesDialog(QWidget* parent)
 	: QDialog(parent)
 {
 	setWindowTitle("Catégories");
+
+	setMinimumWidth(550);
 
 	m_categoriesList = new QListWidget();
 
@@ -18,14 +21,16 @@ ManageCategoriesDialog::ManageCategoriesDialog(QWidget* parent)
 
 	m_newCategoryAddButton = new QPushButton("Ajouter");
 	connect(m_newCategoryAddButton, &QPushButton::released, this, &ManageCategoriesDialog::HandleCategoryAdd);
+	m_newCategoryAddButton->setFixedWidth(100);
 
 	m_defaultButton = new QPushButton("Terminé");
 	m_defaultButton->setDefault(true);
 	connect(m_defaultButton, &QPushButton::released, this, &ManageCategoriesDialog::accept);
 
-	m_newCategoryFormLayout = new QFormLayout(m_newCategoryFormWidget);
-	m_newCategoryFormLayout->addRow(m_nameFieldLabel, m_nameLineEdit);
-	m_newCategoryFormLayout->addRow(m_newCategoryAddButton);
+	m_newCategoryFormLayout = new QHBoxLayout(m_newCategoryFormWidget);
+	m_newCategoryFormLayout->addWidget(m_nameFieldLabel);
+	m_newCategoryFormLayout->addWidget(m_nameLineEdit);
+	m_newCategoryFormLayout->addWidget(m_newCategoryAddButton);
 
 	m_mainLayout = new QVBoxLayout(this);
 	m_mainLayout->addWidget(m_categoriesList);
@@ -44,7 +49,7 @@ void ManageCategoriesDialog::UpdateUI()
 
 		QWidget* categoryWidget = new QWidget();
 
-		QLabel* categoryLabel = new QLabel(QString::fromStdString(category));
+		QLabel* categoryLabel = new QLabel(QString::fromStdString(LimitLength(category, 20)));
 		
 		QPushButton* categoryRenameButton = new QPushButton("Renommer");
 		connect(
@@ -52,6 +57,7 @@ void ManageCategoriesDialog::UpdateUI()
 			&QPushButton::released,
 			[this, i]() {HandleCategoryRename(i); }
 		);
+		categoryRenameButton->setFixedWidth(100);
 		
 		QPushButton* categoryDeleteButton = new QPushButton("Supprimer");
 		connect(
@@ -59,6 +65,7 @@ void ManageCategoriesDialog::UpdateUI()
 			&QPushButton::released,
 			[this, i]() {HandleCategoryDelete(i); }
 		);
+		categoryDeleteButton->setFixedWidth(100);
 
 		QHBoxLayout* categoryLayout = new QHBoxLayout(categoryWidget);
 		categoryLayout->addWidget(categoryLabel);

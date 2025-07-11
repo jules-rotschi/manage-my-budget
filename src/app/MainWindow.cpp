@@ -4,7 +4,8 @@
 
 #include <qstring.h>
 #include <qdatetime.h>
-
+#include <qmenu.h>
+#include <qmenubar.h>
 
 #include "DataManager.h"
 #include "EditOperationDialog.h"
@@ -14,16 +15,43 @@
 #include "MonthlyReviewDialog.h"
 #include "YearlyReviewDialog.h"
 #include "ExceptionHandler.h"
+#include "StringFormatter.h"
 
 MainWindow::MainWindow(QWidget* parent)
-	: QWidget(parent)
+	: QMainWindow(parent)
 {
 	setWindowTitle("Manage my budget");
 
+	setMinimumWidth(720);
+
 	s_DataManager.InitializeData();
 
-	m_manageProfilesButton = new QPushButton("Gérer les profils");
-	connect(m_manageProfilesButton, &QPushButton::released, this, &MainWindow::HandleManageProfiles);
+	m_centralWidget = new QWidget();
+
+	m_profileMenu = menuBar()->addMenu("Profil");
+	m_reviewMenu = menuBar()->addMenu("Bilans");
+
+	m_manageCategoriesAction = new QAction("Gérer les catégories du profil");
+	m_profileMenu->addAction(m_manageCategoriesAction);
+	connect(m_manageCategoriesAction, &QAction::triggered, this, &MainWindow::HandleManageCategories);
+
+	m_manageAccountsAction = new QAction("Gérer les comptes du profil");
+	m_profileMenu->addAction(m_manageAccountsAction);
+	connect(m_manageAccountsAction, &QAction::triggered, this, &MainWindow::HandleManageAccounts);
+
+	m_profileMenu->addSeparator();
+
+	m_manageProfilesAction = new QAction("Gérer les profils");
+	m_profileMenu->addAction(m_manageProfilesAction);
+	connect(m_manageProfilesAction, &QAction::triggered, this, &MainWindow::HandleManageProfiles);
+
+	m_monthlyReviewAction = new QAction("Bilans mensuels");
+	m_reviewMenu->addAction(m_monthlyReviewAction);
+	connect(m_monthlyReviewAction, &QAction::triggered, this, &MainWindow::HandleMonthlyReview);
+
+	m_yearlyReviewAction = new QAction("Bilans annuels");
+	m_reviewMenu->addAction(m_yearlyReviewAction);
+	connect(m_yearlyReviewAction, &QAction::triggered, this, &MainWindow::HandleYearlyReview);
 
 	m_currentProfileForm = new QWidget();
 	
@@ -36,18 +64,6 @@ MainWindow::MainWindow(QWidget* parent)
 
 	m_currentProfileFormLayout = new QFormLayout(m_currentProfileForm);
 	m_currentProfileFormLayout->addRow(m_currentProfileLabel, m_currentProfileComboBox);
-
-	m_manageCategoriesButton = new QPushButton("Gérer les catégories");
-	connect(m_manageCategoriesButton, &QPushButton::released, this, &MainWindow::HandleManageCategories);
-	
-	m_manageAccountsButton = new QPushButton("Gérer les comptes");
-	connect(m_manageAccountsButton, &QPushButton::released, this, &MainWindow::HandleManageAccounts);
-
-	m_monthlyReviewButton = new QPushButton("Bilans mensuels");
-	connect(m_monthlyReviewButton, &QPushButton::released, this, &MainWindow::HandleMonthlyReview);
-	
-	m_yearlyReviewButton = new QPushButton("Bilans annuels");
-	connect(m_yearlyReviewButton, &QPushButton::released, this, &MainWindow::HandleYearlyReview);
 
 	m_currentAccountForm = new QWidget();
 	
@@ -66,16 +82,13 @@ MainWindow::MainWindow(QWidget* parent)
 	m_addOperationForm = new AddOperationForm();
 	connect(m_addOperationForm, &AddOperationForm::OperationAdd, this, &MainWindow::HandleOperationAdd);
 
-	m_mainLayout = new QVBoxLayout(this);
-	m_mainLayout->addWidget(m_manageProfilesButton);
+	m_mainLayout = new QVBoxLayout(m_centralWidget);
 	m_mainLayout->addWidget(m_currentProfileForm);
-	m_mainLayout->addWidget(m_manageCategoriesButton);
-	m_mainLayout->addWidget(m_manageAccountsButton);
-	m_mainLayout->addWidget(m_monthlyReviewButton);
-	m_mainLayout->addWidget(m_yearlyReviewButton);
 	m_mainLayout->addWidget(m_currentAccountForm);
 	m_mainLayout->addWidget(m_operationsList);
 	m_mainLayout->addWidget(m_addOperationForm);
+
+	setCentralWidget(m_centralWidget);
 
 	UpdateUI(true);
 }
@@ -92,12 +105,12 @@ void MainWindow::LoadProfilesToComboBox()
 	}
 
 	m_currentProfileComboBox->setItemText(
-		0, QString::fromStdString(s_DataManager.r_Profiles()[0].name)
+		0, QString::fromStdString(LimitLength(s_DataManager.r_Profiles()[0].name, 20))
 	);
 
 	for (int i = 1; i < s_DataManager.r_Profiles().size(); i++) {
 		const Profile& profile = s_DataManager.r_Profiles()[i];
-		m_currentProfileComboBox->addItem(QString::fromStdString(profile.name));
+		m_currentProfileComboBox->addItem(QString::fromStdString(LimitLength(profile.name, 20)));
 	}
 }
 
@@ -108,12 +121,12 @@ void MainWindow::LoadAccountsToComboBox()
 	}
 
 	m_currentAccountComboBox->setItemText(
-		0, QString::fromStdString(s_DataManager.r_CurrentProfile().bankAccounts[0].name + " (" + s_DataManager.r_CurrentProfile().bankAccounts[0].GetTypeString() + ")")
+		0, QString::fromStdString(LimitLength(s_DataManager.r_CurrentProfile().bankAccounts[0].name, 20) + " (" + s_DataManager.r_CurrentProfile().bankAccounts[0].GetTypeString() + ")")
 	);
 
 	for (int i = 1; i < s_DataManager.r_CurrentProfile().bankAccounts.size(); i++) {
 		const BankAccount& account = s_DataManager.r_CurrentProfile().bankAccounts[i];
-		m_currentAccountComboBox->addItem(QString::fromStdString(account.name + " (" + account.GetTypeString() + ")"));
+		m_currentAccountComboBox->addItem(QString::fromStdString(LimitLength(account.name, 20) + " (" + account.GetTypeString() + ")"));
 	}
 }
 

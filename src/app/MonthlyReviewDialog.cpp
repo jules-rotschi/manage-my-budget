@@ -7,11 +7,15 @@
 
 #include "DataManager.h"
 #include "core/Accountant.h"
+#include "StringFormatter.h"
+#include "MonthString.h"
 
 MonthlyReviewDialog::MonthlyReviewDialog(QWidget* parent)
 	: QDialog(parent)
 {
 	setWindowTitle("Bilans mensuels");
+
+	setMinimumWidth(360);
 
 	QDate currentDate = QDate::currentDate();
 
@@ -23,7 +27,7 @@ MonthlyReviewDialog::MonthlyReviewDialog(QWidget* parent)
 	m_monthLabel = new QLabel("Mois");
 	m_monthComboBox = new QComboBox();
 	for (int i = 0; i < 12; i++) {
-		m_monthComboBox->addItem(QString::fromStdString(std::to_string(i + 1)));
+		m_monthComboBox->addItem(QString::fromStdString(MonthToString(i + 1)));
 	}
 	m_monthComboBox->setCurrentIndex(m_month - 1);
 	connect(m_monthComboBox, &QComboBox::currentIndexChanged, this, &MonthlyReviewDialog::HandleMonthSelectorChange);
@@ -41,9 +45,21 @@ MonthlyReviewDialog::MonthlyReviewDialog(QWidget* parent)
 
 	m_categoriesList = new QListWidget();
 
-	m_totalLabel = new QLabel();
+	m_totalWidget = new QWidget();
+	m_totalTitleLabel = new QLabel("Total");
+	m_totalValueLabel = new QLabel();
+	m_totalLayout = new QHBoxLayout(m_totalWidget);
+	m_totalLayout->addWidget(m_totalTitleLabel);
+	m_totalLayout->addStretch();
+	m_totalLayout->addWidget(m_totalValueLabel);
 
-	m_savingsLabel = new QLabel();
+	m_savingsWidget = new QWidget();
+	m_savingsTitleLabel = new QLabel("Montant épargné");
+	m_savingsValueLabel = new QLabel();
+	m_savingsLayout = new QHBoxLayout(m_savingsWidget);
+	m_savingsLayout->addWidget(m_savingsTitleLabel);
+	m_savingsLayout->addStretch();
+	m_savingsLayout->addWidget(m_savingsValueLabel);
 
 	m_defaultButton = new QPushButton("Fermer");
 	m_defaultButton->setDefault(true);
@@ -61,19 +77,30 @@ void MonthlyReviewDialog::UpdateUI()
 	Accountant accountant(s_DataManager.r_CurrentProfile().bankAccounts);
 
 	for (int i = 1; i < s_DataManager.r_CurrentProfile().categories.size(); i++) {
-		m_categoriesList->addItem(QString::fromStdString(
-			s_DataManager.r_CurrentProfile().categories[i] + " : " + accountant.GetMonthlyAmount(m_year, m_month, i).GetString()
-		));
+		QWidget* categoryReviewWidget = new QWidget();
+
+		QLabel* categoryLabel = new QLabel(QString::fromStdString(LimitLength(s_DataManager.r_CurrentProfile().categories[i], 20)));
+		QLabel* amountLabel = new QLabel(QString::fromStdString(accountant.GetMonthlyAmount(m_year, m_month, i).GetString()));
+
+		QHBoxLayout* categoryReviewLayout = new QHBoxLayout(categoryReviewWidget);
+		categoryReviewLayout->addWidget(categoryLabel);
+		categoryReviewLayout->addStretch();
+		categoryReviewLayout->addWidget(amountLabel);
+
+		QListWidgetItem* categoryReviewItem = new QListWidgetItem();
+		categoryReviewItem->setSizeHint(categoryReviewWidget->sizeHint());
+		m_categoriesList->addItem(categoryReviewItem);
+		m_categoriesList->setItemWidget(categoryReviewItem, categoryReviewWidget);
 	}
 
-	m_totalLabel->setText(QString::fromStdString("Total : " + accountant.GetMonthlyAmount(m_year, m_month).GetString()));
+	m_totalValueLabel->setText(QString::fromStdString(accountant.GetMonthlyAmount(m_year, m_month).GetString()));
 
-	m_savingsLabel->setText(QString::fromStdString("Montant épargné : " + accountant.GetMonthlySavings(m_year, m_month).GetString()));
+	m_savingsValueLabel->setText(QString::fromStdString(accountant.GetMonthlySavings(m_year, m_month).GetString()));
 	
 	m_mainLayout->addWidget(m_monthSelectorWidget);
 	m_mainLayout->addWidget(m_categoriesList);
-	m_mainLayout->addWidget(m_totalLabel);
-	m_mainLayout->addWidget(m_savingsLabel);
+	m_mainLayout->addWidget(m_totalWidget);
+	m_mainLayout->addWidget(m_savingsWidget);
 	m_mainLayout->addWidget(m_defaultButton);
 }
 

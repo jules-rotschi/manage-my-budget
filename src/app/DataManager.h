@@ -4,7 +4,7 @@
 
 #include <qdatastream.h>
 
-#include "app/Profile.h"
+#include "Profile.h"
 
 class DataManager
 {
@@ -35,8 +35,6 @@ public:
 	void EditOperation(int id, int year, int month, int amountValue, int categoryIndex, const std::string& description);
 	void DeleteOperation(int id);
 
-	std::string ToFileName(std::string strCopy) const;
-
 private:
 	std::vector<Profile> m_profiles;
 
@@ -58,6 +56,8 @@ private:
 
 	void LoadDefaultProfile();
 
+	std::string ToFileName(std::string strCopy) const;
+	
 	bool RemoveDirectory(const std::string& name) const;
 };
 

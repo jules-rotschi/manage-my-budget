@@ -13,6 +13,9 @@ public:
 	AddAccountDialog(QWidget* parent = nullptr);
 
 private:
+	QVBoxLayout* m_layout;
+
+	QWidget* m_formWidget;
 	QFormLayout* m_formLayout;
 
 	QLabel* m_nameLabel;
@@ -24,6 +27,9 @@ private:
 
 	QLabel* m_typeLabel;
 	QComboBox* m_typeCombobox;
+
+	QWidget* m_buttonsWidget;
+	QHBoxLayout* m_buttonsLayout;
 
 	QPushButton* m_addButton;
 	QPushButton* m_cancelButton;

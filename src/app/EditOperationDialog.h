@@ -6,6 +6,7 @@
 #include <qcombobox.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
+#include <qboxlayout.h>
 
 class EditOperationDialog : public QDialog
 {
@@ -17,6 +18,9 @@ public:
 private:
 	int m_id;
 
+	QVBoxLayout* m_layout;
+
+	QWidget* m_formWidget;
 	QFormLayout* m_formLayout;
 	
 	QLabel* m_yearLabel;
@@ -34,6 +38,9 @@ private:
 	
 	QLabel* m_descriptionLabel;
 	QLineEdit* m_descriptionLineEdit;
+
+	QWidget* m_buttonsWidget;
+	QHBoxLayout* m_buttonsLayout;
 	
 	QPushButton* m_editButton;
 	QPushButton* m_cancelButton;

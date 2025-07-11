@@ -7,6 +7,8 @@
 #include "DataManager.h"
 #include "EditOperationDialog.h"
 #include "ExceptionHandler.h"
+#include "MonthString.h"
+#include "StringFormatter.h"
 
 OperationsList::OperationsList(QWidget* parent)
 	: QWidget(parent)
@@ -59,26 +61,34 @@ void OperationsList::UpdateUI(bool scrollDown)
 		
 	QDate currentDate = QDate::currentDate();
 
+	int lastOperationYear = 0;
+	int lastOperationMonth = 0;
+
 	for (const Operation& operation : s_DataManager.r_CurrentProfile().r_ConstCurrentBankAccount().r_Operations())
 	{
 		if (!IsOperationInDisplayableMonth(operation.year, operation.month, currentDate)) {
 			continue;
 		}
 
+		if (lastOperationYear != operation.year || lastOperationMonth != operation.month) {
+			QLabel* monthLabel = new QLabel(QString::fromStdString(MonthToString(operation.month) + " " + std::to_string(operation.year)));
+			monthLabel->setAlignment(Qt::AlignCenter);
+			QListWidgetItem* newMonthIndicator = new QListWidgetItem();
+			newMonthIndicator->setSizeHint(monthLabel->sizeHint());
+			m_operationsList->addItem(newMonthIndicator);
+			m_operationsList->setItemWidget(newMonthIndicator, monthLabel);
+		}
+
 		QWidget* operationWidget = new QWidget();
 
 		QString descriptionString = !operation.description.empty()
-			? " (" + QString::fromStdString(operation.description) + ")"
+			? " (" + QString::fromStdString(LimitLength(operation.description, 20)) + ")"
 			: "";
 
 		QString operationString =
-			QString::fromStdString(std::to_string(operation.month))
-			+ '/'
-			+ QString::fromStdString(std::to_string(operation.year))
-			+ " : "
-			+ QString::fromStdString(operation.amount.GetString())
+			QString::fromStdString(operation.amount.GetString())
 			+ " | "
-			+ QString::fromStdString(s_DataManager.r_CurrentProfile().categories[operation.categoryIndex])
+			+ QString::fromStdString(LimitLength(s_DataManager.r_CurrentProfile().categories[operation.categoryIndex], 20))
 			+ descriptionString;
 
 		QLabel* operationLabel = new QLabel(operationString);
@@ -87,11 +97,13 @@ void OperationsList::UpdateUI(bool scrollDown)
 		connect(editOperationButton, &QPushButton::released, [this, operation]() {
 			HandleOperationEdit(operation.id);
 		});
+		editOperationButton->setFixedWidth(100);
 
 		QPushButton* deleteOperationButton = new QPushButton("Supprimer");
 		connect(deleteOperationButton, &QPushButton::released, [this, operation]() {
 			HandleOperationDelete(operation.id);
 		});
+		deleteOperationButton->setFixedWidth(100);
 
 		QHBoxLayout* operationLayout = new QHBoxLayout(operationWidget);
 		operationLayout->addWidget(operationLabel);
@@ -102,6 +114,9 @@ void OperationsList::UpdateUI(bool scrollDown)
 		operationItem->setSizeHint(operationWidget->sizeHint());
 		m_operationsList->addItem(operationItem);
 		m_operationsList->setItemWidget(operationItem, operationWidget);
+
+		lastOperationYear = operation.year;
+		lastOperationMonth = operation.month;
 	}
 
 	if (scrollDown) {

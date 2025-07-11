@@ -2,13 +2,14 @@
 
 #include <vector>
 
+#include <qmainwindow.h>
 #include <qwidget.h>
 #include <qpushbutton.h>
 
 #include "OperationsList.h"
 #include "AddOperationForm.h"
 
-class MainWindow : public QWidget
+class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 
@@ -16,21 +17,22 @@ public:
 	MainWindow(QWidget* parent = nullptr);
 
 private:
+	QWidget* m_centralWidget;
 	QVBoxLayout* m_mainLayout;
 
-	QPushButton* m_manageProfilesButton;
+	QMenu* m_profileMenu;
+	QMenu* m_reviewMenu;
+
+	QAction* m_manageProfilesAction;
+	QAction* m_manageCategoriesAction;
+	QAction* m_manageAccountsAction;
+	QAction* m_monthlyReviewAction;
+	QAction* m_yearlyReviewAction;
 
 	QWidget* m_currentProfileForm;
 	QFormLayout* m_currentProfileFormLayout;
 	QLabel* m_currentProfileLabel;
 	QComboBox* m_currentProfileComboBox;
-
-	QPushButton* m_manageCategoriesButton;
-
-	QPushButton* m_manageAccountsButton;
-
-	QPushButton* m_monthlyReviewButton;
-	QPushButton* m_yearlyReviewButton;
 
 	QWidget* m_currentAccountForm;
 	QFormLayout* m_currentAccountFormLayout;

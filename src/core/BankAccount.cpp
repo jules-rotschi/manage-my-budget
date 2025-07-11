@@ -148,10 +148,9 @@ void BankAccount::HandleCategoryDelete(int index)
 	for (Operation& operation : m_operations) {
 		if (operation.categoryIndex > index) {
 			operation.categoryIndex--;
+			return;
 		}
 	}
-
-	assert((false) && "The given id does not correspond to any existing category of the current profile.");
 }
 
 void BankAccount::Edit(const BankAccount& account)

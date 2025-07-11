@@ -11,6 +11,8 @@ AddAccountDialog::AddAccountDialog(QWidget* parent)
 {
 	setWindowTitle("Ajouter un compte bancaire");
 
+	m_formWidget = new QWidget();
+
 	m_nameLabel = new QLabel("Nom du compte");
 	m_nameLineEdit = new QLineEdit();
 
@@ -30,19 +32,29 @@ AddAccountDialog::AddAccountDialog(QWidget* parent)
 	m_typeCombobox->addItem("Compte courant");
 	m_typeCombobox->addItem("Épargne");
 
-	m_addButton = new QPushButton("Ajouter le compte");
-	connect(m_addButton, &QPushButton::released, this, &AddAccountDialog::HandleConfirm);
-
-	m_cancelButton = new QPushButton("Annuler");
-	connect(m_cancelButton, &QPushButton::released, this, &AddAccountDialog::reject);
-
-	m_addButton->setDefault(true);
-
-	m_formLayout = new QFormLayout(this);
+	m_formLayout = new QFormLayout(m_formWidget);
 	m_formLayout->addRow(m_nameLabel, m_nameLineEdit);
 	m_formLayout->addRow(m_initialAmountLabel, m_initialAmountLineEdit);
 	m_formLayout->addRow(m_typeLabel, m_typeCombobox);
-	m_formLayout->addRow(m_addButton, m_cancelButton);
+
+	m_buttonsWidget = new QWidget();
+
+	m_addButton = new QPushButton("Ajouter le compte");
+	connect(m_addButton, &QPushButton::released, this, &AddAccountDialog::HandleConfirm);
+	m_addButton->setDefault(true);
+	m_addButton->setMinimumWidth(150);
+
+	m_cancelButton = new QPushButton("Annuler");
+	connect(m_cancelButton, &QPushButton::released, this, &AddAccountDialog::reject);
+	m_cancelButton->setMinimumWidth(150);
+
+	m_buttonsLayout = new QHBoxLayout(m_buttonsWidget);
+	m_buttonsLayout->addWidget(m_addButton);
+	m_buttonsLayout->addWidget(m_cancelButton);
+
+	m_layout = new QVBoxLayout(this);
+	m_layout->addWidget(m_formWidget);
+	m_layout->addWidget(m_buttonsWidget);
 }
 
 void AddAccountDialog::HandleConfirm()

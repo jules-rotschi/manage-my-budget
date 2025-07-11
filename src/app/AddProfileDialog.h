@@ -13,10 +13,16 @@ public:
 	AddProfileDialog(QWidget* parent = nullptr);
 
 private:
+	QVBoxLayout* m_layout;
+
+	QWidget* m_formWidget;
 	QFormLayout* m_formLayout;
 
 	QLabel* m_nameLabel;
 	QLineEdit* m_nameLineEdit;
+
+	QWidget* m_buttonsWidget;
+	QHBoxLayout* m_buttonsLayout;
 
 	QPushButton* m_addButton;
 	QPushButton* m_cancelButton;

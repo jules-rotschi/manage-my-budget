@@ -6,11 +6,14 @@
 #include "RenameProfileDialog.h"
 #include "ExceptionHandler.h"
 #include "ConfirmationRequiser.h"
+#include "StringFormatter.h"
 
 ManageProfilesDialog::ManageProfilesDialog(QWidget* parent)
 	: QDialog(parent)
 {
 	setWindowTitle("Profils");
+
+	setMinimumWidth(550);
 
 	m_profilesList = new QListWidget();
 
@@ -38,7 +41,7 @@ void ManageProfilesDialog::UpdateUI()
 
 		QWidget* profileWidget = new QWidget();
 
-		QLabel* profileLabel = new QLabel(QString::fromStdString(profile.name));
+		QLabel* profileLabel = new QLabel(QString::fromStdString(LimitLength(profile.name, 20)));
 
 		QPushButton* profileEditButton = new QPushButton("Renommer");
 		connect(
@@ -46,6 +49,7 @@ void ManageProfilesDialog::UpdateUI()
 			&QPushButton::released,
 			[this, i]() {HandleProfileEdit(i); }
 		);
+		profileEditButton->setFixedWidth(100);
 
 		QPushButton* profileDeleteButton = new QPushButton("Supprimer");
 		connect(
@@ -53,6 +57,7 @@ void ManageProfilesDialog::UpdateUI()
 			&QPushButton::released,
 			[this, i]() {HandleProfileDelete(i); }
 		);
+		profileDeleteButton->setFixedWidth(100);
 
 		QHBoxLayout* profileLayout = new QHBoxLayout(profileWidget);
 		profileLayout->addWidget(profileLabel);

@@ -23,7 +23,7 @@ private:
 	QListWidget* m_categoriesList;
 
 	QWidget* m_newCategoryFormWidget;
-	QFormLayout* m_newCategoryFormLayout;
+	QHBoxLayout* m_newCategoryFormLayout;
 	
 	QLabel* m_nameFieldLabel;
 	QLineEdit* m_nameLineEdit;

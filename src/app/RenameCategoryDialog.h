@@ -5,6 +5,7 @@
 #include <qlabel.h>
 #include <qlineedit>
 #include <qpushbutton.h>
+#include <qboxlayout.h>
 
 class RenameCategoryDialog : public QDialog
 {
@@ -16,11 +17,15 @@ public:
 private:
 	int m_categoryIndex;
 
-	QFormLayout* m_layout;
+	QVBoxLayout* m_layout;
 
+	QWidget* m_formWidget;
+	QFormLayout* m_formLayout;
 	QLabel* m_label;
 	QLineEdit* m_lineEdit;
 
+	QWidget* m_buttonsWidget;
+	QHBoxLayout* m_buttonsLayout;
 	QPushButton* m_confirmButton;
 	QPushButton* m_cancelButton;
 

@@ -7,6 +7,8 @@
 
 #include "DataManager.h"
 #include "ExceptionHandler.h"
+#include "MonthString.h"
+#include "StringFormatter.h"
 
 AddOperationForm::AddOperationForm(QWidget* parent)
 	: QWidget(parent)
@@ -22,7 +24,7 @@ AddOperationForm::AddOperationForm(QWidget* parent)
 	m_monthLabel = new QLabel("Mois");
 	m_monthCombobox = new QComboBox();
 	for (int i = 0; i < 12; i++) {
-		m_monthCombobox->addItem(QString::fromStdString(std::to_string(i + 1)));
+		m_monthCombobox->addItem(QString::fromStdString(MonthToString(i + 1)));
 	}
 	m_monthCombobox->setCurrentIndex(currentDate.month() - 1);
 
@@ -44,23 +46,23 @@ AddOperationForm::AddOperationForm(QWidget* parent)
 	m_descriptionLineEdit = new QLineEdit();
 
 	m_addButton = new QPushButton("Ajouter l'opération");
-	m_addButton->setDefault(true);
 	connect(m_addButton, &QPushButton::released, this, &AddOperationForm::HandleAddButton);
 
 	m_mainLayout = new QFormLayout(this);
 	m_mainLayout->addRow(m_yearLabel, m_yearCombobox);
 	m_mainLayout->addRow(m_monthLabel, m_monthCombobox);
-	m_mainLayout->addRow(m_categoryLabel, m_categoryCombobox);
 	m_mainLayout->addRow(m_amountLabel, m_amountLineEdit);
+	m_mainLayout->addRow(m_categoryLabel, m_categoryCombobox);
 	m_mainLayout->addRow(m_descriptionLabel, m_descriptionLineEdit);
 	m_mainLayout->addWidget(m_addButton);
+	m_addButton->setDefault(true);
 }
 
 void AddOperationForm::LoadCategories()
 {
 	m_categoryCombobox->clear();
 	for (const std::string& category : s_DataManager.r_CurrentProfile().categories) {
-		m_categoryCombobox->addItem(QString::fromStdString(category));
+		m_categoryCombobox->addItem(QString::fromStdString(LimitLength(category, 20)));
 	}
 }
 
@@ -68,6 +70,7 @@ void AddOperationForm::ResetForm()
 {
 	m_amountLineEdit->setText("");
 	m_descriptionLineEdit->setText("");
+	m_amountLineEdit->setFocus();
 }
 
 void AddOperationForm::HandleAddButton()

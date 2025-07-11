@@ -11,6 +11,8 @@ EditAccountDialog::EditAccountDialog(int index, QWidget* parent)
 
 	BankAccount account = s_DataManager.r_CurrentProfile().bankAccounts[m_index];
 
+	m_formWidget = new QWidget();
+
 	m_nameLabel = new QLabel("Nom du compte");
 	m_nameLineEdit = new QLineEdit(QString::fromStdString(account.name));
 
@@ -38,18 +40,29 @@ EditAccountDialog::EditAccountDialog(int index, QWidget* parent)
 		m_typeCombobox->setCurrentIndex(0);
 	}
 
-	m_editButton = new QPushButton("Modifier");
-	connect(m_editButton, &QPushButton::released, this, &EditAccountDialog::HandleConfirm);
-	m_editButton->setDefault(true);
-	
-	m_cancelButton = new QPushButton("Annuler");
-	connect(m_cancelButton, &QPushButton::released, this, &EditAccountDialog::reject);
-
-	m_formLayout = new QFormLayout(this);
+	m_formLayout = new QFormLayout(m_formWidget);
 	m_formLayout->addRow(m_nameLabel, m_nameLineEdit);
 	m_formLayout->addRow(m_initialAmountLabel, m_initialAmountLineEdit);
 	m_formLayout->addRow(m_typeLabel, m_typeCombobox);
-	m_formLayout->addRow(m_editButton, m_cancelButton);
+
+	m_buttonsWidget = new QWidget();
+
+	m_editButton = new QPushButton("Modifier");
+	connect(m_editButton, &QPushButton::released, this, &EditAccountDialog::HandleConfirm);
+	m_editButton->setDefault(true);
+	m_editButton->setMinimumWidth(100);
+	
+	m_cancelButton = new QPushButton("Annuler");
+	connect(m_cancelButton, &QPushButton::released, this, &EditAccountDialog::reject);
+	m_cancelButton->setMinimumWidth(100);
+
+	m_buttonsLayout = new QHBoxLayout(m_buttonsWidget);
+	m_buttonsLayout->addWidget(m_editButton);
+	m_buttonsLayout->addWidget(m_cancelButton);
+
+	m_layout = new QVBoxLayout(this);
+	m_layout->addWidget(m_formWidget);
+	m_layout->addWidget(m_buttonsWidget);
 }
 
 void EditAccountDialog::HandleConfirm()

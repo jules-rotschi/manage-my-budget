@@ -28,9 +28,15 @@ private:
 
 	QListWidget* m_categoriesList;
 
-	QLabel* m_totalLabel;
+	QWidget* m_totalWidget;
+	QHBoxLayout* m_totalLayout;
+	QLabel* m_totalTitleLabel;
+	QLabel* m_totalValueLabel;
 
-	QLabel* m_savingsLabel;
+	QWidget* m_savingsWidget;
+	QHBoxLayout* m_savingsLayout;
+	QLabel* m_savingsTitleLabel;
+	QLabel* m_savingsValueLabel;
 
 	QPushButton* m_defaultButton;
 

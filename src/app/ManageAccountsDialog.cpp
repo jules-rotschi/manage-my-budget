@@ -6,11 +6,14 @@
 #include "EditAccountDialog.h"
 #include "ExceptionHandler.h"
 #include "ConfirmationRequiser.h"
+#include "StringFormatter.h"
 
 ManageAccountsDialog::ManageAccountsDialog(QWidget* parent)
 	: QDialog(parent)
 {
 	setWindowTitle("Comptes bancaires");
+
+	setMinimumWidth(640);
 
 	m_accountsList = new QListWidget();
 
@@ -38,7 +41,7 @@ void ManageAccountsDialog::UpdateUI()
 
 		QWidget* accountWidget = new QWidget();
 
-		QLabel* accountLabel = new QLabel(QString::fromStdString(account.name + " (" + account.GetTypeString() + ") | " + account.GetTotalAmount().GetString()));
+		QLabel* accountLabel = new QLabel(QString::fromStdString(LimitLength(account.name, 20) + " (" + account.GetTypeString() + ") | " + account.GetTotalAmount().GetString()));
 		
 		QPushButton* accountEditButton = new QPushButton("Modifier");
 		connect(
@@ -46,6 +49,7 @@ void ManageAccountsDialog::UpdateUI()
 			&QPushButton::released,
 			[this, i]() {HandleAccountEdit(i); }
 		);
+		accountEditButton->setFixedWidth(100);
 		
 		QPushButton* accountDeleteButton = new QPushButton("Supprimer");
 		connect(
@@ -53,6 +57,7 @@ void ManageAccountsDialog::UpdateUI()
 			&QPushButton::released,
 			[this, i]() {HandleAccountDelete(i); }
 		);
+		accountDeleteButton->setFixedWidth(100);
 
 		QHBoxLayout* accountLayout = new QHBoxLayout(accountWidget);
 		accountLayout->addWidget(accountLabel);
