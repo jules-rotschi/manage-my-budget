@@ -22,12 +22,16 @@ private:
 
 	QMenu* m_profileMenu;
 	QMenu* m_reviewMenu;
+	QMenu* m_dataMenu;
 
 	QAction* m_manageProfilesAction;
 	QAction* m_manageCategoriesAction;
 	QAction* m_manageAccountsAction;
 	QAction* m_monthlyReviewAction;
 	QAction* m_yearlyReviewAction;
+	QAction* m_backUpAction;
+	QAction* m_backUpLoadAction;
+	QAction* m_resetDataAction;
 
 	QWidget* m_currentProfileForm;
 	QFormLayout* m_currentProfileFormLayout;
@@ -56,4 +60,7 @@ private slots:
 	void HandleOperationAdd();
 	void HandleMonthlyReview() const;
 	void HandleYearlyReview() const;
+	void HandleBackUpLoad();
+	void HandleBackUp() const;
+	void HandleDataReset();
 };

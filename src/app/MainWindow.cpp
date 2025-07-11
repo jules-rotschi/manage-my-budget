@@ -6,6 +6,7 @@
 #include <qdatetime.h>
 #include <qmenu.h>
 #include <qmenubar.h>
+#include <qfiledialog.h>
 
 #include "DataManager.h"
 #include "EditOperationDialog.h"
@@ -16,6 +17,7 @@
 #include "YearlyReviewDialog.h"
 #include "ExceptionHandler.h"
 #include "StringFormatter.h"
+#include "ConfirmationRequiser.h"
 
 MainWindow::MainWindow(QWidget* parent)
 	: QMainWindow(parent)
@@ -30,6 +32,7 @@ MainWindow::MainWindow(QWidget* parent)
 
 	m_profileMenu = menuBar()->addMenu("Profil");
 	m_reviewMenu = menuBar()->addMenu("Bilans");
+	m_dataMenu = menuBar()->addMenu("Données");
 
 	m_manageCategoriesAction = new QAction("Gérer les catégories du profil");
 	m_profileMenu->addAction(m_manageCategoriesAction);
@@ -52,6 +55,20 @@ MainWindow::MainWindow(QWidget* parent)
 	m_yearlyReviewAction = new QAction("Bilans annuels");
 	m_reviewMenu->addAction(m_yearlyReviewAction);
 	connect(m_yearlyReviewAction, &QAction::triggered, this, &MainWindow::HandleYearlyReview);
+
+	m_backUpAction = new QAction("Créer une sauvegarde");
+	m_dataMenu->addAction(m_backUpAction);
+	connect(m_backUpAction, &QAction::triggered, this, &MainWindow::HandleBackUp);
+
+	m_backUpLoadAction = new QAction("Charger une sauvegarde");
+	m_dataMenu->addAction(m_backUpLoadAction);
+	connect(m_backUpLoadAction, &QAction::triggered, this, &MainWindow::HandleBackUpLoad);
+
+	m_dataMenu->addSeparator();
+
+	m_resetDataAction = new QAction("Réinitialiser les données");
+	m_dataMenu->addAction(m_resetDataAction);
+	connect(m_resetDataAction, &QAction::triggered, this, &MainWindow::HandleDataReset);
 
 	m_currentProfileForm = new QWidget();
 	
@@ -203,4 +220,92 @@ void MainWindow::HandleYearlyReview() const
 {
 	YearlyReviewDialog dialog;
 	dialog.exec();
+}
+
+void MainWindow::HandleBackUp() const
+{
+	QFileDialog dialog;
+	dialog.setWindowTitle("Créer une sauvegarde");
+	dialog.setOption(QFileDialog::ShowDirsOnly);
+	dialog.setFileMode(QFileDialog::Directory);
+	dialog.setDirectory(QDir::homePath());
+
+	if (!dialog.exec()) {
+		return;
+	}
+
+	QStringList selectedDirectories = dialog.selectedFiles();
+
+	if (selectedDirectories.empty()) {
+		return;
+	}
+
+	QString selectedDirectoryPath = selectedDirectories.first();
+
+	try {
+		s_DataManager.BackUp(selectedDirectoryPath.toStdString());
+	}
+	catch (const ApplicationException& e) {
+		HandleException(e);
+		return;
+	}
+}
+
+void MainWindow::HandleBackUpLoad()
+{
+	QFileDialog dialog;
+	dialog.setWindowTitle("Charger une sauvegarde");
+	dialog.setOption(QFileDialog::ShowDirsOnly);
+	dialog.setFileMode(QFileDialog::Directory);
+	dialog.setDirectory(QDir::homePath());
+
+	if (!dialog.exec()) {
+		return;
+	}
+
+	if (!ConfirmAction("Cette action effacera les données actuelles de l'application pour les remplacer par celles de la sauvegarde. Voulez vous continuer ?", "Écraser les données")) {
+		return;
+	}
+
+	QStringList selectedDirectories = dialog.selectedFiles();
+
+	if (selectedDirectories.empty()) {
+		return;
+	}
+
+	QString selectedDirectoryPath = selectedDirectories.first();
+
+	try {
+		s_DataManager.LoadBackUp(selectedDirectoryPath.toStdString());
+	}
+	catch (const ApplicationException& e) {
+		HandleException(e);
+		return;
+	}
+
+	LoadProfilesToComboBox();
+	LoadAccountsToComboBox();
+	m_addOperationForm->LoadCategories();
+	UpdateUI(true);
+}
+
+void MainWindow::HandleDataReset()
+{
+	if (!ConfirmAction("Les données actuelles seront perdues. Voulez vous vraiment continuer ?", "Réinitialiser")) {
+		return;
+	}
+
+	try {
+		s_DataManager.ResetData();
+		s_DataManager.InitializeData();
+	}
+	catch (const ApplicationException& e) {
+		HandleException(e);
+		return;
+	}
+
+	LoadProfilesToComboBox();
+	LoadAccountsToComboBox();
+	m_addOperationForm->LoadCategories();
+	UpdateUI(true);
 }
