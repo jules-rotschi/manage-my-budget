@@ -35,6 +35,7 @@ AddOperationForm::AddOperationForm(QWidget* parent)
 	m_amountValidator->setDecimals(2);
 	m_amountValidator->setNotation(QDoubleValidator::StandardNotation);
 	m_amountValidator->setLocale(QLocale::system());
+	m_amountValidator->setRange(-1000000, 1000000);
 
 	m_amountLineEdit->setValidator(m_amountValidator);
 
@@ -80,7 +81,7 @@ void AddOperationForm::HandleAddButton()
 	int year = m_yearCombobox->currentText().toInt();
 	int month = m_monthCombobox->currentIndex() + 1;
 	int categoryIndex = m_categoryCombobox->currentIndex();
-	int amountValue = QLocale::system().toDouble(m_amountLineEdit->text(), &isAmountOk) * 100;
+	long amountValue = QLocale::system().toDouble(m_amountLineEdit->text(), &isAmountOk) * 100;
 	std::string description = m_descriptionLineEdit->text().toStdString();
 
 	if (!isAmountOk) {

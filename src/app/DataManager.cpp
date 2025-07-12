@@ -861,7 +861,7 @@ QDataStream& operator<<(QDataStream& stream, const BankAccount& account)
 	stream
 		<< QString::fromStdString(account.name)
 		<< account.type
-		<< account.initialAmount.GetValue();
+		<< (qint32)account.initialAmount.GetValue();
 
 	return stream;
 }
@@ -869,7 +869,7 @@ QDataStream& operator<<(QDataStream& stream, const BankAccount& account)
 QDataStream& operator>>(QDataStream& stream, BankAccount& account)
 {
 	QString name;
-	int initialAmountValue;
+	qint32 initialAmountValue;
 
 	stream
 		>> name
@@ -887,7 +887,7 @@ QDataStream& operator<<(QDataStream& stream, const Operation& operation)
 	stream
 		<< operation.year
 		<< operation.month
-		<< operation.amount.GetValue()
+		<< (qint32)operation.amount.GetValue()
 		<< operation.categoryIndex
 		<< QString::fromStdString(operation.description);
 
@@ -896,7 +896,7 @@ QDataStream& operator<<(QDataStream& stream, const Operation& operation)
 
 QDataStream& operator>>(QDataStream& stream, Operation& operation)
 {
-	int amountValue;
+	qint32 amountValue;
 	QString description;
 
 	stream

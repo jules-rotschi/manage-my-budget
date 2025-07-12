@@ -1,15 +1,15 @@
 ﻿#include "Amount.h"
 
-Amount::Amount(int value) : m_value(value) {}
+Amount::Amount(long value) : m_value(value) {}
 
-int Amount::GetValue() const
+long Amount::GetValue() const
 {
 	return m_value;
 }
 
 std::string Amount::GetString() const
 {
-	int tempValue = m_value;
+	long tempValue = m_value;
 	bool isNegative = tempValue < 0;
 
 	if (isNegative) {

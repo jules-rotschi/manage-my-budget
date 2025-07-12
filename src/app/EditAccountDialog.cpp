@@ -23,6 +23,7 @@ EditAccountDialog::EditAccountDialog(int index, QWidget* parent)
 	m_initialAmountValidator->setDecimals(2);
 	m_initialAmountValidator->setNotation(QDoubleValidator::StandardNotation);
 	m_initialAmountValidator->setLocale(QLocale::system());
+	m_initialAmountValidator->setRange(-1000000, 1000000);
 
 	m_initialAmountLineEdit->setValidator(m_initialAmountValidator);
 	
@@ -71,7 +72,7 @@ void EditAccountDialog::HandleConfirm()
 	std::string type = m_typeCombobox->currentText().toStdString();
 
 	bool isInitialAmountOk = false;
-	int initialAmountValue = QLocale::system().toDouble(m_initialAmountLineEdit->text(), &isInitialAmountOk) * 100;
+	long initialAmountValue = QLocale::system().toDouble(m_initialAmountLineEdit->text(), &isInitialAmountOk) * 100;
 
 	if (!isInitialAmountOk) {
 		return;

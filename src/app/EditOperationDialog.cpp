@@ -50,6 +50,7 @@ EditOperationDialog::EditOperationDialog(int id, QWidget* parent)
 	m_amountValidator->setDecimals(2);
 	m_amountValidator->setNotation(QDoubleValidator::StandardNotation);
 	m_amountValidator->setLocale(QLocale::system());
+	m_amountValidator->setRange(-1000000, 1000000);
 
 	m_amountLineEdit->setValidator(m_amountValidator);
 
@@ -95,8 +96,8 @@ void EditOperationDialog::HandleConfirm()
 	bool isAmountOk = false;
 
 	int year = m_yearCombobox->currentText().toInt();
-	int month = m_monthCombobox->currentText().toInt();
-	int amount = QLocale::system().toDouble(m_amountLineEdit->text(), &isAmountOk) * 100;
+	int month = m_monthCombobox->currentIndex() + 1;
+	long amount = QLocale::system().toDouble(m_amountLineEdit->text(), &isAmountOk) * 100;
 	int categoryIndex = m_categoryCombobox->currentIndex();
 	std::string description = m_descriptionLineEdit->text().toStdString();
 

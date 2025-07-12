@@ -6,14 +6,14 @@ class Amount
 {
 public:
 	Amount() = default;
-	Amount(int value);
+	Amount(long value);
 	
-	int GetValue() const;
+	long GetValue() const;
 
 	std::string GetString() const;
 
 	Amount& operator+=(const Amount& amount);
 
 private:
-	int m_value = 0;
+	long m_value = 0;
 };
