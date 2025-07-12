@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include "core/Amount.h"
-#include "core/BankAccount.h"
+#include "Amount.h"
+#include "BankAccount.h"
 
 class Accountant
 {

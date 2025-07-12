@@ -7,6 +7,7 @@
 #include <qmenu.h>
 #include <qmenubar.h>
 #include <qfiledialog.h>
+#include <qmessagebox.h>
 
 #include "DataManager.h"
 #include "EditOperationDialog.h"
@@ -26,7 +27,45 @@ MainWindow::MainWindow(QWidget* parent)
 
 	setMinimumWidth(720);
 
-	s_DataManager.InitializeData();
+	QMessageBox introBox;
+	introBox.setText("Veuillez sélectionner l'emplacement des données de l'application.");
+	QPushButton boxDefaultButton("Ouvrir le gestionnaire de fichiers");
+	boxDefaultButton.setFixedWidth(200);
+	introBox.addButton(&boxDefaultButton, QMessageBox::AcceptRole);
+	introBox.setDefaultButton(&boxDefaultButton);
+	introBox.exec();
+
+	QString selectedDirectoryPath;
+
+	QFileDialog dialog;
+	dialog.setWindowTitle("Emplacement des données");
+	dialog.setOption(QFileDialog::ShowDirsOnly);
+	dialog.setFileMode(QFileDialog::Directory);
+	dialog.setDirectory(QDir::homePath());
+	if (dialog.exec()) {
+		QStringList selectedDirectories = dialog.selectedFiles();
+
+		if (selectedDirectories.empty()) {
+			return;
+		}
+
+		selectedDirectoryPath = selectedDirectories.first();
+	}
+	else {
+		selectedDirectoryPath = QDir::homePath();
+	}
+
+	QDir dataDirectory(selectedDirectoryPath);
+
+	if (dataDirectory.dirName() == "manage-my-budget-data") {
+		dataDirectory.cdUp();
+	}
+
+	QMessageBox dataDirectoryInfoBox;
+	dataDirectoryInfoBox.setText(QString::fromStdString("Les données seront automatiquement enregistrées dans le dossier \"" + dataDirectory.path().toStdString() + "\"."));
+	dataDirectoryInfoBox.exec();
+
+	s_DataManager.InitializeData(dataDirectory);
 
 	m_centralWidget = new QWidget();
 

@@ -19,6 +19,7 @@ public:
 	void SetCurrentProfileCurrentAccountIndex(int index);
 
 	void InitializeData();
+	void InitializeData(const QDir& dataDirectory);
 
 	void ResetData();
 
@@ -45,6 +46,9 @@ private:
 	std::vector<Profile> m_profiles;
 
 	int m_currentProfileIndex = 0;
+
+	QDir m_dataDirectory;
+	std::string m_dataSubDirectoryName = "manage-my-budget-data";
 
 	void LoadData();
 

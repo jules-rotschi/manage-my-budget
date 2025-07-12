@@ -170,6 +170,9 @@
     <ClCompile Include="src\app\StringFormatter.cpp">
       <Filter>Source Files\src\app\UI</Filter>
     </ClCompile>
+    <ClCompile Include="src\app\FileException.cpp">
+      <Filter>Source Files\src\app\Exceptions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\app\AddOperationForm.h">
@@ -257,6 +260,9 @@
     </ClInclude>
     <ClInclude Include="src\app\StringFormatter.h">
       <Filter>Header Files\src\app\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\FileException.h">
+      <Filter>Header Files\src\app\Exceptions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

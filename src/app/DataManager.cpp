@@ -8,6 +8,7 @@
 
 #include "InvalidInputException.h"
 #include "ForbiddenActionException.h"
+#include "FileException.h"
 
 const std::vector<Profile>& DataManager::r_Profiles() const
 {
@@ -350,11 +351,18 @@ void DataManager::InitializeData()
 	SaveData();
 }
 
+void DataManager::InitializeData(const QDir& dataDirectory)
+{
+	m_dataDirectory = dataDirectory;
+	LoadData();
+	SaveData();
+}
+
 void DataManager::ResetData()
 {
-	QDir directory;
-	RemoveDirectory("data");
-
+	if (!RemoveDirectory(m_dataDirectory.filePath(QString::fromStdString(m_dataSubDirectoryName)).toStdString())) {
+		throw FileException("Impossible de réinitialiser les données enregistrées sur l'ordinateur.");
+	}
 	m_profiles.clear();
 }
 
@@ -365,7 +373,9 @@ void DataManager::LoadData()
 
 void DataManager::LoadProfiles()
 {
-	QFile file("data/profiles/profiles.dat");
+	QDir dataSubDirectory(m_dataDirectory.filePath(QString::fromStdString(m_dataSubDirectoryName)));
+
+	QFile file(dataSubDirectory.filePath("profiles/profiles.dat"));
 
 	if (file.open(QIODeviceBase::ReadOnly)) {
 		QDataStream stream(&file);
@@ -388,7 +398,9 @@ void DataManager::LoadProfiles()
 
 void DataManager::LoadCategories(Profile& profile) const
 {
-	QFile file(QString::fromStdString("data/profiles/" + ToFileName(profile.name) + "/categories.dat"));
+	QDir dataSubDirectory(m_dataDirectory.filePath(QString::fromStdString(m_dataSubDirectoryName)));
+
+	QFile file(dataSubDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/categories.dat")));
 
 	if (file.open(QIODeviceBase::ReadOnly)) {
 		QDataStream dataStream(&file);
@@ -406,7 +418,9 @@ void DataManager::LoadCategories(Profile& profile) const
 
 void DataManager::LoadAccounts(Profile& profile) const
 {
-	QFile file(QString::fromStdString("data/profiles/" + ToFileName(profile.name) + "/accounts/accounts.dat"));
+	QDir dataSubDirectory(m_dataDirectory.filePath(QString::fromStdString(m_dataSubDirectoryName)));
+
+	QFile file(dataSubDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts/accounts.dat")));
 
 	if (file.open(QIODeviceBase::ReadOnly)) {
 		QDataStream stream(&file);
@@ -428,7 +442,9 @@ void DataManager::LoadAccounts(Profile& profile) const
 
 void DataManager::LoadOperations(const Profile& profile, BankAccount& account) const
 {
-	QFile file(QString::fromStdString("data/profiles/" + ToFileName(profile.name) + "/accounts/" + ToFileName(account.name) + "/operations.dat"));
+	QDir dataSubDirectory(m_dataDirectory.filePath(QString::fromStdString(m_dataSubDirectoryName)));
+
+	QFile file(dataSubDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts/" + ToFileName(account.name) + "/operations.dat")));
 
 	file.open(QIODeviceBase::ReadOnly);
 
@@ -443,26 +459,28 @@ void DataManager::LoadOperations(const Profile& profile, BankAccount& account) c
 
 void DataManager::SaveData() const
 {
-	QDir directory;
-	directory.mkdir("data");
+	m_dataDirectory.mkdir(QString::fromStdString(m_dataSubDirectoryName));
 	SaveProfiles();
 }
 
 void DataManager::SaveProfiles() const
 {
-	QDir directory;
-	RemoveDirectory("data/profiles");
-	directory.mkdir("data/profiles");
+	QDir dataSubDirectory(m_dataDirectory.filePath(QString::fromStdString(m_dataSubDirectoryName)));
 
-	QFile file("data/profiles/profiles.dat");
+	RemoveDirectory(dataSubDirectory.filePath("profiles").toStdString());
+	dataSubDirectory.mkdir("profiles");
 
-	file.open(QIODeviceBase::WriteOnly);
+	QFile file(dataSubDirectory.filePath("profiles/profiles.dat"));
+
+	if (!file.open(QIODeviceBase::WriteOnly)) {
+		throw FileException("Impossible d'enregistrer les données.");
+	}
 
 	QDataStream stream(&file);
 
 	for (const Profile& profile : m_profiles) {
 		stream << profile;
-		directory.mkdir(QString::fromStdString("data/profiles/" + ToFileName(profile.name)));
+		dataSubDirectory.mkdir(QString::fromStdString("profiles/" + ToFileName(profile.name)));
 		SaveCategories(profile);
 		SaveAccounts(profile);
 	}
@@ -470,9 +488,13 @@ void DataManager::SaveProfiles() const
 
 void DataManager::SaveCategories(const Profile& profile) const
 {
-	QFile file(QString::fromStdString("data/profiles/" + ToFileName(profile.name) + "/categories.dat"));
+	QDir dataSubDirectory(m_dataDirectory.filePath(QString::fromStdString(m_dataSubDirectoryName)));
 
-	file.open(QIODeviceBase::WriteOnly);
+	QFile file(dataSubDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/categories.dat")));
+
+	if (!file.open(QIODeviceBase::WriteOnly)) {
+		throw FileException("Impossible d'enregistrer les données.");
+	}
 
 	QDataStream stream(&file);
 
@@ -483,28 +505,35 @@ void DataManager::SaveCategories(const Profile& profile) const
 
 void DataManager::SaveAccounts(const Profile& profile) const
 {
-	QDir directory;
-	RemoveDirectory("data/profiles/" + ToFileName(profile.name) + "/accounts");
-	directory.mkdir(QString::fromStdString("data/profiles/" + ToFileName(profile.name) + "/accounts"));
-	
-	QFile file(QString::fromStdString("data/profiles/" + ToFileName(profile.name) + "/accounts/accounts.dat"));
+	QDir dataSubDirectory(m_dataDirectory.filePath(QString::fromStdString(m_dataSubDirectoryName)));
 
-	file.open(QIODeviceBase::WriteOnly);
+	RemoveDirectory(dataSubDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts")).toStdString());
+	dataSubDirectory.mkdir(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts"));
+	
+	QFile file(dataSubDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts/accounts.dat")));
+
+	if (!file.open(QIODeviceBase::WriteOnly)) {
+		throw FileException("Impossible d'enregistrer les données.");
+	}
 
 	QDataStream stream(&file);
 
 	for (const BankAccount& account : profile.bankAccounts) {
 		stream << account;
-		directory.mkdir(QString::fromStdString("data/profiles/" + ToFileName(profile.name) + "/accounts/" + ToFileName(account.name)));
+		dataSubDirectory.mkdir(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts/" + ToFileName(account.name)));
 		SaveOperations(profile, account);
 	}
 }
 
 void DataManager::SaveOperations(const Profile& profile, const BankAccount& account) const
 {
-	QFile file(QString::fromStdString("data/profiles/" + ToFileName(profile.name) + "/accounts/" + ToFileName(account.name) + "/operations.dat"));
+	QDir dataSubDirectory(m_dataDirectory.filePath(QString::fromStdString(m_dataSubDirectoryName)));
 
-	file.open(QIODeviceBase::WriteOnly);
+	QFile file(dataSubDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts/" + ToFileName(account.name) + "/operations.dat")));
+
+	if (!file.open(QIODeviceBase::WriteOnly)) {
+		throw FileException("Impossible d'enregistrer les données.");
+	}
 
 	QDataStream stream(&file);
 
