@@ -276,7 +276,7 @@ void DataManager::DeleteAccount(int index)
 	SaveAccounts(r_CurrentProfile());
 }
 
-void DataManager::AddOperation(int year, int month, int amountValue, int categoryIndex, const std::string& description)
+void DataManager::AddOperation(int year, int month, long amountValue, int categoryIndex, const std::string& description)
 {
 	if (month < 1 || month > 12) {
 		throw InvalidInputException("Le mois doit être compris entre 1 et 12.");
@@ -298,7 +298,7 @@ void DataManager::AddOperation(int year, int month, int amountValue, int categor
 	SaveOperations(r_CurrentProfile(), m_profiles[m_currentProfileIndex].r_CurrentBankAccount());
 }
 
-void DataManager::EditOperation(int id, int year, int month, int amountValue, int categoryIndex, const std::string& description)
+void DataManager::EditOperation(int id, int year, int month, long amountValue, int categoryIndex, const std::string& description)
 {
 	if (month < 1 || month > 12) {
 		throw InvalidInputException("Le mois doit être compris entre 1 et 12.");
@@ -700,7 +700,7 @@ bool DataManager::LoadOperationsBackUp(const QDir& backUpDirectory, const Profil
 
 			operation.year = properties[0].toInt(&isYearOk);
 			operation.month = properties[1].toInt(&isMonthOk);
-			operation.amount = properties[2].toInt(&isAmountValueOk);
+			operation.amount = properties[2].toLong(&isAmountValueOk);
 			operation.categoryIndex = properties[3].toInt(&isCategoryIndexOk);
 			operation.description = properties[4].toStdString();
 

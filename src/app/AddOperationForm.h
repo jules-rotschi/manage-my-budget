@@ -19,6 +19,9 @@ public:
 private:
 	QFormLayout* m_mainLayout;
 
+	QLabel* m_typeLabel;
+	QComboBox* m_typeCombobox;
+
 	QLabel* m_yearLabel;
 	QComboBox* m_yearCombobox;
 

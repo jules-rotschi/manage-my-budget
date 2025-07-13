@@ -15,6 +15,11 @@ AddOperationForm::AddOperationForm(QWidget* parent)
 {
 	QDate currentDate = QDate::currentDate();
 
+	m_typeLabel = new QLabel("Type");
+	m_typeCombobox = new QComboBox();
+	m_typeCombobox->addItem("Crédit");
+	m_typeCombobox->addItem("Débit");
+
 	m_yearLabel = new QLabel("Année");
 	m_yearCombobox = new QComboBox();
 	for (int i = 0; i <= 2; i++) {
@@ -35,7 +40,7 @@ AddOperationForm::AddOperationForm(QWidget* parent)
 	m_amountValidator->setDecimals(2);
 	m_amountValidator->setNotation(QDoubleValidator::StandardNotation);
 	m_amountValidator->setLocale(QLocale::system());
-	m_amountValidator->setRange(-1000000, 1000000);
+	m_amountValidator->setRange(0, 1000000);
 
 	m_amountLineEdit->setValidator(m_amountValidator);
 
@@ -50,6 +55,7 @@ AddOperationForm::AddOperationForm(QWidget* parent)
 	connect(m_addButton, &QPushButton::released, this, &AddOperationForm::HandleAddButton);
 
 	m_mainLayout = new QFormLayout(this);
+	m_mainLayout->addRow(m_typeLabel, m_typeCombobox);
 	m_mainLayout->addRow(m_yearLabel, m_yearCombobox);
 	m_mainLayout->addRow(m_monthLabel, m_monthCombobox);
 	m_mainLayout->addRow(m_amountLabel, m_amountLineEdit);
@@ -78,11 +84,15 @@ void AddOperationForm::HandleAddButton()
 {
 	bool isAmountOk = false;
 
+	bool isDebit = m_typeCombobox->currentIndex();
+
 	int year = m_yearCombobox->currentText().toInt();
 	int month = m_monthCombobox->currentIndex() + 1;
 	int categoryIndex = m_categoryCombobox->currentIndex();
-	long amountValue = QLocale::system().toDouble(m_amountLineEdit->text(), &isAmountOk) * 100;
+	unsigned long absoluteAmountValue = QLocale::system().toDouble(m_amountLineEdit->text(), &isAmountOk) * 100;
 	std::string description = m_descriptionLineEdit->text().toStdString();
+	
+	long amountValue = isDebit ? -(long)absoluteAmountValue : absoluteAmountValue;
 
 	if (!isAmountOk) {
 		return;

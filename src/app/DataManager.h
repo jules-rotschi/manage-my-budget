@@ -38,8 +38,8 @@ public:
 	void EditAccount(int index, const std::string& name, const std::string& type, int initialAmountValue);
 	void DeleteAccount(int index);
 
-	void AddOperation(int year, int month, int amountValue, int categoryIndex, const std::string& description);
-	void EditOperation(int id, int year, int month, int amountValue, int categoryIndex, const std::string& description);
+	void AddOperation(int year, int month, long amountValue, int categoryIndex, const std::string& description);
+	void EditOperation(int id, int year, int month, long amountValue, int categoryIndex, const std::string& description);
 	void DeleteOperation(int id);
 
 private:

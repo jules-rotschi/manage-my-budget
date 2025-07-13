@@ -28,6 +28,17 @@ EditOperationDialog::EditOperationDialog(int id, QWidget* parent)
 
 	m_formWidget = new QWidget();
 
+	m_typeLabel = new QLabel("Type");
+	m_typeCombobox = new QComboBox();
+	m_typeCombobox->addItem("Crédit");
+	m_typeCombobox->addItem("Débit");
+	if (operationToEdit.amount.GetValue() < 0) {
+		m_typeCombobox->setCurrentIndex(1);
+	}
+	else {
+		m_typeCombobox->setCurrentIndex(0);
+	}
+
 	m_yearLabel = new QLabel("Année");
 	m_yearCombobox = new QComboBox();
 	int yearsToDisplay = std::max<int>(currentDate.year() - operationToEdit.year, 2);
@@ -44,13 +55,13 @@ EditOperationDialog::EditOperationDialog(int id, QWidget* parent)
 	m_monthCombobox->setCurrentIndex(operationToEdit.month - 1);
 
 	m_amountLabel = new QLabel("Montant");
-	m_amountLineEdit = new QLineEdit(QString::fromStdString(FormatToLineEdit(operationToEdit.amount.GetValue())));
+	m_amountLineEdit = new QLineEdit(QString::fromStdString(FormatToLineEdit(operationToEdit.amount.GetValue(), true)));
 
 	m_amountValidator = new QDoubleValidator();
 	m_amountValidator->setDecimals(2);
 	m_amountValidator->setNotation(QDoubleValidator::StandardNotation);
 	m_amountValidator->setLocale(QLocale::system());
-	m_amountValidator->setRange(-1000000, 1000000);
+	m_amountValidator->setRange(0, 1000000);
 
 	m_amountLineEdit->setValidator(m_amountValidator);
 
@@ -65,6 +76,7 @@ EditOperationDialog::EditOperationDialog(int id, QWidget* parent)
 	m_descriptionLineEdit = new QLineEdit(QString::fromStdString(operationToEdit.description));
 
 	m_formLayout = new QFormLayout(m_formWidget);
+	m_formLayout->addRow(m_typeLabel, m_typeCombobox);
 	m_formLayout->addRow(m_yearLabel, m_yearCombobox);
 	m_formLayout->addRow(m_monthLabel, m_monthCombobox);
 	m_formLayout->addRow(m_amountLabel, m_amountLineEdit);
@@ -95,18 +107,22 @@ void EditOperationDialog::HandleConfirm()
 {
 	bool isAmountOk = false;
 
+	bool isDebit = m_typeCombobox->currentIndex();
+
 	int year = m_yearCombobox->currentText().toInt();
 	int month = m_monthCombobox->currentIndex() + 1;
-	long amount = QLocale::system().toDouble(m_amountLineEdit->text(), &isAmountOk) * 100;
+	unsigned long absoluteAmountValue = QLocale::system().toDouble(m_amountLineEdit->text(), &isAmountOk) * 100;
 	int categoryIndex = m_categoryCombobox->currentIndex();
 	std::string description = m_descriptionLineEdit->text().toStdString();
+
+	long amountValue = isDebit ? -(long)absoluteAmountValue : absoluteAmountValue;
 
 	if (!isAmountOk) {
 		return;
 	}
 
 	try {
-		s_DataManager.EditOperation(m_id, year, month, amount, categoryIndex, description);
+		s_DataManager.EditOperation(m_id, year, month, amountValue, categoryIndex, description);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);

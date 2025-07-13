@@ -2,4 +2,4 @@
 
 #include <string>
 
-std::string FormatToLineEdit(int value);
+std::string FormatToLineEdit(int value, bool abs = false);

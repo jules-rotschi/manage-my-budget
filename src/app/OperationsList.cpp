@@ -91,6 +91,10 @@ void OperationsList::UpdateUI(bool scrollDown)
 			+ QString::fromStdString(LimitLength(s_DataManager.r_CurrentProfile().categories[operation.categoryIndex], 20))
 			+ descriptionString;
 
+		if (operation.amount.GetValue() > 0) {
+			operationString = '+' + operationString;
+		}
+		
 		QLabel* operationLabel = new QLabel(operationString);
 
 		QPushButton* editOperationButton = new QPushButton("Modifier");

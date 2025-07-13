@@ -2,8 +2,11 @@
 
 #include <qlocale.h>
 
-std::string FormatToLineEdit(int value)
+std::string FormatToLineEdit(int value, bool abs)
 {
+	if (abs && value < 0) {
+		value = -value;
+	}
 
 	if (value == 0) {
 		return "0";
