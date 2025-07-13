@@ -20,8 +20,8 @@
 #include "StringFormatter.h"
 #include "ConfirmationRequiser.h"
 
-MainWindow::MainWindow(QWidget* parent)
-	: QMainWindow(parent)
+MainWindow::MainWindow(const std::string version, QWidget* parent)
+	: m_version(version), QMainWindow(parent)
 {
 	setWindowTitle("Manage my budget");
 
@@ -72,6 +72,7 @@ MainWindow::MainWindow(QWidget* parent)
 	m_profileMenu = menuBar()->addMenu("Profil");
 	m_reviewMenu = menuBar()->addMenu("Bilans");
 	m_dataMenu = menuBar()->addMenu("Données");
+	m_aboutMenu = menuBar()->addMenu("À propos");
 
 	m_manageCategoriesAction = new QAction("Gérer les catégories du profil");
 	m_profileMenu->addAction(m_manageCategoriesAction);
@@ -108,6 +109,10 @@ MainWindow::MainWindow(QWidget* parent)
 	m_resetDataAction = new QAction("Réinitialiser les données");
 	m_dataMenu->addAction(m_resetDataAction);
 	connect(m_resetDataAction, &QAction::triggered, this, &MainWindow::HandleDataReset);
+
+	m_showVersionAction = new QAction("Version");
+	m_aboutMenu->addAction(m_showVersionAction);
+	connect(m_showVersionAction, &QAction::triggered, this, &MainWindow::HandleVersionShow);
 
 	m_currentProfileForm = new QWidget();
 	
@@ -347,4 +352,11 @@ void MainWindow::HandleDataReset()
 	LoadAccountsToComboBox();
 	m_addOperationForm->LoadCategories();
 	UpdateUI(true);
+}
+
+void MainWindow::HandleVersionShow() const
+{
+	QMessageBox box;
+	box.setText(QString::fromStdString("Version " + m_version));
+	box.exec();
 }

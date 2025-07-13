@@ -14,15 +14,18 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	MainWindow(QWidget* parent = nullptr);
+	MainWindow(const std::string version, QWidget* parent = nullptr);
 
 private:
+	std::string m_version;
+
 	QWidget* m_centralWidget;
 	QVBoxLayout* m_mainLayout;
 
 	QMenu* m_profileMenu;
 	QMenu* m_reviewMenu;
 	QMenu* m_dataMenu;
+	QMenu* m_aboutMenu;
 
 	QAction* m_manageProfilesAction;
 	QAction* m_manageCategoriesAction;
@@ -32,6 +35,7 @@ private:
 	QAction* m_backUpAction;
 	QAction* m_backUpLoadAction;
 	QAction* m_resetDataAction;
+	QAction* m_showVersionAction;
 
 	QWidget* m_currentProfileForm;
 	QFormLayout* m_currentProfileFormLayout;
@@ -63,4 +67,5 @@ private slots:
 	void HandleBackUpLoad();
 	void HandleBackUp() const;
 	void HandleDataReset();
+	void HandleVersionShow() const;
 };
