@@ -17,11 +17,11 @@ set (SOURCES_FILES
   ${SRC_DIR}/core/Accountant.cpp
   ${SRC_DIR}/core/Amount.cpp
   ${SRC_DIR}/core/BankAccount.cpp
+  ${SRC_DIR}/core/Category.cpp
   ${SRC_DIR}/core/Operation.cpp
+  ${SRC_DIR}/core/Profile.cpp
 
   ${SRC_DIR}/app/DataManager.cpp
-
-  ${SRC_DIR}/app/Profile.cpp
 
   ${SRC_DIR}/app/ApplicationException.cpp
   ${SRC_DIR}/app/FileException.cpp
@@ -40,13 +40,13 @@ set (SOURCES_FILES
   ${SRC_DIR}/app/AddOperationForm.cpp
   ${SRC_DIR}/app/AddProfileDialog.cpp
   ${SRC_DIR}/app/EditAccountDialog.cpp
+  ${SRC_DIR}/app/EditCategoryDialog.cpp
   ${SRC_DIR}/app/EditOperationDialog.cpp
   ${SRC_DIR}/app/ManageAccountsDialog.cpp
   ${SRC_DIR}/app/ManageCategoriesDialog.cpp
   ${SRC_DIR}/app/ManageProfilesDialog.cpp
   ${SRC_DIR}/app/MonthlyReviewDialog.cpp
   ${SRC_DIR}/app/OperationsList.cpp
-  ${SRC_DIR}/app/RenameCategoryDialog.cpp
   ${SRC_DIR}/app/RenameProfileDialog.cpp
   ${SRC_DIR}/app/YearlyReviewDialog.cpp
 )
@@ -55,11 +55,11 @@ set (HEADERS_FILES
   ${SRC_DIR}/core/Accountant.h
   ${SRC_DIR}/core/Amount.h
   ${SRC_DIR}/core/BankAccount.h
+  ${SRC_DIR}/core/Category.h
   ${SRC_DIR}/core/Operation.h
+  ${SRC_DIR}/core/Profile.h
 
   ${SRC_DIR}/app/DataManager.h
-
-  ${SRC_DIR}/app/Profile.h
 
   ${SRC_DIR}/app/ApplicationException.h
   ${SRC_DIR}/app/FileException.h
@@ -69,8 +69,8 @@ set (HEADERS_FILES
   ${SRC_DIR}/app/AmountValueFormatter.h
   ${SRC_DIR}/app/ConfirmationRequiser.h
   ${SRC_DIR}/app/ExceptionHandler.h
-  ${SRC_DIR}/app/StringFormatter.h
   ${SRC_DIR}/app/MonthString.h
+  ${SRC_DIR}/app/StringFormatter.h
 
   ${SRC_DIR}/app/MainWindow.h
 
@@ -78,13 +78,13 @@ set (HEADERS_FILES
   ${SRC_DIR}/app/AddOperationForm.h
   ${SRC_DIR}/app/AddProfileDialog.h
   ${SRC_DIR}/app/EditAccountDialog.h
+  ${SRC_DIR}/app/EditCategoryDialog.h
   ${SRC_DIR}/app/EditOperationDialog.h
   ${SRC_DIR}/app/ManageAccountsDialog.h
   ${SRC_DIR}/app/ManageCategoriesDialog.h
   ${SRC_DIR}/app/ManageProfilesDialog.h
   ${SRC_DIR}/app/MonthlyReviewDialog.h
   ${SRC_DIR}/app/OperationsList.h
-  ${SRC_DIR}/app/RenameCategoryDialog.h
   ${SRC_DIR}/app/RenameProfileDialog.h
   ${SRC_DIR}/app/YearlyReviewDialog.h
 )

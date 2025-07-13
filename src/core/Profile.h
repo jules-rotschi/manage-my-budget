@@ -4,12 +4,13 @@
 #include <vector>
 
 #include "core/BankAccount.h"
+#include "core/Category.h"
 
 class Profile
 {
 public:
 	std::string name;
-	std::vector<std::string> categories;
+	std::vector<Category> categories;
 	std::vector<BankAccount> bankAccounts;
 
 	Profile(bool populateDefault = false);

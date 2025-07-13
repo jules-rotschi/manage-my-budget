@@ -1,7 +1,7 @@
 ﻿#include "ManageAccountsDialog.h"
 
 #include "DataManager.h"
-#include "RenameCategoryDialog.h"
+#include "EditCategoryDialog.h"
 #include "AddAccountDialog.h"
 #include "EditAccountDialog.h"
 #include "ExceptionHandler.h"

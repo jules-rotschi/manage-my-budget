@@ -2,8 +2,21 @@
 
 #include <assert.h>
 
-Accountant::Accountant(const std::vector<BankAccount>& accounts)
-	: m_accounts(accounts) {}
+#include "core/Profile.h"
+
+Accountant::Accountant(const Profile& profile)
+	: m_profile(profile) {}
+
+Amount Accountant::GetBudgetTotal()
+{
+	Amount total = 0;
+
+	for (const Category& category : m_profile.categories) {
+		total += category.monthlyBudget;
+	}
+
+	return total;
+}
 
 Amount Accountant::GetMonthlyAmount(int year, int month) const
 {
@@ -11,7 +24,7 @@ Amount Accountant::GetMonthlyAmount(int year, int month) const
 
 	Amount amount = 0;
 
-	for (const BankAccount& account : m_accounts) {
+	for (const BankAccount& account : m_profile.bankAccounts) {
 			amount += account.GetMonthlyAmount(year, month);
 	}
 
@@ -24,7 +37,7 @@ Amount Accountant::GetMonthlyAmount(int year, int month, int categoryIndex) cons
 
 	Amount amount = 0;
 
-	for (const BankAccount& account : m_accounts) {
+	for (const BankAccount& account : m_profile.bankAccounts) {
 			amount += account.GetMonthlyAmount(year, month, categoryIndex);
 	}
 
@@ -35,7 +48,7 @@ Amount Accountant::GetYearlyAmount(int year) const
 {
 	Amount amount = 0;
 
-	for (const BankAccount& account : m_accounts) {
+	for (const BankAccount& account : m_profile.bankAccounts) {
 			amount += account.GetYearlyAmount(year);
 	}
 
@@ -46,7 +59,7 @@ Amount Accountant::GetYearlyAmount(int year, int categoryIndex) const
 {
 	Amount amount = 0;
 
-	for (const BankAccount& account : m_accounts) {
+	for (const BankAccount& account : m_profile.bankAccounts) {
 			amount += account.GetYearlyAmount(year, categoryIndex);
 	}
 
@@ -59,7 +72,7 @@ Amount Accountant::GetMonthlySavings(int year, int month)
 
 	Amount savings = 0;
 
-	for (const BankAccount& account : m_accounts) {
+	for (const BankAccount& account : m_profile.bankAccounts) {
 		if (account.type != AccountType::SAVING) continue;
 
 		for (const Operation& operation : account.r_Operations()) {
@@ -76,7 +89,7 @@ Amount Accountant::GetYearlySavings(int year)
 {
 	Amount savings = 0;
 
-	for (const BankAccount& account : m_accounts) {
+	for (const BankAccount& account : m_profile.bankAccounts) {
 		if (account.type != AccountType::SAVING) continue;
 
 		for (const Operation& operation : account.r_Operations()) {

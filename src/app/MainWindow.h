@@ -23,13 +23,14 @@ private:
 	QVBoxLayout* m_mainLayout;
 
 	QMenu* m_profileMenu;
+	QMenu* m_budgetMenu;
 	QMenu* m_reviewMenu;
 	QMenu* m_dataMenu;
 	QMenu* m_aboutMenu;
 
 	QAction* m_manageProfilesAction;
-	QAction* m_manageCategoriesAction;
 	QAction* m_manageAccountsAction;
+	QAction* m_manageBudgetAction;
 	QAction* m_monthlyReviewAction;
 	QAction* m_yearlyReviewAction;
 	QAction* m_backUpAction;
@@ -57,7 +58,7 @@ private:
 
 private slots:
 	void HandleManageProfiles();
-	void HandleManageCategories();
+	void HandleManageBudget();
 	void HandleManageAccounts();
 	void HandleCurrentProfileChange();
 	void HandleCurrentAccountChange();

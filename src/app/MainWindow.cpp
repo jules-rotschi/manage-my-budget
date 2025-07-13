@@ -70,13 +70,10 @@ MainWindow::MainWindow(const std::string version, QWidget* parent)
 	m_centralWidget = new QWidget();
 
 	m_profileMenu = menuBar()->addMenu("Profil");
+	m_budgetMenu = menuBar()->addMenu("Budget");
 	m_reviewMenu = menuBar()->addMenu("Bilans");
 	m_dataMenu = menuBar()->addMenu("Données");
 	m_aboutMenu = menuBar()->addMenu("À propos");
-
-	m_manageCategoriesAction = new QAction("Gérer les catégories du profil");
-	m_profileMenu->addAction(m_manageCategoriesAction);
-	connect(m_manageCategoriesAction, &QAction::triggered, this, &MainWindow::HandleManageCategories);
 
 	m_manageAccountsAction = new QAction("Gérer les comptes du profil");
 	m_profileMenu->addAction(m_manageAccountsAction);
@@ -87,6 +84,10 @@ MainWindow::MainWindow(const std::string version, QWidget* parent)
 	m_manageProfilesAction = new QAction("Gérer les profils");
 	m_profileMenu->addAction(m_manageProfilesAction);
 	connect(m_manageProfilesAction, &QAction::triggered, this, &MainWindow::HandleManageProfiles);
+
+	m_manageBudgetAction = new QAction("Gérer le budget");
+	m_budgetMenu->addAction(m_manageBudgetAction);
+	connect(m_manageBudgetAction, &QAction::triggered, this, &MainWindow::HandleManageBudget);
 
 	m_monthlyReviewAction = new QAction("Bilans mensuels");
 	m_reviewMenu->addAction(m_monthlyReviewAction);
@@ -207,7 +208,7 @@ void MainWindow::HandleManageProfiles()
 	UpdateUI();
 }
 
-void MainWindow::HandleManageCategories()
+void MainWindow::HandleManageBudget()
 {
 	ManageCategoriesDialog dialog;
 	dialog.exec();

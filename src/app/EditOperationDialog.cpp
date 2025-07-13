@@ -67,8 +67,8 @@ EditOperationDialog::EditOperationDialog(int id, QWidget* parent)
 
 	m_categoryLabel = new QLabel("Catégorie");
 	m_categoryCombobox = new QComboBox();
-	for (std::string category : s_DataManager.r_CurrentProfile().categories) {
-		m_categoryCombobox->addItem(QString::fromStdString(LimitLength(category, 20)));
+	for (const Category& category : s_DataManager.r_CurrentProfile().categories) {
+		m_categoryCombobox->addItem(QString::fromStdString(LimitLength(category.name, 20)));
 	}
 	m_categoryCombobox->setCurrentIndex(operationToEdit.categoryIndex);
 

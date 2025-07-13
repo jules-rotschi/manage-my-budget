@@ -3,12 +3,14 @@
 #include <vector>
 
 #include "Amount.h"
-#include "BankAccount.h"
+#include "core/Profile.h"
 
 class Accountant
 {
 public:
-	Accountant(const std::vector<BankAccount>& accounts);
+	Accountant(const Profile& profile);
+
+	Amount GetBudgetTotal();
 
 	Amount GetMonthlyAmount(int year, int month) const;
 	Amount GetMonthlyAmount(int year, int month, int categoryIndex) const;
@@ -18,6 +20,6 @@ public:
 	Amount GetYearlySavings(int year);
 
 private:
-	const std::vector<BankAccount>& m_accounts;
+	const Profile& m_profile;
 };
 

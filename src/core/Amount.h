@@ -17,3 +17,7 @@ public:
 private:
 	long m_value = 0;
 };
+
+Amount operator*(const Amount& a1, const Amount& a2);
+Amount operator-(const Amount& a1, const Amount& a2);
+Amount operator-(const Amount& amount);

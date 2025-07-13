@@ -71,11 +71,10 @@ void DataManager::RenameProfile(int index, const std::string& newName)
 	}
 
 	std::string oldName = m_profiles[index].name;
+	bool isNameEdited = newName != oldName;
 
 	for (int i = 0; i < m_profiles.size(); i++) {
 		const Profile& existingProfile = m_profiles[i];
-
-		bool isNameEdited = newName != oldName;
 
 		if (isNameEdited && ToFileName(existingProfile.name) == ToFileName(newName)) {
 			if (existingProfile.name == newName) {
@@ -111,13 +110,15 @@ void DataManager::DeleteProfile(int index)
 	SaveProfiles();
 }
 
-void DataManager::AddCategory(const std::string& category)
+void DataManager::AddCategory(const std::string& name, Amount monthlyBudget)
 {
-	if (category.empty()) {
+	if (name.empty()) {
 		throw InvalidInputException("Le nom de la catégorie ne peut être vide.");
 	}
 
-	for (const std::string& existingCategory : r_CurrentProfile().categories) {
+	Category category(name, monthlyBudget);
+
+	for (const Category& existingCategory : r_CurrentProfile().categories) {
 		if (category == existingCategory) {
 			throw InvalidInputException("Une catégorie du même nom existe déjà.");
 		}
@@ -128,25 +129,31 @@ void DataManager::AddCategory(const std::string& category)
 	SaveCategories(r_CurrentProfile());
 }
 
-void DataManager::RenameCategory(int index, const std::string& newName)
+void DataManager::EditCategory(int index, const std::string& name, Amount monthlyBudget)
 {
 	assert((index < r_CurrentProfile().categories.size()) && "Category index must be less or equal to last category index.");
 
-	if (r_CurrentProfile().categories[index] == "Opération interne") {
+	if (r_CurrentProfile().categories[index] == Category::Internal()) {
 		throw ForbiddenActionException("Vous ne pouvez pas renommer cette catégorie.");
 	}
 
-	if (newName.empty()) {
+	if (name.empty()) {
 		throw InvalidInputException("Le nom de la catégorie ne peut être vide.");
 	}
 
-	for (const std::string& existingCategoryName : r_CurrentProfile().categories) {
-		if (newName == existingCategoryName) {
+	Category category(name, monthlyBudget);
+
+	std::string oldName = r_CurrentProfile().categories[index].name;
+	bool isNameEdited = category.name != oldName;
+
+	for (const Category& existingCategory : r_CurrentProfile().categories) {
+
+		if (isNameEdited && category == existingCategory) {
 			throw InvalidInputException("Une catégorie du même nom existe déjà.");
 		}
 	}
 
-	m_profiles[m_currentProfileIndex].categories[index] = newName;
+	m_profiles[m_currentProfileIndex].categories[index] = category;
 
 	SaveCategories(r_CurrentProfile());
 }
@@ -155,7 +162,7 @@ void DataManager::DeleteCategory(int index)
 {
 	assert((index < r_CurrentProfile().categories.size()) && "Category index must be less or equal to last category index.");
 
-	if (r_CurrentProfile().categories[index] == "Opération interne") {
+	if (r_CurrentProfile().categories[index] == Category::Internal()) {
 		throw ForbiddenActionException(
 			"Vous ne pouvez pas supprimer la catégorie \"Opération interne\". Cette catégorie permet de classer les opérations entre vos différents comptes."
 		);
@@ -368,10 +375,20 @@ void DataManager::ResetData()
 
 void DataManager::LoadData()
 {
-	LoadProfiles();
+	bool isDataFromVersion1_0_0 = false;
+
+	QDir dataSubDirectory(m_dataDirectory.filePath(QString::fromStdString(m_dataSubDirectoryName)));
+
+	QFile file(dataSubDirectory.filePath("version.dat"));
+
+	if (!file.open(QIODeviceBase::ReadOnly)) {
+		isDataFromVersion1_0_0 = true;
+	}
+
+	LoadProfiles(isDataFromVersion1_0_0);
 }
 
-void DataManager::LoadProfiles()
+void DataManager::LoadProfiles(bool isDataFromVersion1_0_0)
 {
 	QDir dataSubDirectory(m_dataDirectory.filePath(QString::fromStdString(m_dataSubDirectoryName)));
 
@@ -391,28 +408,38 @@ void DataManager::LoadProfiles()
 	}
 
 	for (Profile& profile : m_profiles) {
-		LoadCategories(profile);
+		LoadCategories(profile, isDataFromVersion1_0_0);
 		LoadAccounts(profile);
 	}
 }
 
-void DataManager::LoadCategories(Profile& profile) const
+void DataManager::LoadCategories(Profile& profile, bool isDataFromVersion1_0_0) const
 {
 	QDir dataSubDirectory(m_dataDirectory.filePath(QString::fromStdString(m_dataSubDirectoryName)));
 
 	QFile file(dataSubDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/categories.dat")));
 
 	if (file.open(QIODeviceBase::ReadOnly)) {
-		QDataStream dataStream(&file);
+		QDataStream stream(&file);
 
 		while (!file.atEnd()) {
-			QString category;
-			dataStream >> category;
-			profile.categories.push_back(category.toStdString());
+			Category category;
+
+			if (isDataFromVersion1_0_0) {
+				QString categoryName;
+				stream >> categoryName;
+				category.name = categoryName.toStdString();
+				category.monthlyBudget = 0;
+			}
+			else {
+				stream >> category;
+			}
+
+			profile.categories.push_back(category);
 		}
 	}
 	else {
-		profile.categories.push_back("Opération interne");
+		profile.categories.push_back(Category::Internal());
 	}
 }
 
@@ -460,6 +487,18 @@ void DataManager::LoadOperations(const Profile& profile, BankAccount& account) c
 void DataManager::SaveData() const
 {
 	m_dataDirectory.mkdir(QString::fromStdString(m_dataSubDirectoryName));
+	QDir dataSubDirectory(m_dataDirectory.filePath(QString::fromStdString(m_dataSubDirectoryName)));
+
+	QFile file(dataSubDirectory.filePath("version.dat"));
+
+	if (!file.open(QIODeviceBase::WriteOnly)) {
+		throw FileException("Impossible d'enregistrer les données.");
+	}
+
+	QDataStream stream(&file);
+
+	stream << QString::fromStdString(s_Version);
+
 	SaveProfiles();
 }
 
@@ -498,8 +537,8 @@ void DataManager::SaveCategories(const Profile& profile) const
 
 	QDataStream stream(&file);
 
-	for (const std::string& category : profile.categories) {
-		stream << QString::fromStdString(category);
+	for (const Category& category : profile.categories) {
+		stream << category;
 	}
 }
 
@@ -610,14 +649,19 @@ bool DataManager::LoadCategoriesBackUp(const QDir& backUpDirectory, Profile& pro
 		stream.readLine();
 
 		while (!stream.atEnd()) {
-			std::string category;
+			Category category;
 
 			QString line = stream.readLine();
 			QStringList properties = line.split(',');
 
-			assert(properties.size() == 1);
+			assert(properties.size() == 1 || properties.size() == 2);
 
-			category = properties[0].toStdString();
+			category.name = properties[0].toStdString();
+
+			if (properties.size() == 2) {
+				bool isBudgetOk = false;
+				category.monthlyBudget = properties[1].toInt(&isBudgetOk);
+			}
 
 			profile.categories.push_back(category);
 		}
@@ -729,6 +773,16 @@ void DataManager::BackUp(const std::string& backUpPath)
 
 	QDir backUpDirectory(QString::fromStdString(backUpPath + '/') + directoryName);
 
+	QFile file(backUpDirectory.filePath("version.txt"));
+
+	if (!file.open(QIODeviceBase::WriteOnly)) {
+		throw FileException("Impossible de sauvegarder les données.");
+	}
+
+	QTextStream stream(&file);
+
+	stream << QString::fromStdString(s_Version);
+
 	BackUpProfiles(backUpDirectory);
 }
 
@@ -760,10 +814,10 @@ void DataManager::BackUpCategories(const QDir& backUpDirectory, const Profile& p
 
 	QTextStream stream(&file);
 
-	stream << "Name\n";
+	stream << "Name,Monthly budget\n";
 
-	for (const std::string& category : profile.categories) {
-		stream << QString::fromStdString(category) << '\n';
+	for (const Category& category : profile.categories) {
+		stream << category << '\n';
 	}
 }
 
@@ -856,6 +910,30 @@ QDataStream& operator>>(QDataStream& stream, Profile& profile)
 	return stream;
 }
 
+QDataStream& operator<<(QDataStream& stream, const Category& category)
+{
+	stream
+		<< QString::fromStdString(category.name)
+		<< (qint32)category.monthlyBudget.GetValue();
+
+	return stream;
+}
+
+QDataStream& operator>>(QDataStream& stream, Category& category)
+{
+	QString name;
+	qint32 monthlyBudgetValue;
+
+	stream
+		>> name
+		>> monthlyBudgetValue;
+
+	category.name = name.toStdString();
+	category.monthlyBudget = monthlyBudgetValue;
+
+	return stream;
+}
+
 QDataStream& operator<<(QDataStream& stream, const BankAccount& account)
 {
 	stream
@@ -916,6 +994,18 @@ QTextStream& operator<<(QTextStream& stream, const Profile& profile)
 {
 	stream
 		<< QString::fromStdString(profile.name);
+
+	return stream;
+}
+
+QTextStream& operator<<(QTextStream& stream, const Category& category)
+{
+	QString separator = ",";
+
+	stream
+		<< QString::fromStdString(category.name)
+		<< separator
+		<< category.monthlyBudget.GetValue();
 
 	return stream;
 }

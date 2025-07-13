@@ -5,7 +5,7 @@
 #include <qdatastream.h>
 #include <qdir.h>
 
-#include "Profile.h"
+#include "core/Profile.h"
 
 class DataManager
 {
@@ -30,8 +30,8 @@ public:
 	void RenameProfile(int index, const std::string& newName);
 	void DeleteProfile(int index);
 
-	void AddCategory(const std::string& category);
-	void RenameCategory(int index, const std::string& newName);
+	void AddCategory(const std::string& name, Amount monthlyBudget);
+	void EditCategory(int index, const std::string& name, Amount monthlyBudget);
 	void DeleteCategory(int index);
 
 	void AddAccount(const std::string& name, const std::string& type, int initialAmountValue);
@@ -52,8 +52,8 @@ private:
 
 	void LoadData();
 
-	void LoadProfiles();
-	void LoadCategories(Profile& profile) const;
+	void LoadProfiles(bool isDataFromVersion1_0_0 = false);
+	void LoadCategories(Profile& profile, bool isDataFromVersion1_0_0 = false) const;
 	void LoadAccounts(Profile& profile) const;
 	void LoadOperations(const Profile& profile, BankAccount& account) const;
 
@@ -84,6 +84,9 @@ private:
 QDataStream& operator<<(QDataStream& stream, const Profile& profile);
 QDataStream& operator>>(QDataStream& stream, Profile& profile);
 
+QDataStream& operator<<(QDataStream& stream, const Category& category);
+QDataStream& operator>>(QDataStream& stream, Category& category);
+
 QDataStream& operator<<(QDataStream& stream, const BankAccount& account);
 QDataStream& operator>>(QDataStream& stream, BankAccount& account);
 
@@ -92,8 +95,12 @@ QDataStream& operator>>(QDataStream& stream, Operation& operation);
 
 QTextStream& operator<<(QTextStream& stream, const Profile& profile);
 
+QTextStream& operator<<(QTextStream& stream, const Category& category);
+
 QTextStream& operator<<(QTextStream& stream, const BankAccount& account);
 
 QTextStream& operator<<(QTextStream& stream, const Operation& operation);
 
 inline DataManager s_DataManager;
+
+inline std::string s_Version("1.0.1");

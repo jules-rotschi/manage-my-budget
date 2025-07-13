@@ -9,6 +9,7 @@
 #include <qformlayout.h>
 #include <qlineedit.h>
 #include <qlistwidget.h>
+#include <qcombobox.h>
 
 class ManageCategoriesDialog : public QDialog
 {
@@ -23,10 +24,21 @@ private:
 	QListWidget* m_categoriesList;
 
 	QWidget* m_newCategoryFormWidget;
-	QHBoxLayout* m_newCategoryFormLayout;
+	QVBoxLayout* m_newCategoryFormLayout;
+
+	QWidget* m_newCategoryFieldsWidget;
+	QFormLayout* m_newCategoryFieldsLayout;
 	
 	QLabel* m_nameFieldLabel;
 	QLineEdit* m_nameLineEdit;
+
+	QLabel* m_budgetTypeLabel;
+	QComboBox* m_budgetTypeComboBox;
+
+	QLabel* m_budgetLabel;
+	QLineEdit* m_budgetLineEdit;
+
+	QDoubleValidator* m_budgetAmountValidator;
 	
 	QPushButton* m_newCategoryAddButton;
 

@@ -104,6 +104,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\Category.cpp" />
     <ClCompile Include="src\app\FileException.cpp" />
     <ClCompile Include="src\app\MonthString.cpp" />
     <ClCompile Include="src\app\ConfirmationRequiser.cpp" />
@@ -115,14 +116,14 @@
     <ClCompile Include="src\app\AddProfileDialog.cpp" />
     <ClCompile Include="src\app\RenameProfileDialog.cpp" />
     <ClCompile Include="src\app\ManageProfilesDialog.cpp" />
-    <ClCompile Include="src\app\Profile.cpp" />
+    <ClCompile Include="src\core\Profile.cpp" />
     <ClCompile Include="src\app\MonthlyReviewDialog.cpp" />
     <ClCompile Include="src\app\StringFormatter.cpp" />
     <ClCompile Include="src\core\Accountant.cpp" />
     <ClCompile Include="src\app\EditAccountDialog.cpp" />
     <ClCompile Include="src\app\AddAccountDialog.cpp" />
     <ClCompile Include="src\app\ManageAccountsDialog.cpp" />
-    <ClCompile Include="src\app\RenameCategoryDialog.cpp" />
+    <ClCompile Include="src\app\EditCategoryDialog.cpp" />
     <ClCompile Include="src\app\ManageCategoriesDialog.cpp" />
     <ClCompile Include="src\core\BankAccount.cpp" />
     <ClCompile Include="src\app\AddOperationForm.cpp" />
@@ -144,7 +145,7 @@
     <QtMoc Include="src\app\OperationsList.h" />
     <QtMoc Include="src\app\AddOperationForm.h" />
     <QtMoc Include="src\app\ManageCategoriesDialog.h" />
-    <QtMoc Include="src\app\RenameCategoryDialog.h" />
+    <QtMoc Include="src\app\EditCategoryDialog.h" />
     <QtMoc Include="src\app\ManageAccountsDialog.h" />
     <QtMoc Include="src\app\AddAccountDialog.h" />
     <QtMoc Include="src\app\EditAccountDialog.h" />
@@ -152,6 +153,7 @@
     <QtMoc Include="src\app\ManageProfilesDialog.h" />
     <QtMoc Include="src\app\AddProfileDialog.h" />
     <QtMoc Include="src\app\RenameProfileDialog.h" />
+    <ClInclude Include="src\core\Category.h" />
     <ClInclude Include="src\app\FileException.h" />
     <ClInclude Include="src\app\MonthString.h" />
     <ClInclude Include="src\app\ConfirmationRequiser.h" />
@@ -160,7 +162,7 @@
     <ClInclude Include="src\app\ApplicationException.h" />
     <ClInclude Include="src\app\ForbiddenActionException.h" />
     <ClInclude Include="src\app\InvalidInputException.h" />
-    <ClInclude Include="src\app\Profile.h" />
+    <ClInclude Include="src\core\Profile.h" />
     <ClInclude Include="src\app\StringFormatter.h" />
     <ClInclude Include="src\core\Accountant.h" />
     <ClInclude Include="src\core\BankAccount.h" />

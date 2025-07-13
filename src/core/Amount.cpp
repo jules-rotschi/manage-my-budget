@@ -40,3 +40,18 @@ Amount& Amount::operator+=(const Amount& amount)
 	m_value += amount.m_value;
 	return *this;
 }
+
+Amount operator*(const Amount& a1, const Amount& a2)
+{
+	return Amount(a1.GetValue() * a2.GetValue());
+}
+
+Amount operator-(const Amount& a1, const Amount& a2)
+{
+	return Amount(a1.GetValue() - a2.GetValue());
+}
+
+Amount operator-(const Amount& amount)
+{
+	return Amount(-amount.GetValue());
+}

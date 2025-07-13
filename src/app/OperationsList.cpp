@@ -88,7 +88,7 @@ void OperationsList::UpdateUI(bool scrollDown)
 		QString operationString =
 			QString::fromStdString(operation.amount.GetString())
 			+ " | "
-			+ QString::fromStdString(LimitLength(s_DataManager.r_CurrentProfile().categories[operation.categoryIndex], 20))
+			+ QString::fromStdString(LimitLength(s_DataManager.r_CurrentProfile().categories[operation.categoryIndex].name, 20))
 			+ descriptionString;
 
 		if (operation.amount.GetValue() > 0) {

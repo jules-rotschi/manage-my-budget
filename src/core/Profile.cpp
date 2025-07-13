@@ -1,13 +1,13 @@
-﻿#include "Profile.h"
+﻿#include "core/Profile.h"
 
 #include <assert.h>
 
-#include "DataManager.h"
+#include "app/DataManager.h"
 
 Profile::Profile(bool populateDefault)
 {
 	if (populateDefault) {
-		categories.push_back("Opération interne");
+		categories.push_back(Category::Internal());
 		bankAccounts.push_back(BankAccount::Default());
 	}
 }

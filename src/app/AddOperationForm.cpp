@@ -68,8 +68,8 @@ AddOperationForm::AddOperationForm(QWidget* parent)
 void AddOperationForm::LoadCategories()
 {
 	m_categoryCombobox->clear();
-	for (const std::string& category : s_DataManager.r_CurrentProfile().categories) {
-		m_categoryCombobox->addItem(QString::fromStdString(LimitLength(category, 20)));
+	for (const Category& category : s_DataManager.r_CurrentProfile().categories) {
+		m_categoryCombobox->addItem(QString::fromStdString(LimitLength(category.name, 20)));
 	}
 }
 
@@ -91,12 +91,12 @@ void AddOperationForm::HandleAddButton()
 	int categoryIndex = m_categoryCombobox->currentIndex();
 	unsigned long absoluteAmountValue = QLocale::system().toDouble(m_amountLineEdit->text(), &isAmountOk) * 100;
 	std::string description = m_descriptionLineEdit->text().toStdString();
-	
-	long amountValue = isDebit ? -(long)absoluteAmountValue : absoluteAmountValue;
 
 	if (!isAmountOk) {
 		return;
 	}
+	
+	long amountValue = isDebit ? -(long)absoluteAmountValue : absoluteAmountValue;
 
 	try {
 		s_DataManager.AddOperation(year, month, amountValue, categoryIndex, description);

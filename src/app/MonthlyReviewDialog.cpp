@@ -46,7 +46,7 @@ MonthlyReviewDialog::MonthlyReviewDialog(QWidget* parent)
 	m_categoriesList = new QListWidget();
 
 	m_totalWidget = new QWidget();
-	m_totalTitleLabel = new QLabel("Total");
+	m_totalTitleLabel = new QLabel();
 	m_totalValueLabel = new QLabel();
 	m_totalLayout = new QHBoxLayout(m_totalWidget);
 	m_totalLayout->addWidget(m_totalTitleLabel);
@@ -74,13 +74,22 @@ void MonthlyReviewDialog::UpdateUI()
 {
 	m_categoriesList->clear();
 
-	Accountant accountant(s_DataManager.r_CurrentProfile().bankAccounts);
+	Accountant accountant(s_DataManager.r_CurrentProfile());
+
+	Amount budgetTotal = accountant.GetBudgetTotal();
+
+	m_totalTitleLabel->setText(QString::fromStdString("Total (Prévu : " + budgetTotal.GetString() + ")"));
 
 	for (int i = 1; i < s_DataManager.r_CurrentProfile().categories.size(); i++) {
+		const Category& category = s_DataManager.r_CurrentProfile().categories[i];
+
+		Amount monthlyAmount = accountant.GetMonthlyAmount(m_year, m_month, i);
+		Amount remainingAmount = -(category.monthlyBudget - monthlyAmount);
+
 		QWidget* categoryReviewWidget = new QWidget();
 
-		QLabel* categoryLabel = new QLabel(QString::fromStdString(LimitLength(s_DataManager.r_CurrentProfile().categories[i], 20)));
-		QLabel* amountLabel = new QLabel(QString::fromStdString(accountant.GetMonthlyAmount(m_year, m_month, i).GetString()));
+		QLabel* categoryLabel = new QLabel(QString::fromStdString(LimitLength(category.name, 20) + " (Budget : " + category.monthlyBudget.GetString() + ")"));
+		QLabel* amountLabel = new QLabel(QString::fromStdString(monthlyAmount.GetString() + " (Différence budget : " + remainingAmount.GetString() + ")"));
 
 		QHBoxLayout* categoryReviewLayout = new QHBoxLayout(categoryReviewWidget);
 		categoryReviewLayout->addWidget(categoryLabel);
@@ -93,7 +102,10 @@ void MonthlyReviewDialog::UpdateUI()
 		m_categoriesList->setItemWidget(categoryReviewItem, categoryReviewWidget);
 	}
 
-	m_totalValueLabel->setText(QString::fromStdString(accountant.GetMonthlyAmount(m_year, m_month).GetString()));
+	Amount total = accountant.GetMonthlyAmount(m_year, m_month);
+	Amount remaingAmount = -(budgetTotal - total);
+
+	m_totalValueLabel->setText(QString::fromStdString(total.GetString() + " (Différence budget : " + remaingAmount.GetString() + ")"));
 
 	m_savingsValueLabel->setText(QString::fromStdString(accountant.GetMonthlySavings(m_year, m_month).GetString()));
 	

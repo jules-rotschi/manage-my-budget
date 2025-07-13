@@ -6,13 +6,14 @@
 #include <qlineedit>
 #include <qpushbutton.h>
 #include <qboxlayout.h>
+#include <qcombobox.h>
 
-class RenameCategoryDialog : public QDialog
+class EditCategoryDialog : public QDialog
 {
 	Q_OBJECT
 
 public:
-	RenameCategoryDialog(int categoryIndex, QWidget* parent = nullptr);
+	EditCategoryDialog(int categoryIndex, QWidget* parent = nullptr);
 
 private:
 	int m_categoryIndex;
@@ -21,8 +22,17 @@ private:
 
 	QWidget* m_formWidget;
 	QFormLayout* m_formLayout;
-	QLabel* m_label;
-	QLineEdit* m_lineEdit;
+
+	QLabel* m_nameLabel;
+	QLineEdit* m_nameLineEdit;
+
+	QLabel* m_typeLabel;
+	QComboBox* m_typeCombobox;
+
+	QLabel* m_budgetLabel;
+	QLineEdit* m_budgetLineEdit;
+
+	QDoubleValidator* m_budgetAmountValidator;
 
 	QWidget* m_buttonsWidget;
 	QHBoxLayout* m_buttonsLayout;

@@ -1,7 +1,7 @@
 ﻿#include "ManageProfilesDialog.h"
 
 #include "DataManager.h"
-#include "RenameCategoryDialog.h"
+#include "EditCategoryDialog.h"
 #include "AddProfileDialog.h"
 #include "RenameProfileDialog.h"
 #include "ExceptionHandler.h"
