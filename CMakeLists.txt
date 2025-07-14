@@ -12,7 +12,7 @@ qt_standard_project_setup()
 
 set (SRC_DIR src)
 
-set (SOURCES_FILES
+set (SOURCES
   ${SRC_DIR}/main.cpp
   ${SRC_DIR}/core/Accountant.cpp
   ${SRC_DIR}/core/Amount.cpp
@@ -51,7 +51,7 @@ set (SOURCES_FILES
   ${SRC_DIR}/app/YearlyReviewDialog.cpp
 )
 
-set (HEADERS_FILES
+set (HEADERS
   ${SRC_DIR}/core/Accountant.h
   ${SRC_DIR}/core/Amount.h
   ${SRC_DIR}/core/BankAccount.h
@@ -89,15 +89,13 @@ set (HEADERS_FILES
   ${SRC_DIR}/app/YearlyReviewDialog.h
 )
 
-qt_add_executable(ManageMyBudget ${SOURCES_FILES} ${HEADERS_FILES})
+qt_add_executable(ManageMyBudget ${SOURCE} ${HEADERS})
 target_link_libraries(ManageMyBudget PRIVATE Qt6::Core Qt6::Widgets)
 
 target_include_directories(ManageMyBudget
     PRIVATE
         ${CMAKE_SOURCE_DIR}/src
 )
-
-set(CMAKE_WIN32_EXECUTABLE ON)
 
 install(TARGETS ManageMyBudget
     BUNDLE  DESTINATION .
