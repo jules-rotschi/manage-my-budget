@@ -10,6 +10,29 @@
 #include "ForbiddenActionException.h"
 #include "FileException.h"
 
+static DataManager* s_Instance = nullptr;
+
+DataManager::DataManager(const std::string appVersion)
+	: appVersion(appVersion) {}
+
+void DataManager::Init(const std::string& appVersion)
+{
+	assert(!s_Instance);
+	s_Instance = new DataManager(appVersion);
+}
+
+void DataManager::ShutDown()
+{
+	delete s_Instance;
+	s_Instance = nullptr;
+}
+
+DataManager& DataManager::Instance()
+{
+	assert(s_Instance);
+	return *s_Instance;
+}
+
 const std::vector<Profile>& DataManager::r_Profiles() const
 {
 	return m_profiles;
@@ -188,12 +211,12 @@ void DataManager::DeleteCategory(int index)
 
 void DataManager::AddAccount(const std::string& name, const std::string& type, int initialAmountValue)
 {
-	if (s_DataManager.ToFileName(name).empty()) {
+	if (DataManager::Instance().ToFileName(name).empty()) {
 		throw InvalidInputException("Le nom du compte doit contenir au moins un caractère (hors caractères spéciaux).");
 	}
 
 	for (const BankAccount& existingAccount : r_CurrentProfile().bankAccounts) {
-		if (s_DataManager.ToFileName(existingAccount.name) == s_DataManager.ToFileName(name)) {
+		if (DataManager::Instance().ToFileName(existingAccount.name) == DataManager::Instance().ToFileName(name)) {
 			if (existingAccount.name == name) {
 				throw InvalidInputException("Un compte du même nom existe déjà.");
 			}
@@ -223,7 +246,7 @@ void DataManager::EditAccount(int index, const std::string& name, const std::str
 {
 	assert((index < r_CurrentProfile().bankAccounts.size()) && "Account index must be less or equal to last account index.");
 
-	if (s_DataManager.ToFileName(name).empty()) {
+	if (DataManager::Instance().ToFileName(name).empty()) {
 		throw InvalidInputException("Le nom du compte doit contenir au moins un caractère (hors caractères spéciaux).");
 	}
 
@@ -234,7 +257,7 @@ void DataManager::EditAccount(int index, const std::string& name, const std::str
 
 		bool isNameEdited = name != oldAccountName;
 
-		if (isNameEdited && s_DataManager.ToFileName(existingAccount.name) == s_DataManager.ToFileName(name)) {
+		if (isNameEdited && DataManager::Instance().ToFileName(existingAccount.name) == DataManager::Instance().ToFileName(name)) {
 			if (existingAccount.name == name) {
 				throw InvalidInputException("Un compte du même nom existe déjà.");
 			}
@@ -497,7 +520,7 @@ void DataManager::SaveData() const
 
 	QDataStream stream(&file);
 
-	stream << QString::fromStdString(s_Version);
+	stream << QString::fromStdString(appVersion);
 
 	SaveProfiles();
 }
@@ -781,7 +804,7 @@ void DataManager::BackUp(const std::string& backUpPath)
 
 	QTextStream stream(&file);
 
-	stream << QString::fromStdString(s_Version);
+	stream << QString::fromStdString(appVersion);
 
 	BackUpProfiles(backUpDirectory);
 }

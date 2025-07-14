@@ -10,6 +10,15 @@
 class DataManager
 {
 public:
+	const std::string appVersion;
+
+	DataManager(const std::string appVersion);
+
+	static void Init(const std::string& appVersion);
+	static void ShutDown();
+
+	static DataManager& Instance();
+
 	const std::vector<Profile>& r_Profiles() const;
 
 	const Profile& r_CurrentProfile();
@@ -100,7 +109,3 @@ QTextStream& operator<<(QTextStream& stream, const Category& category);
 QTextStream& operator<<(QTextStream& stream, const BankAccount& account);
 
 QTextStream& operator<<(QTextStream& stream, const Operation& operation);
-
-inline DataManager s_DataManager;
-
-inline std::string s_Version("1.0.1");

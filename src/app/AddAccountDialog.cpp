@@ -71,7 +71,7 @@ void AddAccountDialog::HandleConfirm()
 	}
 
 	try {
-		s_DataManager.AddAccount(name, type, initialAmountValue);
+		DataManager::Instance().AddAccount(name, type, initialAmountValue);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);

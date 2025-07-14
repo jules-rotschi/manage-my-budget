@@ -14,11 +14,9 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	MainWindow(const std::string version, QWidget* parent = nullptr);
+	MainWindow(QWidget* parent = nullptr);
 
 private:
-	std::string m_version;
-
 	QWidget* m_centralWidget;
 	QVBoxLayout* m_mainLayout;
 

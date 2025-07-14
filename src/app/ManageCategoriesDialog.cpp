@@ -65,8 +65,8 @@ void ManageCategoriesDialog::UpdateUI()
 {
 	m_categoriesList->clear();
 
-	for (int i = 0; i < s_DataManager.r_CurrentProfile().categories.size(); i++) {
-		Category category = s_DataManager.r_CurrentProfile().categories[i];
+	for (int i = 0; i < DataManager::Instance().r_CurrentProfile().categories.size(); i++) {
+		Category category = DataManager::Instance().r_CurrentProfile().categories[i];
 
 		QWidget* categoryWidget = new QWidget();
 
@@ -116,7 +116,7 @@ void ManageCategoriesDialog::HandleCategoryAdd()
 	long budgetAmountValue = isDebit ? -(long)absoluteBudgetAmountValue : absoluteBudgetAmountValue;
 
 	try {
-		s_DataManager.AddCategory(name, budgetAmountValue);
+		DataManager::Instance().AddCategory(name, budgetAmountValue);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);
@@ -140,7 +140,7 @@ void ManageCategoriesDialog::HandleCategoryRename(int index)
 void ManageCategoriesDialog::HandleCategoryDelete(int index)
 {
 	try {
-		s_DataManager.DeleteCategory(index);
+		DataManager::Instance().DeleteCategory(index);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);

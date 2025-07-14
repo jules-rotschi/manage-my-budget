@@ -15,7 +15,7 @@ EditOperationDialog::EditOperationDialog(int id, QWidget* parent)
 {
 	Operation operationToEdit;
 
-	for (const Operation& operation : s_DataManager.r_CurrentProfile().r_ConstCurrentBankAccount().r_Operations()) {
+	for (const Operation& operation : DataManager::Instance().r_CurrentProfile().r_ConstCurrentBankAccount().r_Operations()) {
 		if (operation.id == id) {
 			operationToEdit = operation;
 			break;
@@ -67,7 +67,7 @@ EditOperationDialog::EditOperationDialog(int id, QWidget* parent)
 
 	m_categoryLabel = new QLabel("Catégorie");
 	m_categoryCombobox = new QComboBox();
-	for (const Category& category : s_DataManager.r_CurrentProfile().categories) {
+	for (const Category& category : DataManager::Instance().r_CurrentProfile().categories) {
 		m_categoryCombobox->addItem(QString::fromStdString(LimitLength(category.name, 20)));
 	}
 	m_categoryCombobox->setCurrentIndex(operationToEdit.categoryIndex);
@@ -122,7 +122,7 @@ void EditOperationDialog::HandleConfirm()
 	}
 
 	try {
-		s_DataManager.EditOperation(m_id, year, month, amountValue, categoryIndex, description);
+		DataManager::Instance().EditOperation(m_id, year, month, amountValue, categoryIndex, description);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);

@@ -74,14 +74,14 @@ void MonthlyReviewDialog::UpdateUI()
 {
 	m_categoriesList->clear();
 
-	Accountant accountant(s_DataManager.r_CurrentProfile());
+	Accountant accountant(DataManager::Instance().r_CurrentProfile());
 
 	Amount budgetTotal = accountant.GetBudgetTotal();
 
 	m_totalTitleLabel->setText(QString::fromStdString("Total (Prévu : " + budgetTotal.GetString() + ")"));
 
-	for (int i = 1; i < s_DataManager.r_CurrentProfile().categories.size(); i++) {
-		const Category& category = s_DataManager.r_CurrentProfile().categories[i];
+	for (int i = 1; i < DataManager::Instance().r_CurrentProfile().categories.size(); i++) {
+		const Category& category = DataManager::Instance().r_CurrentProfile().categories[i];
 
 		Amount monthlyAmount = accountant.GetMonthlyAmount(m_year, m_month, i);
 		Amount remainingAmount = -(category.monthlyBudget - monthlyAmount);

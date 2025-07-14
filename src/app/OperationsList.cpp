@@ -56,7 +56,7 @@ void OperationsList::UpdateUI(bool scrollDown)
 	m_operationsList->clear();
 
 	m_totalLabel->setText(
-		QString::fromStdString("Solde du compte : " + s_DataManager.r_CurrentProfile().r_ConstCurrentBankAccount().GetTotalAmount().GetString())
+		QString::fromStdString("Solde du compte : " + DataManager::Instance().r_CurrentProfile().r_ConstCurrentBankAccount().GetTotalAmount().GetString())
 	);
 		
 	QDate currentDate = QDate::currentDate();
@@ -64,7 +64,7 @@ void OperationsList::UpdateUI(bool scrollDown)
 	int lastOperationYear = 0;
 	int lastOperationMonth = 0;
 
-	for (const Operation& operation : s_DataManager.r_CurrentProfile().r_ConstCurrentBankAccount().r_Operations())
+	for (const Operation& operation : DataManager::Instance().r_CurrentProfile().r_ConstCurrentBankAccount().r_Operations())
 	{
 		if (!IsOperationInDisplayableMonth(operation.year, operation.month, currentDate)) {
 			continue;
@@ -88,7 +88,7 @@ void OperationsList::UpdateUI(bool scrollDown)
 		QString operationString =
 			QString::fromStdString(operation.amount.GetString())
 			+ " | "
-			+ QString::fromStdString(LimitLength(s_DataManager.r_CurrentProfile().categories[operation.categoryIndex].name, 20))
+			+ QString::fromStdString(LimitLength(DataManager::Instance().r_CurrentProfile().categories[operation.categoryIndex].name, 20))
 			+ descriptionString;
 
 		if (operation.amount.GetValue() > 0) {
@@ -176,7 +176,7 @@ void OperationsList::HandleOperationEdit(int id)
 void OperationsList::HandleOperationDelete(int id)
 {
 	try {
-		s_DataManager.DeleteOperation(id);
+		DataManager::Instance().DeleteOperation(id);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);

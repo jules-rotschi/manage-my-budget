@@ -36,8 +36,8 @@ void ManageAccountsDialog::UpdateUI()
 {
 	m_accountsList->clear();
 
-	for (int i = 0; i < s_DataManager.r_CurrentProfile().bankAccounts.size(); i++) {
-		const BankAccount account = s_DataManager.r_CurrentProfile().bankAccounts[i];
+	for (int i = 0; i < DataManager::Instance().r_CurrentProfile().bankAccounts.size(); i++) {
+		const BankAccount account = DataManager::Instance().r_CurrentProfile().bankAccounts[i];
 
 		QWidget* accountWidget = new QWidget();
 
@@ -91,12 +91,12 @@ void ManageAccountsDialog::HandleAccountEdit(int index)
 
 void ManageAccountsDialog::HandleAccountDelete(int index)
 {
-	if (!ConfirmAction("Voulez-vous vraiment supprimer le compte \"" + s_DataManager.r_CurrentProfile().bankAccounts[index].name + "\" ?", "Supprimer")) {
+	if (!ConfirmAction("Voulez-vous vraiment supprimer le compte \"" + DataManager::Instance().r_CurrentProfile().bankAccounts[index].name + "\" ?", "Supprimer")) {
 		return;
 	}
 
 	try {
-		s_DataManager.DeleteAccount(index);
+		DataManager::Instance().DeleteAccount(index);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);

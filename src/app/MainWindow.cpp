@@ -20,8 +20,8 @@
 #include "StringFormatter.h"
 #include "ConfirmationRequiser.h"
 
-MainWindow::MainWindow(const std::string version, QWidget* parent)
-	: m_version(version), QMainWindow(parent)
+MainWindow::MainWindow(QWidget* parent)
+	: QMainWindow(parent)
 {
 	setWindowTitle("Manage my budget");
 
@@ -65,7 +65,7 @@ MainWindow::MainWindow(const std::string version, QWidget* parent)
 	dataDirectoryInfoBox.setText(QString::fromStdString("Les données seront automatiquement enregistrées dans le dossier \"" + dataDirectory.path().toStdString() + "\"."));
 	dataDirectoryInfoBox.exec();
 
-	s_DataManager.InitializeData(dataDirectory);
+	DataManager::Instance().InitializeData(dataDirectory);
 
 	m_centralWidget = new QWidget();
 
@@ -167,11 +167,11 @@ void MainWindow::LoadProfilesToComboBox()
 	}
 
 	m_currentProfileComboBox->setItemText(
-		0, QString::fromStdString(LimitLength(s_DataManager.r_Profiles()[0].name, 20))
+		0, QString::fromStdString(LimitLength(DataManager::Instance().r_Profiles()[0].name, 20))
 	);
 
-	for (int i = 1; i < s_DataManager.r_Profiles().size(); i++) {
-		const Profile& profile = s_DataManager.r_Profiles()[i];
+	for (int i = 1; i < DataManager::Instance().r_Profiles().size(); i++) {
+		const Profile& profile = DataManager::Instance().r_Profiles()[i];
 		m_currentProfileComboBox->addItem(QString::fromStdString(LimitLength(profile.name, 20)));
 	}
 }
@@ -183,11 +183,11 @@ void MainWindow::LoadAccountsToComboBox()
 	}
 
 	m_currentAccountComboBox->setItemText(
-		0, QString::fromStdString(LimitLength(s_DataManager.r_CurrentProfile().bankAccounts[0].name, 20) + " (" + s_DataManager.r_CurrentProfile().bankAccounts[0].GetTypeString() + ")")
+		0, QString::fromStdString(LimitLength(DataManager::Instance().r_CurrentProfile().bankAccounts[0].name, 20) + " (" + DataManager::Instance().r_CurrentProfile().bankAccounts[0].GetTypeString() + ")")
 	);
 
-	for (int i = 1; i < s_DataManager.r_CurrentProfile().bankAccounts.size(); i++) {
-		const BankAccount& account = s_DataManager.r_CurrentProfile().bankAccounts[i];
+	for (int i = 1; i < DataManager::Instance().r_CurrentProfile().bankAccounts.size(); i++) {
+		const BankAccount& account = DataManager::Instance().r_CurrentProfile().bankAccounts[i];
 		m_currentAccountComboBox->addItem(QString::fromStdString(LimitLength(account.name, 20) + " (" + account.GetTypeString() + ")"));
 	}
 }
@@ -203,7 +203,7 @@ void MainWindow::HandleManageProfiles()
 
 	connect(m_currentProfileComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::HandleCurrentProfileChange);
 	
-	m_currentProfileComboBox->setCurrentIndex(s_DataManager.GetCurrentProfileIndex());
+	m_currentProfileComboBox->setCurrentIndex(DataManager::Instance().GetCurrentProfileIndex());
 
 	UpdateUI();
 }
@@ -229,14 +229,14 @@ void MainWindow::HandleManageAccounts()
 	
 	connect(m_currentAccountComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::HandleCurrentAccountChange);
 	
-	m_currentAccountComboBox->setCurrentIndex(s_DataManager.r_CurrentProfile().GetCurrentAccountIndex());
+	m_currentAccountComboBox->setCurrentIndex(DataManager::Instance().r_CurrentProfile().GetCurrentAccountIndex());
 	
 	UpdateUI();
 }
 
 void MainWindow::HandleCurrentProfileChange()
 {
-	s_DataManager.SetCurrentProfileIndex(m_currentProfileComboBox->currentIndex());
+	DataManager::Instance().SetCurrentProfileIndex(m_currentProfileComboBox->currentIndex());
 	
 	LoadAccountsToComboBox();
 	m_addOperationForm->LoadCategories();
@@ -246,7 +246,7 @@ void MainWindow::HandleCurrentProfileChange()
 
 void MainWindow::HandleCurrentAccountChange()
 {
-	s_DataManager.SetCurrentProfileCurrentAccountIndex(m_currentAccountComboBox->currentIndex());
+	DataManager::Instance().SetCurrentProfileCurrentAccountIndex(m_currentAccountComboBox->currentIndex());
 	UpdateUI(true);
 }
 
@@ -288,7 +288,7 @@ void MainWindow::HandleBackUp() const
 	QString selectedDirectoryPath = selectedDirectories.first();
 
 	try {
-		s_DataManager.BackUp(selectedDirectoryPath.toStdString());
+		DataManager::Instance().BackUp(selectedDirectoryPath.toStdString());
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);
@@ -321,7 +321,7 @@ void MainWindow::HandleBackUpLoad()
 	QString selectedDirectoryPath = selectedDirectories.first();
 
 	try {
-		s_DataManager.LoadBackUp(selectedDirectoryPath.toStdString());
+		DataManager::Instance().LoadBackUp(selectedDirectoryPath.toStdString());
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);
@@ -341,8 +341,8 @@ void MainWindow::HandleDataReset()
 	}
 
 	try {
-		s_DataManager.ResetData();
-		s_DataManager.InitializeData();
+		DataManager::Instance().ResetData();
+		DataManager::Instance().InitializeData();
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);
@@ -358,6 +358,6 @@ void MainWindow::HandleDataReset()
 void MainWindow::HandleVersionShow() const
 {
 	QMessageBox box;
-	box.setText(QString::fromStdString("Version " + m_version));
+	box.setText(QString::fromStdString("Version " + DataManager::Instance().appVersion));
 	box.exec();
 }

@@ -42,7 +42,7 @@ AddProfileDialog::AddProfileDialog(QWidget* parent)
 void AddProfileDialog::HandleConfirm()
 {
 	try {
-		s_DataManager.AddProfile(m_nameLineEdit->text().toStdString());
+		DataManager::Instance().AddProfile(m_nameLineEdit->text().toStdString());
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);

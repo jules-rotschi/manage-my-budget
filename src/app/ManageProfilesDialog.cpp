@@ -36,8 +36,8 @@ void ManageProfilesDialog::UpdateUI()
 {
 	m_profilesList->clear();
 
-	for (int i = 0; i < s_DataManager.r_Profiles().size(); i++) {
-		const Profile& profile = s_DataManager.r_Profiles()[i];
+	for (int i = 0; i < DataManager::Instance().r_Profiles().size(); i++) {
+		const Profile& profile = DataManager::Instance().r_Profiles()[i];
 
 		QWidget* profileWidget = new QWidget();
 
@@ -91,12 +91,12 @@ void ManageProfilesDialog::HandleProfileEdit(int index)
 
 void ManageProfilesDialog::HandleProfileDelete(int index)
 {
-	if (!ConfirmAction("Voulez-vous vraiment supprimer le profil \"" + s_DataManager.r_Profiles()[index].name + "\" ?", "Supprimer")) {
+	if (!ConfirmAction("Voulez-vous vraiment supprimer le profil \"" + DataManager::Instance().r_Profiles()[index].name + "\" ?", "Supprimer")) {
 		return;
 	}
 
 	try {
-		s_DataManager.DeleteProfile(index);
+		DataManager::Instance().DeleteProfile(index);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);

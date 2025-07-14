@@ -68,7 +68,7 @@ AddOperationForm::AddOperationForm(QWidget* parent)
 void AddOperationForm::LoadCategories()
 {
 	m_categoryCombobox->clear();
-	for (const Category& category : s_DataManager.r_CurrentProfile().categories) {
+	for (const Category& category : DataManager::Instance().r_CurrentProfile().categories) {
 		m_categoryCombobox->addItem(QString::fromStdString(LimitLength(category.name, 20)));
 	}
 }
@@ -99,7 +99,7 @@ void AddOperationForm::HandleAddButton()
 	long amountValue = isDebit ? -(long)absoluteAmountValue : absoluteAmountValue;
 
 	try {
-		s_DataManager.AddOperation(year, month, amountValue, categoryIndex, description);
+		DataManager::Instance().AddOperation(year, month, amountValue, categoryIndex, description);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);
