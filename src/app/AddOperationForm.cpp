@@ -5,7 +5,7 @@
 #include <qdatetime.h>
 #include <qlineedit.h>
 
-#include "DataManager.h"
+#include "StateManager.h"
 #include "ExceptionHandler.h"
 #include "MonthString.h"
 #include "StringFormatter.h"
@@ -68,7 +68,7 @@ AddOperationForm::AddOperationForm(QWidget* parent)
 void AddOperationForm::LoadCategories()
 {
 	m_categoryCombobox->clear();
-	for (const Category& category : DataManager::Instance().r_CurrentProfile().categories) {
+	for (const Category& category : StateManager::Instance().r_CurrentProfile().categories) {
 		m_categoryCombobox->addItem(QString::fromStdString(LimitLength(category.name, 20)));
 	}
 }
@@ -99,7 +99,7 @@ void AddOperationForm::HandleAddButton()
 	long amountValue = isDebit ? -(long)absoluteAmountValue : absoluteAmountValue;
 
 	try {
-		DataManager::Instance().AddOperation(year, month, amountValue, categoryIndex, description);
+		StateManager::Instance().AddOperation(year, month, amountValue, categoryIndex, description);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);

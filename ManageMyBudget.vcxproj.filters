@@ -176,6 +176,18 @@
     <ClCompile Include="src\core\Profile.cpp">
       <Filter>Source Files\src\core</Filter>
     </ClCompile>
+    <ClCompile Include="src\app\StateManager.cpp">
+      <Filter>Source Files\src\app</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\BackUpManager.cpp">
+      <Filter>Source Files\src\app</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\Files.cpp">
+      <Filter>Source Files\src\app</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\Converter.cpp">
+      <Filter>Source Files\src\app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\app\AddOperationForm.h">
@@ -269,6 +281,18 @@
     </ClInclude>
     <ClInclude Include="src\core\Profile.h">
       <Filter>Header Files\src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\BackUpManager.h">
+      <Filter>Header Files\src\app</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\StateManager.h">
+      <Filter>Header Files\src\app</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\Files.h">
+      <Filter>Header Files\src\app</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\Converter.h">
+      <Filter>Header Files\src\app</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

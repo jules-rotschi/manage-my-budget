@@ -1,14 +1,16 @@
 ﻿#include <vector>
 #include <qapplication.h>
 
+#include "app/StateManager.h"
 #include "app/DataManager.h"
+#include "app/BackUpManager.h"
 #include "app/MainWindow.h"
 
 const std::string version("1.0.1");
 
 int main(int argc, char* argv[])
 {
-	DataManager::Init(version);
+	StateManager::Init(version);
 
 	QApplication app(argc, argv);
 
@@ -17,7 +19,7 @@ int main(int argc, char* argv[])
 
 	int result = app.exec();
 
-	DataManager::ShutDown();
+	StateManager::ShutDown();
 
 	return result;
 }

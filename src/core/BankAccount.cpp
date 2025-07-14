@@ -131,7 +131,7 @@ void BankAccount::EditOperation(int id, const Operation& operation)
 
 void BankAccount::DeleteOperation(int id)
 {
-	for (int i = 0; i < m_operations.size(); i++) {
+	for (size_t i = 0; i < m_operations.size(); i++) {
 		const Operation& operation = m_operations[i];
 
 		if (operation.id == id) {

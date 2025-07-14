@@ -1,6 +1,6 @@
 ﻿#include "EditAccountDialog.h"
 
-#include "DataManager.h"
+#include "StateManager.h"
 #include "AmountValueFormatter.h"
 #include "ExceptionHandler.h"
 
@@ -9,7 +9,7 @@ EditAccountDialog::EditAccountDialog(int index, QWidget* parent)
 {
 	setWindowTitle("Modifier le compte");
 
-	BankAccount account = DataManager::Instance().r_CurrentProfile().bankAccounts[m_index];
+	BankAccount account = StateManager::Instance().r_CurrentProfile().bankAccounts[m_index];
 
 	m_formWidget = new QWidget();
 
@@ -79,7 +79,7 @@ void EditAccountDialog::HandleConfirm()
 	}
 
 	try {
-		DataManager::Instance().EditAccount(m_index, name, type, initialAmountValue);
+		StateManager::Instance().EditAccount(m_index, name, type, initialAmountValue);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);

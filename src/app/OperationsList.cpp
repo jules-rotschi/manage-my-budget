@@ -4,7 +4,7 @@
 
 #include <qdatetime.h>
 
-#include "DataManager.h"
+#include "StateManager.h"
 #include "EditOperationDialog.h"
 #include "ExceptionHandler.h"
 #include "MonthString.h"
@@ -56,15 +56,15 @@ void OperationsList::UpdateUI(bool scrollDown)
 	m_operationsList->clear();
 
 	m_totalLabel->setText(
-		QString::fromStdString("Solde du compte : " + DataManager::Instance().r_CurrentProfile().r_ConstCurrentBankAccount().GetTotalAmount().GetString())
+		QString::fromStdString("Solde du compte : " + StateManager::Instance().r_CurrentProfile().r_ConstCurrentBankAccount().GetTotalAmount().GetString())
 	);
-		
+
 	QDate currentDate = QDate::currentDate();
 
 	int lastOperationYear = 0;
 	int lastOperationMonth = 0;
 
-	for (const Operation& operation : DataManager::Instance().r_CurrentProfile().r_ConstCurrentBankAccount().r_Operations())
+	for (const Operation& operation : StateManager::Instance().r_CurrentProfile().r_ConstCurrentBankAccount().r_Operations())
 	{
 		if (!IsOperationInDisplayableMonth(operation.year, operation.month, currentDate)) {
 			continue;
@@ -88,32 +88,32 @@ void OperationsList::UpdateUI(bool scrollDown)
 		QString operationString =
 			QString::fromStdString(operation.amount.GetString())
 			+ " | "
-			+ QString::fromStdString(LimitLength(DataManager::Instance().r_CurrentProfile().categories[operation.categoryIndex].name, 20))
+			+ QString::fromStdString(LimitLength(StateManager::Instance().r_CurrentProfile().categories[operation.categoryIndex].name, 20))
 			+ descriptionString;
 
 		if (operation.amount.GetValue() > 0) {
 			operationString = '+' + operationString;
 		}
-		
+
 		QLabel* operationLabel = new QLabel(operationString);
 
 		QPushButton* editOperationButton = new QPushButton("Modifier");
 		connect(editOperationButton, &QPushButton::released, [this, operation]() {
 			HandleOperationEdit(operation.id);
-		});
+			});
 		editOperationButton->setFixedWidth(100);
 
 		QPushButton* deleteOperationButton = new QPushButton("Supprimer");
 		connect(deleteOperationButton, &QPushButton::released, [this, operation]() {
 			HandleOperationDelete(operation.id);
-		});
+			});
 		deleteOperationButton->setFixedWidth(100);
 
 		QHBoxLayout* operationLayout = new QHBoxLayout(operationWidget);
 		operationLayout->addWidget(operationLabel);
 		operationLayout->addWidget(editOperationButton);
 		operationLayout->addWidget(deleteOperationButton);
-		
+
 		QListWidgetItem* operationItem = new QListWidgetItem();
 		operationItem->setSizeHint(operationWidget->sizeHint());
 		m_operationsList->addItem(operationItem);
@@ -167,7 +167,7 @@ bool OperationsList::IsOperationInDisplayableMonth(int operationYear, int operat
 void OperationsList::HandleOperationEdit(int id)
 {
 	EditOperationDialog dialog(id);
-	
+
 	if (dialog.exec()) {
 		UpdateUI();
 	}
@@ -176,7 +176,7 @@ void OperationsList::HandleOperationEdit(int id)
 void OperationsList::HandleOperationDelete(int id)
 {
 	try {
-		DataManager::Instance().DeleteOperation(id);
+		StateManager::Instance().DeleteOperation(id);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);

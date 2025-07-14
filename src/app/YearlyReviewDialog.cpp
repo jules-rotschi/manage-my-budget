@@ -5,7 +5,7 @@
 #include <qdatetime.h>
 #include <qpushbutton.h>
 
-#include "DataManager.h"
+#include "StateManager.h"
 #include "core/Accountant.h"
 #include "StringFormatter.h"
 
@@ -63,14 +63,14 @@ void YearlyReviewDialog::UpdateUI()
 {
 	m_categoriesList->clear();
 
-	Accountant accountant(DataManager::Instance().r_CurrentProfile());
+	Accountant accountant(StateManager::Instance().r_CurrentProfile());
 
 	Amount budgetTotal = accountant.GetBudgetTotal() * 12;
 
 	m_totalTitleLabel->setText(QString::fromStdString("Total (Prévu : " + budgetTotal.GetString() + ")"));
 
-	for (int i = 1; i < DataManager::Instance().r_CurrentProfile().categories.size(); i++) {
-		const Category& category = DataManager::Instance().r_CurrentProfile().categories[i];
+	for (int i = 1; i < StateManager::Instance().r_CurrentProfile().categories.size(); i++) {
+		const Category& category = StateManager::Instance().r_CurrentProfile().categories[i];
 
 		Amount yearlyAmount = accountant.GetYearlyAmount(m_year, i);
 		Amount yearlyBudget = category.monthlyBudget * 12;

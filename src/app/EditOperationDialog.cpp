@@ -4,7 +4,7 @@
 
 #include <qdatetime.h>
 
-#include "DataManager.h"
+#include "StateManager.h"
 #include "AmountValueFormatter.h"
 #include "ExceptionHandler.h"
 #include "StringFormatter.h"
@@ -15,7 +15,7 @@ EditOperationDialog::EditOperationDialog(int id, QWidget* parent)
 {
 	Operation operationToEdit;
 
-	for (const Operation& operation : DataManager::Instance().r_CurrentProfile().r_ConstCurrentBankAccount().r_Operations()) {
+	for (const Operation& operation : StateManager::Instance().r_CurrentProfile().r_ConstCurrentBankAccount().r_Operations()) {
 		if (operation.id == id) {
 			operationToEdit = operation;
 			break;
@@ -67,7 +67,7 @@ EditOperationDialog::EditOperationDialog(int id, QWidget* parent)
 
 	m_categoryLabel = new QLabel("Catégorie");
 	m_categoryCombobox = new QComboBox();
-	for (const Category& category : DataManager::Instance().r_CurrentProfile().categories) {
+	for (const Category& category : StateManager::Instance().r_CurrentProfile().categories) {
 		m_categoryCombobox->addItem(QString::fromStdString(LimitLength(category.name, 20)));
 	}
 	m_categoryCombobox->setCurrentIndex(operationToEdit.categoryIndex);
@@ -89,7 +89,7 @@ EditOperationDialog::EditOperationDialog(int id, QWidget* parent)
 	m_editButton->setDefault(true);
 	connect(m_editButton, &QPushButton::released, this, &EditOperationDialog::HandleConfirm);
 	m_editButton->setMinimumWidth(100);
-	
+
 	m_cancelButton = new QPushButton("Annuler");
 	connect(m_cancelButton, &QPushButton::released, this, &EditOperationDialog::reject);
 	m_cancelButton->setMinimumWidth(100);
@@ -97,7 +97,7 @@ EditOperationDialog::EditOperationDialog(int id, QWidget* parent)
 	m_buttonsLayout = new QHBoxLayout(m_buttonsWidget);
 	m_buttonsLayout->addWidget(m_editButton);
 	m_buttonsLayout->addWidget(m_cancelButton);
-	
+
 	m_layout = new QVBoxLayout(this);
 	m_layout->addWidget(m_formWidget);
 	m_layout->addWidget(m_buttonsWidget);
@@ -122,7 +122,7 @@ void EditOperationDialog::HandleConfirm()
 	}
 
 	try {
-		DataManager::Instance().EditOperation(m_id, year, month, amountValue, categoryIndex, description);
+		StateManager::Instance().EditOperation(m_id, year, month, amountValue, categoryIndex, description);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);

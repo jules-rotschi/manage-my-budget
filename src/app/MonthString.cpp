@@ -1,6 +1,7 @@
 ﻿#include "MonthString.h"
 
 #include <array>
+#include "Converter.h"
 
 std::array<std::string, 12> months = {
 	"Janvier",
@@ -28,10 +29,10 @@ std::string MonthToString(int month)
 
 int StringToMonth(const std::string& str)
 {
-	for (int i = 0; i < months.size(); i++) {
+	for (size_t i = 0; i < months.size(); i++) {
 		const std::string& monthString = months[i];
 		if (monthString == str) {
-			return i + 1;
+			return SizeToInt(i) + 1;
 		}
 	}
 

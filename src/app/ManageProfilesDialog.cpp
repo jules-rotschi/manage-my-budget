@@ -1,12 +1,13 @@
 ﻿#include "ManageProfilesDialog.h"
 
-#include "DataManager.h"
+#include "StateManager.h"
 #include "EditCategoryDialog.h"
 #include "AddProfileDialog.h"
 #include "RenameProfileDialog.h"
 #include "ExceptionHandler.h"
 #include "ConfirmationRequiser.h"
 #include "StringFormatter.h"
+#include "Converter.h"
 
 ManageProfilesDialog::ManageProfilesDialog(QWidget* parent)
 	: QDialog(parent)
@@ -36,8 +37,8 @@ void ManageProfilesDialog::UpdateUI()
 {
 	m_profilesList->clear();
 
-	for (int i = 0; i < DataManager::Instance().r_Profiles().size(); i++) {
-		const Profile& profile = DataManager::Instance().r_Profiles()[i];
+	for (size_t i = 0; i < StateManager::Instance().r_Profiles().size(); i++) {
+		const Profile& profile = StateManager::Instance().r_Profiles()[i];
 
 		QWidget* profileWidget = new QWidget();
 
@@ -47,7 +48,7 @@ void ManageProfilesDialog::UpdateUI()
 		connect(
 			profileEditButton,
 			&QPushButton::released,
-			[this, i]() {HandleProfileEdit(i); }
+			[this, i]() {HandleProfileEdit(SizeToInt(i)); }
 		);
 		profileEditButton->setFixedWidth(100);
 
@@ -55,7 +56,7 @@ void ManageProfilesDialog::UpdateUI()
 		connect(
 			profileDeleteButton,
 			&QPushButton::released,
-			[this, i]() {HandleProfileDelete(i); }
+			[this, i]() {HandleProfileDelete(SizeToInt(i)); }
 		);
 		profileDeleteButton->setFixedWidth(100);
 
@@ -91,12 +92,12 @@ void ManageProfilesDialog::HandleProfileEdit(int index)
 
 void ManageProfilesDialog::HandleProfileDelete(int index)
 {
-	if (!ConfirmAction("Voulez-vous vraiment supprimer le profil \"" + DataManager::Instance().r_Profiles()[index].name + "\" ?", "Supprimer")) {
+	if (!ConfirmAction("Voulez-vous vraiment supprimer le profil \"" + StateManager::Instance().r_Profiles()[index].name + "\" ?", "Supprimer")) {
 		return;
 	}
 
 	try {
-		DataManager::Instance().DeleteProfile(index);
+		StateManager::Instance().DeleteProfile(index);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);

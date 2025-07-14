@@ -1,9 +1,10 @@
 ﻿#include "ManageCategoriesDialog.h"
 
-#include "DataManager.h"
+#include "StateManager.h"
 #include "EditCategoryDialog.h"
 #include "ExceptionHandler.h"
 #include "StringFormatter.h"
+#include "Converter.h"
 
 ManageCategoriesDialog::ManageCategoriesDialog(QWidget* parent)
 	: QDialog(parent)
@@ -65,26 +66,26 @@ void ManageCategoriesDialog::UpdateUI()
 {
 	m_categoriesList->clear();
 
-	for (int i = 0; i < DataManager::Instance().r_CurrentProfile().categories.size(); i++) {
-		Category category = DataManager::Instance().r_CurrentProfile().categories[i];
+	for (size_t i = 0; i < StateManager::Instance().r_CurrentProfile().categories.size(); i++) {
+		Category category = StateManager::Instance().r_CurrentProfile().categories[i];
 
 		QWidget* categoryWidget = new QWidget();
 
 		QLabel* categoryLabel = new QLabel(QString::fromStdString(LimitLength(category.name, 20) + " : " + category.monthlyBudget.GetString()));
-		
+
 		QPushButton* categoryRenameButton = new QPushButton("Modifier");
 		connect(
 			categoryRenameButton,
 			&QPushButton::released,
-			[this, i]() {HandleCategoryRename(i); }
+			[this, i]() {HandleCategoryRename(SizeToInt(i)); }
 		);
 		categoryRenameButton->setFixedWidth(100);
-		
+
 		QPushButton* categoryDeleteButton = new QPushButton("Supprimer");
 		connect(
 			categoryDeleteButton,
 			&QPushButton::released,
-			[this, i]() {HandleCategoryDelete(i); }
+			[this, i]() {HandleCategoryDelete(SizeToInt(i)); }
 		);
 		categoryDeleteButton->setFixedWidth(100);
 
@@ -116,7 +117,7 @@ void ManageCategoriesDialog::HandleCategoryAdd()
 	long budgetAmountValue = isDebit ? -(long)absoluteBudgetAmountValue : absoluteBudgetAmountValue;
 
 	try {
-		DataManager::Instance().AddCategory(name, budgetAmountValue);
+		StateManager::Instance().AddCategory(name, budgetAmountValue);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);
@@ -140,7 +141,7 @@ void ManageCategoriesDialog::HandleCategoryRename(int index)
 void ManageCategoriesDialog::HandleCategoryDelete(int index)
 {
 	try {
-		DataManager::Instance().DeleteCategory(index);
+		StateManager::Instance().DeleteCategory(index);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);

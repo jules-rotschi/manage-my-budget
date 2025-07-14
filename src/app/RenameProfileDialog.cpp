@@ -1,13 +1,13 @@
 ﻿#include "RenameProfileDialog.h"
 
-#include "DataManager.h"
+#include "StateManager.h"
 #include "ExceptionHandler.h"
 #include "StringFormatter.h"
 
 RenameProfileDialog::RenameProfileDialog(int index, QWidget* parent)
 	: m_index(index), QDialog(parent)
 {
-	const Profile& profile = DataManager::Instance().r_Profiles()[index];
+	const Profile& profile = StateManager::Instance().r_Profiles()[index];
 
 	setWindowTitle(QString::fromStdString("Renommer le profil \"" + LimitLength(profile.name, 20) + "\""));
 
@@ -44,7 +44,7 @@ void RenameProfileDialog::HandleConfirm()
 	std::string newName = m_nameLineEdit->text().toStdString();
 
 	try {
-		DataManager::Instance().RenameProfile(m_index, newName);
+		StateManager::Instance().RenameProfile(m_index, newName);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);

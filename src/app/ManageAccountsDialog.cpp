@@ -1,12 +1,13 @@
 ﻿#include "ManageAccountsDialog.h"
 
-#include "DataManager.h"
+#include "StateManager.h"
 #include "EditCategoryDialog.h"
 #include "AddAccountDialog.h"
 #include "EditAccountDialog.h"
 #include "ExceptionHandler.h"
 #include "ConfirmationRequiser.h"
 #include "StringFormatter.h"
+#include "Converter.h"
 
 ManageAccountsDialog::ManageAccountsDialog(QWidget* parent)
 	: QDialog(parent)
@@ -36,8 +37,8 @@ void ManageAccountsDialog::UpdateUI()
 {
 	m_accountsList->clear();
 
-	for (int i = 0; i < DataManager::Instance().r_CurrentProfile().bankAccounts.size(); i++) {
-		const BankAccount account = DataManager::Instance().r_CurrentProfile().bankAccounts[i];
+	for (size_t i = 0; i < StateManager::Instance().r_CurrentProfile().bankAccounts.size(); i++) {
+		const BankAccount account = StateManager::Instance().r_CurrentProfile().bankAccounts[i];
 
 		QWidget* accountWidget = new QWidget();
 
@@ -47,7 +48,7 @@ void ManageAccountsDialog::UpdateUI()
 		connect(
 			accountEditButton,
 			&QPushButton::released,
-			[this, i]() {HandleAccountEdit(i); }
+			[this, i]() {HandleAccountEdit(SizeToInt(i)); }
 		);
 		accountEditButton->setFixedWidth(100);
 		
@@ -55,7 +56,7 @@ void ManageAccountsDialog::UpdateUI()
 		connect(
 			accountDeleteButton,
 			&QPushButton::released,
-			[this, i]() {HandleAccountDelete(i); }
+			[this, i]() {HandleAccountDelete(SizeToInt(i)); }
 		);
 		accountDeleteButton->setFixedWidth(100);
 
@@ -91,12 +92,12 @@ void ManageAccountsDialog::HandleAccountEdit(int index)
 
 void ManageAccountsDialog::HandleAccountDelete(int index)
 {
-	if (!ConfirmAction("Voulez-vous vraiment supprimer le compte \"" + DataManager::Instance().r_CurrentProfile().bankAccounts[index].name + "\" ?", "Supprimer")) {
+	if (!ConfirmAction("Voulez-vous vraiment supprimer le compte \"" + StateManager::Instance().r_CurrentProfile().bankAccounts[index].name + "\" ?", "Supprimer")) {
 		return;
 	}
 
 	try {
-		DataManager::Instance().DeleteAccount(index);
+		StateManager::Instance().DeleteAccount(index);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);

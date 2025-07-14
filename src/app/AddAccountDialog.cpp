@@ -3,7 +3,7 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 
-#include "DataManager.h"
+#include "StateManager.h"
 #include "ExceptionHandler.h"
 
 AddAccountDialog::AddAccountDialog(QWidget* parent)
@@ -71,7 +71,7 @@ void AddAccountDialog::HandleConfirm()
 	}
 
 	try {
-		DataManager::Instance().AddAccount(name, type, initialAmountValue);
+		StateManager::Instance().AddAccount(name, type, initialAmountValue);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);

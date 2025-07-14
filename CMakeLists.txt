@@ -21,7 +21,12 @@ set (SOURCES
   ${SRC_DIR}/core/Operation.cpp
   ${SRC_DIR}/core/Profile.cpp
 
+  ${SRC_DIR}/app/StateManager.cpp
   ${SRC_DIR}/app/DataManager.cpp
+  ${SRC_DIR}/app/BackUpManager.cpp
+
+  ${SRC_DIR}/app/Converter.cpp
+  ${SRC_DIR}/app/Files.cpp
 
   ${SRC_DIR}/app/ApplicationException.cpp
   ${SRC_DIR}/app/FileException.cpp
@@ -59,7 +64,12 @@ set (HEADERS
   ${SRC_DIR}/core/Operation.h
   ${SRC_DIR}/core/Profile.h
 
+  ${SRC_DIR}/app/StateManager.h
   ${SRC_DIR}/app/DataManager.h
+  ${SRC_DIR}/app/BackUpManager.h
+  
+  ${SRC_DIR}/app/Converter.h
+  ${SRC_DIR}/app/Files.h
 
   ${SRC_DIR}/app/ApplicationException.h
   ${SRC_DIR}/app/FileException.h

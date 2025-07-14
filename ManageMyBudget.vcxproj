@@ -104,6 +104,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\app\Converter.cpp" />
+    <ClCompile Include="src\app\Files.cpp" />
+    <ClCompile Include="src\app\BackUpManager.cpp" />
     <ClCompile Include="src\core\Category.cpp" />
     <ClCompile Include="src\app\FileException.cpp" />
     <ClCompile Include="src\app\MonthString.cpp" />
@@ -135,11 +138,15 @@
     <ClCompile Include="src\app\MainWindow.cpp" />
     <ClCompile Include="src\core\Operation.cpp" />
     <ClCompile Include="src\app\YearlyReviewDialog.cpp" />
+    <ClCompile Include="src\app\StateManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\app\MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\app\Converter.h" />
+    <ClInclude Include="src\app\Files.h" />
+    <ClInclude Include="src\app\StateManager.h" />
     <QtMoc Include="src\app\YearlyReviewDialog.h" />
     <QtMoc Include="src\app\EditOperationDialog.h" />
     <QtMoc Include="src\app\OperationsList.h" />
@@ -153,6 +160,7 @@
     <QtMoc Include="src\app\ManageProfilesDialog.h" />
     <QtMoc Include="src\app\AddProfileDialog.h" />
     <QtMoc Include="src\app\RenameProfileDialog.h" />
+    <ClInclude Include="src\app\BackUpManager.h" />
     <ClInclude Include="src\core\Category.h" />
     <ClInclude Include="src\app\FileException.h" />
     <ClInclude Include="src\app\MonthString.h" />

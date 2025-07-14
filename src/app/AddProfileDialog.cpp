@@ -3,7 +3,7 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 
-#include "DataManager.h"
+#include "StateManager.h"
 #include "ExceptionHandler.h"
 
 AddProfileDialog::AddProfileDialog(QWidget* parent)
@@ -42,7 +42,7 @@ AddProfileDialog::AddProfileDialog(QWidget* parent)
 void AddProfileDialog::HandleConfirm()
 {
 	try {
-		DataManager::Instance().AddProfile(m_nameLineEdit->text().toStdString());
+		StateManager::Instance().AddProfile(m_nameLineEdit->text().toStdString());
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);

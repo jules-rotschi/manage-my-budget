@@ -1,6 +1,6 @@
 ﻿#include "EditCategoryDialog.h"
 
-#include "DataManager.h"
+#include "StateManager.h"
 #include "ExceptionHandler.h"
 #include "StringFormatter.h"
 #include "AmountValueFormatter.h"
@@ -8,7 +8,7 @@
 EditCategoryDialog::EditCategoryDialog(int categoryIndex, QWidget* parent)
 	: m_categoryIndex(categoryIndex), QDialog(parent)
 {
-	Category categoryToEdit = DataManager::Instance().r_CurrentProfile().categories[categoryIndex];
+	Category categoryToEdit = StateManager::Instance().r_CurrentProfile().categories[categoryIndex];
 
 	setWindowTitle(QString::fromStdString("Modifier la catégorie \"" + LimitLength(categoryToEdit.name, 20) + "\""));
 
@@ -80,7 +80,7 @@ void EditCategoryDialog::HandleConfirm()
 	long budgetAmountValue = isDebit ? -(long)absoluteBudgetAmountValue : absoluteBudgetAmountValue;
 
 	try {
-		DataManager::Instance().EditCategory(m_categoryIndex, name, budgetAmountValue);
+		StateManager::Instance().EditCategory(m_categoryIndex, name, budgetAmountValue);
 	}
 	catch (const ApplicationException& e) {
 		HandleException(e);
