@@ -12,23 +12,28 @@ std::string Amount::GetString() const
 	long tempValue = m_value;
 	bool isNegative = tempValue < 0;
 
-	if (isNegative) {
+	if (isNegative)
+	{
 		tempValue = -tempValue;
 	}
 
 	std::string valueString = std::to_string(tempValue);
-	if (valueString.length() == 2) {
+	if (valueString.length() == 2)
+	{
 		valueString = "0" + valueString;
 	}
-	if (valueString.length() == 1) {
+	if (valueString.length() == 1)
+	{
 		valueString = "00" + valueString;
 	}
-	if (valueString.length() == 0) {
+	if (valueString.length() == 0)
+	{
 		valueString = "000";
 	}
 	valueString.insert(valueString.end() - 2, '.');
 
-	if (isNegative) {
+	if (isNegative)
+	{
 		valueString = "-" + valueString;
 	}
 

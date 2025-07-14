@@ -26,7 +26,8 @@ MonthlyReviewDialog::MonthlyReviewDialog(QWidget* parent)
 
 	m_monthLabel = new QLabel("Mois");
 	m_monthComboBox = new QComboBox();
-	for (int i = 0; i < 12; i++) {
+	for (int i = 0; i < 12; i++)
+	{
 		m_monthComboBox->addItem(QString::fromStdString(MonthToString(i + 1)));
 	}
 	m_monthComboBox->setCurrentIndex(m_month - 1);
@@ -34,7 +35,8 @@ MonthlyReviewDialog::MonthlyReviewDialog(QWidget* parent)
 
 	m_yearLabel = new QLabel("Année");
 	m_yearComboBox = new QComboBox();
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 3; i++)
+	{
 		m_yearComboBox->addItem(QString::fromStdString(std::to_string(m_year - i)));
 	}
 	connect(m_yearComboBox, &QComboBox::currentIndexChanged, this, &MonthlyReviewDialog::HandleMonthSelectorChange);
@@ -80,7 +82,8 @@ void MonthlyReviewDialog::UpdateUI()
 
 	m_totalTitleLabel->setText(QString::fromStdString("Total (Prévu : " + budgetTotal.GetString() + ")"));
 
-	for (int i = 1; i < StateManager::Instance().r_CurrentProfile().categories.size(); i++) {
+	for (int i = 1; i < StateManager::Instance().r_CurrentProfile().categories.size(); i++)
+	{
 		const Category& category = StateManager::Instance().r_CurrentProfile().categories[i];
 
 		Amount monthlyAmount = accountant.GetMonthlyAmount(m_year, m_month, i);

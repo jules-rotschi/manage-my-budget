@@ -22,13 +22,15 @@ AddOperationForm::AddOperationForm(QWidget* parent)
 
 	m_yearLabel = new QLabel("Année");
 	m_yearCombobox = new QComboBox();
-	for (int i = 0; i <= 2; i++) {
+	for (int i = 0; i <= 2; i++)
+	{
 		m_yearCombobox->addItem(QString::fromStdString(std::to_string(currentDate.year() - i)));
 	}
 
 	m_monthLabel = new QLabel("Mois");
 	m_monthCombobox = new QComboBox();
-	for (int i = 0; i < 12; i++) {
+	for (int i = 0; i < 12; i++)
+	{
 		m_monthCombobox->addItem(QString::fromStdString(MonthToString(i + 1)));
 	}
 	m_monthCombobox->setCurrentIndex(currentDate.month() - 1);
@@ -68,7 +70,8 @@ AddOperationForm::AddOperationForm(QWidget* parent)
 void AddOperationForm::LoadCategories()
 {
 	m_categoryCombobox->clear();
-	for (const Category& category : StateManager::Instance().r_CurrentProfile().categories) {
+	for (const Category& category : StateManager::Instance().r_CurrentProfile().categories)
+	{
 		m_categoryCombobox->addItem(QString::fromStdString(LimitLength(category.name, 20)));
 	}
 }
@@ -92,16 +95,19 @@ void AddOperationForm::HandleAddButton()
 	unsigned long absoluteAmountValue = QLocale::system().toDouble(m_amountLineEdit->text(), &isAmountOk) * 100;
 	std::string description = m_descriptionLineEdit->text().toStdString();
 
-	if (!isAmountOk) {
+	if (!isAmountOk)
+	{
 		return;
 	}
 	
 	long amountValue = isDebit ? -(long)absoluteAmountValue : absoluteAmountValue;
 
-	try {
+	try
+	{
 		StateManager::Instance().AddOperation(year, month, amountValue, categoryIndex, description);
 	}
-	catch (const ApplicationException& e) {
+	catch (const ApplicationException& e)
+	{
 		HandleException(e);
 		return;
 	}

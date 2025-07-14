@@ -44,22 +44,26 @@ MainWindow::MainWindow(QWidget* parent)
 	dialog.setOption(QFileDialog::ShowDirsOnly);
 	dialog.setFileMode(QFileDialog::Directory);
 	dialog.setDirectory(QDir::homePath());
-	if (dialog.exec()) {
+	if (dialog.exec())
+	{
 		QStringList selectedDirectories = dialog.selectedFiles();
 
-		if (selectedDirectories.empty()) {
+		if (selectedDirectories.empty())
+		{
 			return;
 		}
 
 		selectedDirectoryPath = selectedDirectories.first();
 	}
-	else {
+	else
+	{
 		selectedDirectoryPath = QDir::homePath();
 	}
 
 	QDir dataDirectory(selectedDirectoryPath);
 
-	if (dataDirectory.dirName() == "manage-my-budget-data") {
+	if (dataDirectory.dirName() == "manage-my-budget-data")
+	{
 		dataDirectory.cdUp();
 	}
 
@@ -164,7 +168,8 @@ void MainWindow::UpdateUI(bool scrollDown)
 
 void MainWindow::LoadProfilesToComboBox()
 {
-	for (int i = 1; i < m_currentProfileComboBox->count();) {
+	for (int i = 1; i < m_currentProfileComboBox->count();)
+	{
 		m_currentProfileComboBox->removeItem(i);
 	}
 
@@ -172,7 +177,8 @@ void MainWindow::LoadProfilesToComboBox()
 		0, QString::fromStdString(LimitLength(StateManager::Instance().r_Profiles()[0].name, 20))
 	);
 
-	for (int i = 1; i < StateManager::Instance().r_Profiles().size(); i++) {
+	for (int i = 1; i < StateManager::Instance().r_Profiles().size(); i++)
+	{
 		const Profile& profile = StateManager::Instance().r_Profiles()[i];
 		m_currentProfileComboBox->addItem(QString::fromStdString(LimitLength(profile.name, 20)));
 	}
@@ -180,7 +186,8 @@ void MainWindow::LoadProfilesToComboBox()
 
 void MainWindow::LoadAccountsToComboBox()
 {
-	for (int i = 1; i < m_currentAccountComboBox->count();) {
+	for (int i = 1; i < m_currentAccountComboBox->count();)
+	{
 		m_currentAccountComboBox->removeItem(i);
 	}
 
@@ -188,7 +195,8 @@ void MainWindow::LoadAccountsToComboBox()
 		0, QString::fromStdString(LimitLength(StateManager::Instance().r_CurrentProfile().bankAccounts[0].name, 20) + " (" + StateManager::Instance().r_CurrentProfile().bankAccounts[0].GetTypeString() + ")")
 	);
 
-	for (int i = 1; i < StateManager::Instance().r_CurrentProfile().bankAccounts.size(); i++) {
+	for (int i = 1; i < StateManager::Instance().r_CurrentProfile().bankAccounts.size(); i++)
+	{
 		const BankAccount& account = StateManager::Instance().r_CurrentProfile().bankAccounts[i];
 		m_currentAccountComboBox->addItem(QString::fromStdString(LimitLength(account.name, 20) + " (" + account.GetTypeString() + ")"));
 	}
@@ -277,22 +285,26 @@ void MainWindow::HandleBackUp() const
 	dialog.setFileMode(QFileDialog::Directory);
 	dialog.setDirectory(QDir::homePath());
 
-	if (!dialog.exec()) {
+	if (!dialog.exec())
+	{
 		return;
 	}
 
 	QStringList selectedDirectories = dialog.selectedFiles();
 
-	if (selectedDirectories.empty()) {
+	if (selectedDirectories.empty())
+	{
 		return;
 	}
 
 	QString selectedDirectoryPath = selectedDirectories.first();
 
-	try {
+	try
+	{
 		BackUp(selectedDirectoryPath.toStdString());
 	}
-	catch (const ApplicationException& e) {
+	catch (const ApplicationException& e)
+	{
 		HandleException(e);
 		return;
 	}
@@ -306,26 +318,31 @@ void MainWindow::HandleBackUpLoad()
 	dialog.setFileMode(QFileDialog::Directory);
 	dialog.setDirectory(QDir::homePath());
 
-	if (!dialog.exec()) {
+	if (!dialog.exec())
+	{
 		return;
 	}
 
-	if (!ConfirmAction("Cette action effacera les données actuelles de l'application pour les remplacer par celles de la sauvegarde. Voulez vous continuer ?", "Écraser les données")) {
+	if (!ConfirmAction("Cette action effacera les données actuelles de l'application pour les remplacer par celles de la sauvegarde. Voulez vous continuer ?", "Écraser les données"))
+	{
 		return;
 	}
 
 	QStringList selectedDirectories = dialog.selectedFiles();
 
-	if (selectedDirectories.empty()) {
+	if (selectedDirectories.empty())
+	{
 		return;
 	}
 
 	QString selectedDirectoryPath = selectedDirectories.first();
 
-	try {
+	try
+	{
 		LoadBackUp(selectedDirectoryPath.toStdString());
 	}
-	catch (const ApplicationException& e) {
+	catch (const ApplicationException& e)
+	{
 		HandleException(e);
 		return;
 	}
@@ -338,15 +355,18 @@ void MainWindow::HandleBackUpLoad()
 
 void MainWindow::HandleDataReset()
 {
-	if (!ConfirmAction("Les données actuelles seront perdues. Voulez vous vraiment continuer ?", "Réinitialiser")) {
+	if (!ConfirmAction("Les données actuelles seront perdues. Voulez vous vraiment continuer ?", "Réinitialiser"))
+	{
 		return;
 	}
 
-	try {
+	try
+	{
 		ResetData();
 		InitializeData();
 	}
-	catch (const ApplicationException& e) {
+	catch (const ApplicationException& e)
+	{
 		HandleException(e);
 		return;
 	}

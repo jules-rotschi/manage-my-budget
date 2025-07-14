@@ -32,7 +32,8 @@ EditAccountDialog::EditAccountDialog(int index, QWidget* parent)
 	m_typeCombobox->addItem("Compte courant");
 	m_typeCombobox->addItem("Épargne");
 
-	switch (account.type) {
+	switch (account.type)
+	{
 	case AccountType::SAVING:
 		m_typeCombobox->setCurrentIndex(1);
 		break;
@@ -74,14 +75,17 @@ void EditAccountDialog::HandleConfirm()
 	bool isInitialAmountOk = false;
 	long initialAmountValue = QLocale::system().toDouble(m_initialAmountLineEdit->text(), &isInitialAmountOk) * 100;
 
-	if (!isInitialAmountOk) {
+	if (!isInitialAmountOk)
+	{
 		return;
 	}
 
-	try {
+	try
+	{
 		StateManager::Instance().EditAccount(m_index, name, type, initialAmountValue);
 	}
-	catch (const ApplicationException& e) {
+	catch (const ApplicationException& e)
+	{
 		HandleException(e);
 		return;
 	}

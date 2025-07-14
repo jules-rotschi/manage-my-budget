@@ -27,7 +27,8 @@ Amount BankAccount::GetTotalAmount() const
 {
 	Amount total = initialAmount;
 
-	for (const Operation& operation : m_operations) {
+	for (const Operation& operation : m_operations)
+	{
 		total += operation.amount;
 	}
 
@@ -40,11 +41,13 @@ Amount BankAccount::GetMonthlyAmount(int year, int month) const
 
 	Amount amount = 0;
 
-	for (const Operation& operation : m_operations) {
+	for (const Operation& operation : m_operations)
+	{
 
 		bool isInternalOperation = operation.categoryIndex == 0;
 
-		if (!isInternalOperation && operation.year == year && operation.month == month) {
+		if (!isInternalOperation && operation.year == year && operation.month == month)
+		{
 			amount += operation.amount;
 		}
 	}
@@ -58,10 +61,12 @@ Amount BankAccount::GetMonthlyAmount(int year, int month, int categoryIndex) con
 
 	Amount amount = 0;
 
-	for (const Operation& operation : m_operations) {
+	for (const Operation& operation : m_operations)
+	{
 		bool isInternalOperation = operation.categoryIndex == 0;
 
-		if (!isInternalOperation && operation.year == year && operation.month == month && operation.categoryIndex == categoryIndex) {
+		if (!isInternalOperation && operation.year == year && operation.month == month && operation.categoryIndex == categoryIndex)
+		{
 			amount += operation.amount;
 		}
 	}
@@ -73,10 +78,12 @@ Amount BankAccount::GetYearlyAmount(int year) const
 {
 	Amount amount = 0;
 
-	for (const Operation& operation : m_operations) {
+	for (const Operation& operation : m_operations)
+	{
 		bool isInternalOperation = operation.categoryIndex == 0;
 
-		if (!isInternalOperation && operation.year == year) {
+		if (!isInternalOperation && operation.year == year)
+		{
 			amount += operation.amount;
 		}
 	}
@@ -88,10 +95,12 @@ Amount BankAccount::GetYearlyAmount(int year, int categoryIndex) const
 {
 	Amount amount = 0;
 
-	for (const Operation& operation : m_operations) {
+	for (const Operation& operation : m_operations)
+	{
 		bool isInternalOperation = operation.categoryIndex == 0;
 
-		if (!isInternalOperation && operation.year == year && operation.categoryIndex == categoryIndex) {
+		if (!isInternalOperation && operation.year == year && operation.categoryIndex == categoryIndex)
+		{
 			amount += operation.amount;
 		}
 	}
@@ -118,8 +127,10 @@ void BankAccount::EditOperation(int id, const Operation& operation)
 {
 	assert((operation.month >= 1 && operation.month <= 12) && "Operation month must be within [1;12].");
 
-	for (Operation& oldOperation : m_operations) {
-		if (oldOperation.id == id) {
+	for (Operation& oldOperation : m_operations)
+	{
+		if (oldOperation.id == id)
+		{
 			oldOperation.Edit(operation);
 			SortOperations();
 			return;
@@ -131,10 +142,12 @@ void BankAccount::EditOperation(int id, const Operation& operation)
 
 void BankAccount::DeleteOperation(int id)
 {
-	for (size_t i = 0; i < m_operations.size(); i++) {
+	for (size_t i = 0; i < m_operations.size(); i++)
+	{
 		const Operation& operation = m_operations[i];
 
-		if (operation.id == id) {
+		if (operation.id == id)
+		{
 			m_operations.erase(m_operations.begin() + i);
 			return;
 		}
@@ -145,8 +158,10 @@ void BankAccount::DeleteOperation(int id)
 
 void BankAccount::HandleCategoryDelete(int index)
 {
-	for (Operation& operation : m_operations) {
-		if (operation.categoryIndex > index) {
+	for (Operation& operation : m_operations)
+	{
+		if (operation.categoryIndex > index)
+		{
 			operation.categoryIndex--;
 			return;
 		}
@@ -206,11 +221,13 @@ int BankAccount::GetNextIdAndIncrement()
 void BankAccount::SortOperations()
 {
 	std::sort(m_operations.begin(), m_operations.end(), [](const Operation& op1, const Operation& op2) {
-		if (op1.year != op2.year) {
+		if (op1.year != op2.year)
+		{
 			return op1.year < op2.year;
 		}
 
-		if (op1.month != op2.month) {
+		if (op1.month != op2.month)
+		{
 			return op1.month < op2.month;
 		}
 

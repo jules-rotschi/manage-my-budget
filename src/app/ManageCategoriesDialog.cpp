@@ -66,7 +66,8 @@ void ManageCategoriesDialog::UpdateUI()
 {
 	m_categoriesList->clear();
 
-	for (size_t i = 0; i < StateManager::Instance().r_CurrentProfile().categories.size(); i++) {
+	for (size_t i = 0; i < StateManager::Instance().r_CurrentProfile().categories.size(); i++)
+	{
 		Category category = StateManager::Instance().r_CurrentProfile().categories[i];
 
 		QWidget* categoryWidget = new QWidget();
@@ -110,16 +111,19 @@ void ManageCategoriesDialog::HandleCategoryAdd()
 	std::string name = m_nameLineEdit->text().toStdString();
 	long absoluteBudgetAmountValue = QLocale::system().toDouble(m_budgetLineEdit->text(), &isBudgetOk) * 100;
 
-	if (!isBudgetOk) {
+	if (!isBudgetOk)
+	{
 		return;
 	}
 
 	long budgetAmountValue = isDebit ? -(long)absoluteBudgetAmountValue : absoluteBudgetAmountValue;
 
-	try {
+	try
+	{
 		StateManager::Instance().AddCategory(name, budgetAmountValue);
 	}
-	catch (const ApplicationException& e) {
+	catch (const ApplicationException& e)
+	{
 		HandleException(e);
 		return;
 	}
@@ -133,17 +137,20 @@ void ManageCategoriesDialog::HandleCategoryRename(int index)
 {
 	EditCategoryDialog dialog(index);
 
-	if (dialog.exec()) {
+	if (dialog.exec())
+	{
 		UpdateUI();
 	}
 }
 
 void ManageCategoriesDialog::HandleCategoryDelete(int index)
 {
-	try {
+	try
+	{
 		StateManager::Instance().DeleteCategory(index);
 	}
-	catch (const ApplicationException& e) {
+	catch (const ApplicationException& e)
+	{
 		HandleException(e);
 		return;
 	}

@@ -66,14 +66,17 @@ void AddAccountDialog::HandleConfirm()
 	bool isInitialAmountOk = false;
 	long initialAmountValue = QLocale::system().toDouble(m_initialAmountLineEdit->text(), &isInitialAmountOk) * 100;
 
-	if (!isInitialAmountOk) {
+	if (!isInitialAmountOk)
+	{
 		return;
 	}
 
-	try {
+	try
+	{
 		StateManager::Instance().AddAccount(name, type, initialAmountValue);
 	}
-	catch (const ApplicationException& e) {
+	catch (const ApplicationException& e)
+	{
 		HandleException(e);
 		return;
 	}

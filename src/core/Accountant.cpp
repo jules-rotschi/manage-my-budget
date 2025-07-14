@@ -11,7 +11,8 @@ Amount Accountant::GetBudgetTotal()
 {
 	Amount total = 0;
 
-	for (const Category& category : m_profile.categories) {
+	for (const Category& category : m_profile.categories)
+	{
 		total += category.monthlyBudget;
 	}
 
@@ -24,7 +25,8 @@ Amount Accountant::GetMonthlyAmount(int year, int month) const
 
 	Amount amount = 0;
 
-	for (const BankAccount& account : m_profile.bankAccounts) {
+	for (const BankAccount& account : m_profile.bankAccounts)
+	{
 			amount += account.GetMonthlyAmount(year, month);
 	}
 
@@ -37,7 +39,8 @@ Amount Accountant::GetMonthlyAmount(int year, int month, int categoryIndex) cons
 
 	Amount amount = 0;
 
-	for (const BankAccount& account : m_profile.bankAccounts) {
+	for (const BankAccount& account : m_profile.bankAccounts)
+	{
 			amount += account.GetMonthlyAmount(year, month, categoryIndex);
 	}
 
@@ -48,7 +51,8 @@ Amount Accountant::GetYearlyAmount(int year) const
 {
 	Amount amount = 0;
 
-	for (const BankAccount& account : m_profile.bankAccounts) {
+	for (const BankAccount& account : m_profile.bankAccounts)
+	{
 			amount += account.GetYearlyAmount(year);
 	}
 
@@ -59,7 +63,8 @@ Amount Accountant::GetYearlyAmount(int year, int categoryIndex) const
 {
 	Amount amount = 0;
 
-	for (const BankAccount& account : m_profile.bankAccounts) {
+	for (const BankAccount& account : m_profile.bankAccounts)
+	{
 			amount += account.GetYearlyAmount(year, categoryIndex);
 	}
 
@@ -72,10 +77,12 @@ Amount Accountant::GetMonthlySavings(int year, int month)
 
 	Amount savings = 0;
 
-	for (const BankAccount& account : m_profile.bankAccounts) {
+	for (const BankAccount& account : m_profile.bankAccounts)
+	{
 		if (account.type != AccountType::SAVING) continue;
 
-		for (const Operation& operation : account.r_Operations()) {
+		for (const Operation& operation : account.r_Operations())
+		{
 			if (operation.year != year || operation.month != month) continue;
 
 			savings += operation.amount;
@@ -89,10 +96,12 @@ Amount Accountant::GetYearlySavings(int year)
 {
 	Amount savings = 0;
 
-	for (const BankAccount& account : m_profile.bankAccounts) {
+	for (const BankAccount& account : m_profile.bankAccounts)
+	{
 		if (account.type != AccountType::SAVING) continue;
 
-		for (const Operation& operation : account.r_Operations()) {
+		for (const Operation& operation : account.r_Operations())
+		{
 			if (operation.year != year) continue;
 
 			savings += operation.amount;

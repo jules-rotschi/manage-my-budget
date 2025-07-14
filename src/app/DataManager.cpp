@@ -35,7 +35,8 @@ void InitializeData()
 
 void ResetData()
 {
-	if (!RemoveDirectory(dataDirectory.path().toStdString())) {
+	if (!RemoveDirectory(dataDirectory.path().toStdString()))
+	{
 		throw FileException("Impossible de réinitialiser les données enregistrées sur l'ordinateur.");
 	}
 	StateManager::Instance().ResetData();
@@ -47,7 +48,8 @@ void LoadData()
 
 	QFile file(dataDirectory.filePath("version.dat"));
 
-	if (!file.open(QIODeviceBase::ReadOnly)) {
+	if (!file.open(QIODeviceBase::ReadOnly))
+	{
 		isDataFromVersion1_0_0 = true;
 	}
 
@@ -58,20 +60,24 @@ void LoadProfiles(bool isDataFromVersion1_0_0)
 {
 	QFile file(dataDirectory.filePath("profiles/profiles.dat"));
 
-	if (file.open(QIODeviceBase::ReadOnly)) {
+	if (file.open(QIODeviceBase::ReadOnly))
+	{
 		QDataStream stream(&file);
 
-		while (!file.atEnd()) {
+		while (!file.atEnd())
+		{
 			Profile profile;
 			stream >> profile;
 			StateManager::Instance().LoadProfile(profile);
 		}
 	}
-	else {
+	else
+	{
 		StateManager::Instance().LoadDefaultProfile();
 	}
 
-	for (size_t i = 0; i < StateManager::Instance().r_Profiles().size(); i++) {
+	for (size_t i = 0; i < StateManager::Instance().r_Profiles().size(); i++)
+	{
 		LoadCategories(SizeToInt(i), isDataFromVersion1_0_0);
 		LoadAccounts(SizeToInt(i));
 	}
@@ -83,26 +89,31 @@ void LoadCategories(int profileIndex, bool isDataFromVersion1_0_0)
 
 	QFile file(dataDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/categories.dat")));
 
-	if (file.open(QIODeviceBase::ReadOnly)) {
+	if (file.open(QIODeviceBase::ReadOnly))
+	{
 		QDataStream stream(&file);
 
-		while (!file.atEnd()) {
+		while (!file.atEnd())
+		{
 			Category category;
 
-			if (isDataFromVersion1_0_0) {
+			if (isDataFromVersion1_0_0)
+			{
 				QString categoryName;
 				stream >> categoryName;
 				category.name = categoryName.toStdString();
 				category.monthlyBudget = 0;
 			}
-			else {
+			else
+			{
 				stream >> category;
 			}
 
 			StateManager::Instance().LoadCategory(category, profileIndex);
 		}
 	}
-	else {
+	else
+	{
 		StateManager::Instance().LoadInternalCategory(profileIndex);
 	}
 }
@@ -113,20 +124,24 @@ void LoadAccounts(int profileIndex)
 
 	QFile file(dataDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts/accounts.dat")));
 
-	if (file.open(QIODeviceBase::ReadOnly)) {
+	if (file.open(QIODeviceBase::ReadOnly))
+	{
 		QDataStream stream(&file);
 
-		while (!file.atEnd()) {
+		while (!file.atEnd())
+		{
 			BankAccount account;
 			stream >> account;
 			StateManager::Instance().LoadAccount(account, profileIndex);
 		}
 	}
-	else {
+	else
+	{
 		StateManager::Instance().LoadDefaultAccount(profileIndex);
 	}
 
-	for (size_t i = 0; i < StateManager::Instance().r_Profiles()[profileIndex].bankAccounts.size(); i++) {
+	for (size_t i = 0; i < StateManager::Instance().r_Profiles()[profileIndex].bankAccounts.size(); i++)
+	{
 		LoadOperations(profileIndex, SizeToInt(i));
 	}
 }
@@ -142,7 +157,8 @@ void LoadOperations(int profileIndex, int accountIndex)
 
 	QDataStream stream(&file);
 
-	while (!file.atEnd()) {
+	while (!file.atEnd())
+	{
 		Operation operation;
 		stream >> operation;
 		StateManager::Instance().LoadOperation(operation, profileIndex, accountIndex);
@@ -153,7 +169,8 @@ void SaveData()
 {
 	QFile file(dataDirectory.filePath("version.dat"));
 
-	if (!file.open(QIODeviceBase::WriteOnly)) {
+	if (!file.open(QIODeviceBase::WriteOnly))
+	{
 		throw FileException("Impossible d'enregistrer les données.");
 	}
 
@@ -171,13 +188,15 @@ void SaveProfiles()
 
 	QFile file(dataDirectory.filePath("profiles/profiles.dat"));
 
-	if (!file.open(QIODeviceBase::WriteOnly)) {
+	if (!file.open(QIODeviceBase::WriteOnly))
+	{
 		throw FileException("Impossible d'enregistrer les données.");
 	}
 
 	QDataStream stream(&file);
 
-	for (const Profile& profile : StateManager::Instance().r_Profiles()) {
+	for (const Profile& profile : StateManager::Instance().r_Profiles())
+	{
 		stream << profile;
 		dataDirectory.mkdir(QString::fromStdString("profiles/" + ToFileName(profile.name)));
 		SaveCategories(profile);
@@ -189,13 +208,15 @@ void SaveCategories(const Profile& profile)
 {
 	QFile file(dataDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/categories.dat")));
 
-	if (!file.open(QIODeviceBase::WriteOnly)) {
+	if (!file.open(QIODeviceBase::WriteOnly))
+	{
 		throw FileException("Impossible d'enregistrer les données.");
 	}
 
 	QDataStream stream(&file);
 
-	for (const Category& category : profile.categories) {
+	for (const Category& category : profile.categories)
+	{
 		stream << category;
 	}
 }
@@ -207,13 +228,15 @@ void SaveAccounts(const Profile& profile)
 
 	QFile file(dataDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts/accounts.dat")));
 
-	if (!file.open(QIODeviceBase::WriteOnly)) {
+	if (!file.open(QIODeviceBase::WriteOnly))
+	{
 		throw FileException("Impossible d'enregistrer les données.");
 	}
 
 	QDataStream stream(&file);
 
-	for (const BankAccount& account : profile.bankAccounts) {
+	for (const BankAccount& account : profile.bankAccounts)
+	{
 		stream << account;
 		dataDirectory.mkdir(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts/" + ToFileName(account.name)));
 		SaveOperations(profile, account);
@@ -224,13 +247,15 @@ void SaveOperations(const Profile& profile, const BankAccount& account)
 {
 	QFile file(dataDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts/" + ToFileName(account.name) + "/operations.dat")));
 
-	if (!file.open(QIODeviceBase::WriteOnly)) {
+	if (!file.open(QIODeviceBase::WriteOnly))
+	{
 		throw FileException("Impossible d'enregistrer les données.");
 	}
 
 	QDataStream stream(&file);
 
-	for (const Operation& operation : account.r_Operations()) {
+	for (const Operation& operation : account.r_Operations())
+	{
 		stream << operation;
 	}
 }

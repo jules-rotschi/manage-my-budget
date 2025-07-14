@@ -41,10 +41,12 @@ AddProfileDialog::AddProfileDialog(QWidget* parent)
 
 void AddProfileDialog::HandleConfirm()
 {
-	try {
+	try
+	{
 		StateManager::Instance().AddProfile(m_nameLineEdit->text().toStdString());
 	}
-	catch (const ApplicationException& e) {
+	catch (const ApplicationException& e)
+	{
 		HandleException(e);
 		return;
 	}

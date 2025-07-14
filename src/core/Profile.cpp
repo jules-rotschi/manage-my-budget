@@ -6,7 +6,8 @@
 
 Profile::Profile(bool populateDefault)
 {
-	if (populateDefault) {
+	if (populateDefault)
+	{
 		categories.push_back(Category::Internal());
 		bankAccounts.push_back(BankAccount::Default());
 	}

@@ -10,10 +10,12 @@ std::string ToFileName(std::string strCopy)
 
 	std::replace(strCopy.begin(), strCopy.end(), ' ', '-');
 
-	for (size_t i = 0; i < strCopy.size(); i++) {
+	for (size_t i = 0; i < strCopy.size(); i++)
+	{
 		char c = strCopy[i];
 
-		if ((c < 97 || c > 122) && c != '-') {
+		if ((c < 97 || c > 122) && c != '-')
+		{
 			strCopy.erase(i, 1);
 			i--;
 		}
@@ -38,7 +40,8 @@ bool RemoveDirectory(const std::string& name)
 		| QDir::AllDirs
 		| QDir::Files,
 		QDir::DirsFirst)
-		) {
+		)
+	{
 		if (fileInfo.isDir()) isSuccessful = RemoveDirectory(name + "/" + fileInfo.fileName().toStdString());
 		else isSuccessful = QFile::remove(QString::fromStdString(name) + "/" + fileInfo.fileName());
 

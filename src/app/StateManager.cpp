@@ -10,8 +10,7 @@
 static StateManager* s_Instance = nullptr;
 
 StateManager::StateManager(const std::string& appVersion)
-	: appVersion(appVersion) {
-}
+	: appVersion(appVersion) {}
 
 void StateManager::Init(const std::string& appVersion)
 {
@@ -72,13 +71,17 @@ void StateManager::SetCurrentProfileCurrentAccountIndex(int index)
 
 void StateManager::AddProfile(const std::string& name)
 {
-	if (ToFileName(name).empty()) {
+	if (ToFileName(name).empty())
+	{
 		throw InvalidInputException("Le nom du profil doit contenir au moins un caractère (hors caractères spéciaux).");
 	}
 
-	for (const Profile& existingProfile : m_profiles) {
-		if (ToFileName(existingProfile.name) == ToFileName(name)) {
-			if (existingProfile.name == name) {
+	for (const Profile& existingProfile : m_profiles)
+	{
+		if (ToFileName(existingProfile.name) == ToFileName(name))
+		{
+			if (existingProfile.name == name)
+			{
 				throw InvalidInputException("Un profil du même nom existe déjà.");
 			}
 			throw InvalidInputException("Un profil du même nom existe déjà (les différences de caractères spéciaux et de casse ne cont pas prises en compte).");
@@ -97,18 +100,22 @@ void StateManager::RenameProfile(int index, const std::string& newName)
 {
 	assert((index < m_profiles.size()) && "Profile index must be less or equal to last profile index.");
 
-	if (ToFileName(newName).empty()) {
+	if (ToFileName(newName).empty())
+	{
 		throw InvalidInputException("Le nom du profil doit contenir au moins un caractère (hors caractères spéciaux).");
 	}
 
 	std::string oldName = m_profiles[index].name;
 	bool isNameEdited = newName != oldName;
 
-	for (size_t i = 0; i < m_profiles.size(); i++) {
+	for (size_t i = 0; i < m_profiles.size(); i++)
+	{
 		const Profile& existingProfile = m_profiles[i];
 
-		if (isNameEdited && ToFileName(existingProfile.name) == ToFileName(newName)) {
-			if (existingProfile.name == newName) {
+		if (isNameEdited && ToFileName(existingProfile.name) == ToFileName(newName))
+		{
+			if (existingProfile.name == newName)
+			{
 				throw InvalidInputException("Un profil du même nom existe déjà.");
 			}
 			throw InvalidInputException("Un profil du même nom existe déjà (les différences de caractères spéciaux et de casse ne cont pas prises en compte).");
@@ -124,15 +131,18 @@ void StateManager::DeleteProfile(int index)
 {
 	assert((index < m_profiles.size()) && "Profile index must be less or equal to last profile index.");
 
-	if (m_profiles.size() == 1) {
+	if (m_profiles.size() == 1)
+	{
 		throw ForbiddenActionException("Vous ne pouvez pas supprimer le seul profil existant.");
 	}
 
-	if (m_currentProfileIndex == index) {
+	if (m_currentProfileIndex == index)
+	{
 		SetCurrentProfileIndex(0);
 	}
 
-	if (m_currentProfileIndex > index) {
+	if (m_currentProfileIndex > index)
+	{
 		m_currentProfileIndex--;
 	}
 
@@ -143,13 +153,15 @@ void StateManager::DeleteProfile(int index)
 
 void StateManager::AddCategory(const std::string& name, Amount monthlyBudget)
 {
-	if (name.empty()) {
+	if (name.empty())
+	{
 		throw InvalidInputException("Le nom de la catégorie ne peut être vide.");
 	}
 
 	Category category(name, monthlyBudget);
 
-	for (const Category& existingCategory : r_CurrentProfile().categories) {
+	for (const Category& existingCategory : r_CurrentProfile().categories)
+	{
 		if (category == existingCategory) {
 			throw InvalidInputException("Une catégorie du même nom existe déjà.");
 		}
@@ -164,11 +176,13 @@ void StateManager::EditCategory(int index, const std::string& name, Amount month
 {
 	assert((index < r_CurrentProfile().categories.size()) && "Category index must be less or equal to last category index.");
 
-	if (r_CurrentProfile().categories[index] == Category::Internal()) {
+	if (r_CurrentProfile().categories[index] == Category::Internal())
+	{
 		throw ForbiddenActionException("Vous ne pouvez pas renommer cette catégorie.");
 	}
 
-	if (name.empty()) {
+	if (name.empty())
+	{
 		throw InvalidInputException("Le nom de la catégorie ne peut être vide.");
 	}
 
@@ -177,9 +191,10 @@ void StateManager::EditCategory(int index, const std::string& name, Amount month
 	std::string oldName = r_CurrentProfile().categories[index].name;
 	bool isNameEdited = category.name != oldName;
 
-	for (const Category& existingCategory : r_CurrentProfile().categories) {
-
-		if (isNameEdited && category == existingCategory) {
+	for (const Category& existingCategory : r_CurrentProfile().categories)
+	{
+		if (isNameEdited && category == existingCategory)
+		{
 			throw InvalidInputException("Une catégorie du même nom existe déjà.");
 		}
 	}
@@ -193,19 +208,24 @@ void StateManager::DeleteCategory(int index)
 {
 	assert((index < r_CurrentProfile().categories.size()) && "Category index must be less or equal to last category index.");
 
-	if (r_CurrentProfile().categories[index] == Category::Internal()) {
+	if (r_CurrentProfile().categories[index] == Category::Internal())
+	{
 		throw ForbiddenActionException(
 			"Vous ne pouvez pas supprimer la catégorie \"Opération interne\". Cette catégorie permet de classer les opérations entre vos différents comptes."
 		);
 	}
 
-	if (r_CurrentProfile().categories.size() == 1) {
+	if (r_CurrentProfile().categories.size() == 1)
+	{
 		throw ForbiddenActionException("Vous ne pouvez pas supprimer la seule catégorie existante.");
 	}
 
-	for (const BankAccount& account : r_CurrentProfile().bankAccounts) {
-		for (const Operation& operation : account.r_Operations()) {
-			if (operation.categoryIndex == index) {
+	for (const BankAccount& account : r_CurrentProfile().bankAccounts)
+	{
+		for (const Operation& operation : account.r_Operations())
+		{
+			if (operation.categoryIndex == index)
+			{
 				throw ForbiddenActionException("Cette catégorie est utilisée par au moins une opération.");
 			}
 		}
@@ -219,13 +239,17 @@ void StateManager::DeleteCategory(int index)
 
 void StateManager::AddAccount(const std::string& name, const std::string& type, int initialAmountValue)
 {
-	if (ToFileName(name).empty()) {
+	if (ToFileName(name).empty())
+	{
 		throw InvalidInputException("Le nom du compte doit contenir au moins un caractère (hors caractères spéciaux).");
 	}
 
-	for (const BankAccount& existingAccount : r_CurrentProfile().bankAccounts) {
-		if (ToFileName(existingAccount.name) == ToFileName(name)) {
-			if (existingAccount.name == name) {
+	for (const BankAccount& existingAccount : r_CurrentProfile().bankAccounts)
+	{
+		if (ToFileName(existingAccount.name) == ToFileName(name))
+		{
+			if (existingAccount.name == name)
+			{
 				throw InvalidInputException("Un compte du même nom existe déjà.");
 			}
 			throw InvalidInputException("Un compte du même nom existe déjà (les différences de caractères spéciaux et de casse ne cont pas prises en compte).");
@@ -235,11 +259,13 @@ void StateManager::AddAccount(const std::string& name, const std::string& type, 
 	BankAccount account;
 	account.name = name;
 
-	if (type == "Compte courant") {
+	if (type == "Compte courant")
+	{
 		account.type = AccountType::CURRENT;
 	}
 
-	if (type == "Épargne") {
+	if (type == "Épargne")
+	{
 		account.type = AccountType::SAVING;
 	}
 
@@ -254,19 +280,23 @@ void StateManager::EditAccount(int index, const std::string& name, const std::st
 {
 	assert((index < r_CurrentProfile().bankAccounts.size()) && "Account index must be less or equal to last account index.");
 
-	if (ToFileName(name).empty()) {
+	if (ToFileName(name).empty())
+	{
 		throw InvalidInputException("Le nom du compte doit contenir au moins un caractère (hors caractères spéciaux).");
 	}
 
 	std::string oldAccountName = r_CurrentProfile().bankAccounts[index].name;
 
-	for (size_t i = 0; i < r_CurrentProfile().bankAccounts.size(); i++) {
+	for (size_t i = 0; i < r_CurrentProfile().bankAccounts.size(); i++)
+	{
 		const BankAccount& existingAccount = r_CurrentProfile().bankAccounts[i];
 
 		bool isNameEdited = name != oldAccountName;
 
-		if (isNameEdited && ToFileName(existingAccount.name) == ToFileName(name)) {
-			if (existingAccount.name == name) {
+		if (isNameEdited && ToFileName(existingAccount.name) == ToFileName(name))
+		{
+			if (existingAccount.name == name)
+			{
 				throw InvalidInputException("Un compte du même nom existe déjà.");
 			}
 			throw InvalidInputException("Un compte du même nom existe déjà (les différences de caractères spéciaux et de casse ne cont pas prises en compte).");
@@ -276,13 +306,16 @@ void StateManager::EditAccount(int index, const std::string& name, const std::st
 	BankAccount account;
 	account.name = name;
 
-	if (type == "Compte courant") {
+	if (type == "Compte courant")
+	{
 		account.type = AccountType::CURRENT;
 	}
-	else if (type == "Épargne") {
+	else if (type == "Épargne")
+	{
 		account.type = AccountType::SAVING;
 	}
-	else {
+	else
+	{
 		throw InvalidInputException("Type du compte invalide.");
 	}
 
@@ -297,15 +330,18 @@ void StateManager::DeleteAccount(int index)
 {
 	assert((index < r_CurrentProfile().bankAccounts.size()) && "Account index must be less or equal to last account index.");
 
-	if (r_CurrentProfile().bankAccounts.size() == 1) {
+	if (r_CurrentProfile().bankAccounts.size() == 1)
+	{
 		throw ForbiddenActionException("Vous ne pouvez pas supprimer le seul compte du profil.");
 	}
 
-	if (r_CurrentProfile().GetCurrentAccountIndex() == index) {
+	if (r_CurrentProfile().GetCurrentAccountIndex() == index)
+	{
 		m_profiles[m_currentProfileIndex].SetCurrentAccountIndex(0);
 	}
 
-	if (r_CurrentProfile().GetCurrentAccountIndex() > index) {
+	if (r_CurrentProfile().GetCurrentAccountIndex() > index)
+	{
 		m_profiles[m_currentProfileIndex].SetCurrentAccountIndex(r_CurrentProfile().GetCurrentAccountIndex() - 1);
 	}
 
@@ -316,11 +352,13 @@ void StateManager::DeleteAccount(int index)
 
 void StateManager::AddOperation(int year, int month, long amountValue, int categoryIndex, const std::string& description)
 {
-	if (month < 1 || month > 12) {
+	if (month < 1 || month > 12)
+	{
 		throw InvalidInputException("Le mois doit être compris entre 1 et 12.");
 	}
 
-	if (categoryIndex >= r_CurrentProfile().categories.size()) {
+	if (categoryIndex >= r_CurrentProfile().categories.size())
+	{
 		throw InvalidInputException("La catégorie n'existe pas.");
 	}
 
@@ -338,11 +376,13 @@ void StateManager::AddOperation(int year, int month, long amountValue, int categ
 
 void StateManager::EditOperation(int id, int year, int month, long amountValue, int categoryIndex, const std::string& description)
 {
-	if (month < 1 || month > 12) {
+	if (month < 1 || month > 12)
+	{
 		throw InvalidInputException("Le mois doit être compris entre 1 et 12.");
 	}
 
-	if (categoryIndex >= r_CurrentProfile().categories.size()) {
+	if (categoryIndex >= r_CurrentProfile().categories.size())
+	{
 		throw InvalidInputException("La catégorie n'existe pas.");
 	}
 

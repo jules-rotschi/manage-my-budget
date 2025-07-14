@@ -23,7 +23,8 @@ OperationsList::OperationsList(QWidget* parent)
 	m_displaySinceComboBox->addItem("1 an");
 	m_displaySinceComboBox->addItem("Toujours");
 
-	switch (m_displayOperationsSinceMonths) {
+	switch (m_displayOperationsSinceMonths)
+	{
 	case 2:
 		m_displaySinceComboBox->setCurrentIndex(0);
 		break;
@@ -66,11 +67,13 @@ void OperationsList::UpdateUI(bool scrollDown)
 
 	for (const Operation& operation : StateManager::Instance().r_CurrentProfile().r_ConstCurrentBankAccount().r_Operations())
 	{
-		if (!IsOperationInDisplayableMonth(operation.year, operation.month, currentDate)) {
+		if (!IsOperationInDisplayableMonth(operation.year, operation.month, currentDate))
+		{
 			continue;
 		}
 
-		if (lastOperationYear != operation.year || lastOperationMonth != operation.month) {
+		if (lastOperationYear != operation.year || lastOperationMonth != operation.month)
+		{
 			QLabel* monthLabel = new QLabel(QString::fromStdString(MonthToString(operation.month) + " " + std::to_string(operation.year)));
 			monthLabel->setAlignment(Qt::AlignCenter);
 			QListWidgetItem* newMonthIndicator = new QListWidgetItem();
@@ -91,7 +94,8 @@ void OperationsList::UpdateUI(bool scrollDown)
 			+ QString::fromStdString(LimitLength(StateManager::Instance().r_CurrentProfile().categories[operation.categoryIndex].name, 20))
 			+ descriptionString;
 
-		if (operation.amount.GetValue() > 0) {
+		if (operation.amount.GetValue() > 0)
+		{
 			operationString = '+' + operationString;
 		}
 
@@ -123,14 +127,16 @@ void OperationsList::UpdateUI(bool scrollDown)
 		lastOperationMonth = operation.month;
 	}
 
-	if (scrollDown) {
+	if (scrollDown)
+	{
 		m_operationsList->scrollToBottom();
 	}
 }
 
 bool OperationsList::IsOperationInDisplayableMonth(int operationYear, int operationMonth, const QDate& currentDate) const
 {
-	if (m_displayOperationsSinceMonths < 0) {
+	if (m_displayOperationsSinceMonths < 0)
+	{
 		return true;
 	}
 
@@ -138,7 +144,8 @@ bool OperationsList::IsOperationInDisplayableMonth(int operationYear, int operat
 
 	bool isOperationInAFutureYear = operationYear > currentDate.year();
 
-	if (isOperationInAFutureYear) {
+	if (isOperationInAFutureYear)
+	{
 		return true;
 	}
 
@@ -146,14 +153,16 @@ bool OperationsList::IsOperationInDisplayableMonth(int operationYear, int operat
 
 	bool isEveryDisplayableMonthInCurrentYear = currentDate.month() >= m_displayOperationsSinceMonths;
 
-	if (isEveryDisplayableMonthInCurrentYear) {
+	if (isEveryDisplayableMonthInCurrentYear)
+	{
 		int firstDisplayableMonthOfCurrentYear = currentDate.month() - m_displayOperationsSinceMonths + 1;
 
 		return isOperationInCurrentYear && operationMonth >= firstDisplayableMonthOfCurrentYear;
 	}
 
 	// Every month of current year is displayable
-	if (isOperationInCurrentYear) {
+	if (isOperationInCurrentYear)
+	{
 		return true;
 	}
 
@@ -168,17 +177,20 @@ void OperationsList::HandleOperationEdit(int id)
 {
 	EditOperationDialog dialog(id);
 
-	if (dialog.exec()) {
+	if (dialog.exec())
+	{
 		UpdateUI();
 	}
 }
 
 void OperationsList::HandleOperationDelete(int id)
 {
-	try {
+	try
+	{
 		StateManager::Instance().DeleteOperation(id);
 	}
-	catch (const ApplicationException& e) {
+	catch (const ApplicationException& e)
+	{
 		HandleException(e);
 		return;
 	}
@@ -188,7 +200,8 @@ void OperationsList::HandleOperationDelete(int id)
 
 void OperationsList::HandleDisplayFromChange()
 {
-	switch (m_displaySinceComboBox->currentIndex()) {
+	switch (m_displaySinceComboBox->currentIndex())
+	{
 	case 0:
 		m_displayOperationsSinceMonths = 2;
 		break;

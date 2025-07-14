@@ -21,10 +21,12 @@ EditCategoryDialog::EditCategoryDialog(int categoryIndex, QWidget* parent)
 	m_typeCombobox = new QComboBox();
 	m_typeCombobox->addItem("Crédit");
 	m_typeCombobox->addItem("Débit");
-	if (categoryToEdit.monthlyBudget.GetValue() < 0) {
+	if (categoryToEdit.monthlyBudget.GetValue() < 0)
+	{
 		m_typeCombobox->setCurrentIndex(1);
 	}
-	else {
+	else
+	{
 		m_typeCombobox->setCurrentIndex(0);
 	}
 
@@ -73,16 +75,19 @@ void EditCategoryDialog::HandleConfirm()
 	std::string name = m_nameLineEdit->text().toStdString();
 	long absoluteBudgetAmountValue = QLocale::system().toDouble(m_budgetLineEdit->text(), &isBudgetOk) * 100;
 
-	if (!isBudgetOk) {
+	if (!isBudgetOk)
+	{
 		return;
 	}
 
 	long budgetAmountValue = isDebit ? -(long)absoluteBudgetAmountValue : absoluteBudgetAmountValue;
 
-	try {
+	try
+	{
 		StateManager::Instance().EditCategory(m_categoryIndex, name, budgetAmountValue);
 	}
-	catch (const ApplicationException& e) {
+	catch (const ApplicationException& e)
+	{
 		HandleException(e);
 		return;
 	}

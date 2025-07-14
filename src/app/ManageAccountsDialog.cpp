@@ -37,7 +37,8 @@ void ManageAccountsDialog::UpdateUI()
 {
 	m_accountsList->clear();
 
-	for (size_t i = 0; i < StateManager::Instance().r_CurrentProfile().bankAccounts.size(); i++) {
+	for (size_t i = 0; i < StateManager::Instance().r_CurrentProfile().bankAccounts.size(); i++)
+	{
 		const BankAccount account = StateManager::Instance().r_CurrentProfile().bankAccounts[i];
 
 		QWidget* accountWidget = new QWidget();
@@ -48,7 +49,7 @@ void ManageAccountsDialog::UpdateUI()
 		connect(
 			accountEditButton,
 			&QPushButton::released,
-			[this, i]() {HandleAccountEdit(SizeToInt(i)); }
+			[this, i]() { HandleAccountEdit(SizeToInt(i)); }
 		);
 		accountEditButton->setFixedWidth(100);
 		
@@ -56,7 +57,7 @@ void ManageAccountsDialog::UpdateUI()
 		connect(
 			accountDeleteButton,
 			&QPushButton::released,
-			[this, i]() {HandleAccountDelete(SizeToInt(i)); }
+			[this, i]() { HandleAccountDelete(SizeToInt(i)); }
 		);
 		accountDeleteButton->setFixedWidth(100);
 
@@ -76,7 +77,8 @@ void ManageAccountsDialog::HandleAccountAdd()
 {
 	AddAccountDialog dialog;
 
-	if (dialog.exec()) {
+	if (dialog.exec())
+	{
 		UpdateUI();
 	}
 }
@@ -85,21 +87,25 @@ void ManageAccountsDialog::HandleAccountEdit(int index)
 {
 	EditAccountDialog dialog(index);
 
-	if (dialog.exec()) {
+	if (dialog.exec())
+	{
 		UpdateUI();
 	}
 }
 
 void ManageAccountsDialog::HandleAccountDelete(int index)
 {
-	if (!ConfirmAction("Voulez-vous vraiment supprimer le compte \"" + StateManager::Instance().r_CurrentProfile().bankAccounts[index].name + "\" ?", "Supprimer")) {
+	if (!ConfirmAction("Voulez-vous vraiment supprimer le compte \"" + StateManager::Instance().r_CurrentProfile().bankAccounts[index].name + "\" ?", "Supprimer"))
+	{
 		return;
 	}
 
-	try {
+	try
+	{
 		StateManager::Instance().DeleteAccount(index);
 	}
-	catch (const ApplicationException& e) {
+	catch (const ApplicationException& e)
+	{
 		HandleException(e);
 		return;
 	}

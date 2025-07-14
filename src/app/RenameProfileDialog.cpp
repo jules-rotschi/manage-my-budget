@@ -43,10 +43,12 @@ void RenameProfileDialog::HandleConfirm()
 {
 	std::string newName = m_nameLineEdit->text().toStdString();
 
-	try {
+	try
+	{
 		StateManager::Instance().RenameProfile(m_index, newName);
 	}
-	catch (const ApplicationException& e) {
+	catch (const ApplicationException& e)
+	{
 		HandleException(e);
 		return;
 	}

@@ -3,7 +3,8 @@
 #include <array>
 #include "Converter.h"
 
-std::array<std::string, 12> months = {
+std::array<std::string, 12> months =
+{
 	"Janvier",
 	"Février",
 	"Mars",
@@ -20,7 +21,8 @@ std::array<std::string, 12> months = {
 
 std::string MonthToString(int month)
 {
-	if (month < 0 || month > 11) {
+	if (month < 0 || month > 11)
+	{
 		return "";
 	}
 
@@ -29,9 +31,11 @@ std::string MonthToString(int month)
 
 int StringToMonth(const std::string& str)
 {
-	for (size_t i = 0; i < months.size(); i++) {
+	for (size_t i = 0; i < months.size(); i++)
+	{
 		const std::string& monthString = months[i];
-		if (monthString == str) {
+		if (monthString == str)
+		{
 			return SizeToInt(i) + 1;
 		}
 	}

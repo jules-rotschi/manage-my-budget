@@ -15,7 +15,8 @@ EditOperationDialog::EditOperationDialog(int id, QWidget* parent)
 {
 	Operation operationToEdit;
 
-	for (const Operation& operation : StateManager::Instance().r_CurrentProfile().r_ConstCurrentBankAccount().r_Operations()) {
+	for (const Operation& operation : StateManager::Instance().r_CurrentProfile().r_ConstCurrentBankAccount().r_Operations())
+	{
 		if (operation.id == id) {
 			operationToEdit = operation;
 			break;
@@ -32,24 +33,28 @@ EditOperationDialog::EditOperationDialog(int id, QWidget* parent)
 	m_typeCombobox = new QComboBox();
 	m_typeCombobox->addItem("Crédit");
 	m_typeCombobox->addItem("Débit");
-	if (operationToEdit.amount.GetValue() < 0) {
+	if (operationToEdit.amount.GetValue() < 0)
+	{
 		m_typeCombobox->setCurrentIndex(1);
 	}
-	else {
+	else
+	{
 		m_typeCombobox->setCurrentIndex(0);
 	}
 
 	m_yearLabel = new QLabel("Année");
 	m_yearCombobox = new QComboBox();
 	int yearsToDisplay = std::max<int>(currentDate.year() - operationToEdit.year, 2);
-	for (int i = 0; i <= yearsToDisplay; i++) {
+	for (int i = 0; i <= yearsToDisplay; i++)
+	{
 		m_yearCombobox->addItem(QString::fromStdString(std::to_string(currentDate.year() - i)));
 	}
 	m_yearCombobox->setCurrentIndex(currentDate.year() - operationToEdit.year);
 
 	m_monthLabel = new QLabel("Mois");
 	m_monthCombobox = new QComboBox();
-	for (int i = 0; i < 12; i++) {
+	for (int i = 0; i < 12; i++)
+	{
 		m_monthCombobox->addItem(QString::fromStdString(MonthToString(i + 1)));
 	}
 	m_monthCombobox->setCurrentIndex(operationToEdit.month - 1);
@@ -67,7 +72,8 @@ EditOperationDialog::EditOperationDialog(int id, QWidget* parent)
 
 	m_categoryLabel = new QLabel("Catégorie");
 	m_categoryCombobox = new QComboBox();
-	for (const Category& category : StateManager::Instance().r_CurrentProfile().categories) {
+	for (const Category& category : StateManager::Instance().r_CurrentProfile().categories)
+	{
 		m_categoryCombobox->addItem(QString::fromStdString(LimitLength(category.name, 20)));
 	}
 	m_categoryCombobox->setCurrentIndex(operationToEdit.categoryIndex);
@@ -117,14 +123,17 @@ void EditOperationDialog::HandleConfirm()
 
 	long amountValue = isDebit ? -(long)absoluteAmountValue : absoluteAmountValue;
 
-	if (!isAmountOk) {
+	if (!isAmountOk)
+	{
 		return;
 	}
 
-	try {
+	try
+	{
 		StateManager::Instance().EditOperation(m_id, year, month, amountValue, categoryIndex, description);
 	}
-	catch (const ApplicationException& e) {
+	catch (const ApplicationException& e)
+	{
 		HandleException(e);
 		return;
 	}
