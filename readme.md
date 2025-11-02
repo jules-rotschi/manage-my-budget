@@ -14,7 +14,7 @@ Manage My Budget is an application that allows users to sort their bank operatio
 ### Qt installation
 
 1. If Qt is not installed on your system, install [Qt](https://www.qt.io/).
-2. Adapt `CMakeLists.txt` 8th line with path to your Qt directory (`set(Qt6_DIR path/to/Qt/6.9.1/msvc2022_64/lib/cmake/Qt6)`).
+2. Adapt `CMakeLists.txt` 8th line with path to your Qt directory (`set(Qt6_DIR path/to/Qt/version/compiler/lib/cmake/Qt6)`).
 
 ### Build the project with Visual Studio
 
