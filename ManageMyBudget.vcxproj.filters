@@ -1,301 +1,258 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>qml;cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Form Files">
-      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
-      <Extensions>ui</Extensions>
-    </Filter>
-    <Filter Include="Translation Files">
-      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
-      <Extensions>ts</Extensions>
-    </Filter>
-    <Filter Include="Header Files\src">
-      <UniqueIdentifier>{c7db166c-e7de-42d3-9f10-b529c1ae727a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\src\core">
-      <UniqueIdentifier>{7a61f11c-024b-4875-a14e-a9941e7a0871}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\src\app">
-      <UniqueIdentifier>{5494b434-e621-4432-9be2-573e5a85b6f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\src\app\Exceptions">
-      <UniqueIdentifier>{dcd84fa0-2dd2-4241-ba35-108d4dea3a09}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\src\app\UI">
-      <UniqueIdentifier>{9df2cf99-360a-41a9-ae96-b41602833340}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\src\app\UI\Category">
-      <UniqueIdentifier>{cbe9e76b-1d70-45e9-a992-6ebb11439bb9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\src\app\UI\Account">
-      <UniqueIdentifier>{1f206353-c9cd-4292-8c5e-335c313bceb1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\src\app\UI\Operation">
-      <UniqueIdentifier>{201be6f3-7764-4785-9730-ba91c84f57ed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\src\app\UI\Profile">
-      <UniqueIdentifier>{b852e35d-9d92-40c5-a189-51dc9a114bf3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\src\app\UI\Review">
-      <UniqueIdentifier>{6abd86ee-dfb7-429d-9735-0a3603d29a8b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\src">
-      <UniqueIdentifier>{6f49f25b-4b55-45c9-9cfd-bf9c21ecc4eb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\src\core">
-      <UniqueIdentifier>{f84d48bb-5242-4e5c-a463-f91ef623d8f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\src\app">
-      <UniqueIdentifier>{7e75a6b6-468c-485f-a20a-523520fd5a24}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\src\app\Exceptions">
-      <UniqueIdentifier>{f7be875f-15d7-4c41-97c3-b84b5e448b75}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\src\app\UI">
-      <UniqueIdentifier>{17793382-a339-408a-810f-a1f292d6831e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\src\app\UI\Account">
-      <UniqueIdentifier>{1723a43c-71a8-4941-9b81-cd257f453a3d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\src\app\UI\Category">
-      <UniqueIdentifier>{51c67f8f-92fd-4833-8507-f3031826c74f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\src\app\UI\Operation">
-      <UniqueIdentifier>{969a1f96-fa0e-4bfc-8faa-febc735b5485}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\src\app\UI\Profile">
-      <UniqueIdentifier>{8105d01e-724a-46cc-a7c3-44d08b3883de}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\src\app\UI\Review">
-      <UniqueIdentifier>{345226f7-675b-4b66-aed3-d2c57e076ed7}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\core\Operation.cpp">
-      <Filter>Source Files\src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\Amount.cpp">
-      <Filter>Source Files\src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\DataManager.cpp">
-      <Filter>Source Files\src\app</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\BankAccount.cpp">
-      <Filter>Source Files\src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\AddOperationForm.cpp">
-      <Filter>Source Files\src\app\UI\Operation</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\EditOperationDialog.cpp">
-      <Filter>Source Files\src\app\UI\Operation</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\ManageAccountsDialog.cpp">
-      <Filter>Source Files\src\app\UI\Account</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\ManageCategoriesDialog.cpp">
-      <Filter>Source Files\src\app\UI\Category</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\OperationsList.cpp">
-      <Filter>Source Files\src\app\UI\Operation</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\EditCategoryDialog.cpp">
-      <Filter>Source Files\src\app\UI\Category</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\AddAccountDialog.cpp">
-      <Filter>Source Files\src\app\UI\Account</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\EditAccountDialog.cpp">
-      <Filter>Source Files\src\app\UI\Account</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\Accountant.cpp">
-      <Filter>Source Files\src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\MonthlyReviewDialog.cpp">
-      <Filter>Source Files\src\app\UI\Review</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\YearlyReviewDialog.cpp">
-      <Filter>Source Files\src\app\UI\Review</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\ManageProfilesDialog.cpp">
-      <Filter>Source Files\src\app\UI\Profile</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\AddProfileDialog.cpp">
-      <Filter>Source Files\src\app\UI\Profile</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\RenameProfileDialog.cpp">
-      <Filter>Source Files\src\app\UI\Profile</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\InvalidInputException.cpp">
-      <Filter>Source Files\src\app\Exceptions</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\ForbiddenActionException.cpp">
-      <Filter>Source Files\src\app\Exceptions</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\ApplicationException.cpp">
-      <Filter>Source Files\src\app\Exceptions</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\MainWindow.cpp">
-      <Filter>Source Files\src\app\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\ExceptionHandler.cpp">
-      <Filter>Source Files\src\app\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\AmountValueFormatter.cpp">
-      <Filter>Source Files\src\app\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\ConfirmationRequiser.cpp">
-      <Filter>Source Files\src\app\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\MonthString.cpp">
-      <Filter>Source Files\src\app\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\StringFormatter.cpp">
-      <Filter>Source Files\src\app\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\FileException.cpp">
-      <Filter>Source Files\src\app\Exceptions</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\Category.cpp">
-      <Filter>Source Files\src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\Profile.cpp">
-      <Filter>Source Files\src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\StateManager.cpp">
-      <Filter>Source Files\src\app</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\BackUpManager.cpp">
-      <Filter>Source Files\src\app</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\Files.cpp">
-      <Filter>Source Files\src\app</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app\Converter.cpp">
-      <Filter>Source Files\src\app</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="src\app\AddOperationForm.h">
-      <Filter>Header Files\src\app\UI\Operation</Filter>
-    </QtMoc>
-    <QtMoc Include="src\app\EditOperationDialog.h">
-      <Filter>Header Files\src\app\UI\Operation</Filter>
-    </QtMoc>
-    <QtMoc Include="src\app\ManageAccountsDialog.h">
-      <Filter>Header Files\src\app\UI\Account</Filter>
-    </QtMoc>
-    <QtMoc Include="src\app\OperationsList.h">
-      <Filter>Header Files\src\app\UI\Operation</Filter>
-    </QtMoc>
-    <QtMoc Include="src\app\EditCategoryDialog.h">
-      <Filter>Header Files\src\app\UI\Category</Filter>
-    </QtMoc>
-    <QtMoc Include="src\app\ManageCategoriesDialog.h">
-      <Filter>Header Files\src\app\UI\Category</Filter>
-    </QtMoc>
-    <QtMoc Include="src\app\AddAccountDialog.h">
-      <Filter>Header Files\src\app\UI\Account</Filter>
-    </QtMoc>
-    <QtMoc Include="src\app\EditAccountDialog.h">
-      <Filter>Header Files\src\app\UI\Account</Filter>
-    </QtMoc>
-    <QtMoc Include="src\app\MonthlyReviewDialog.h">
-      <Filter>Header Files\src\app\UI\Review</Filter>
-    </QtMoc>
-    <QtMoc Include="src\app\YearlyReviewDialog.h">
-      <Filter>Header Files\src\app\UI\Review</Filter>
-    </QtMoc>
-    <QtMoc Include="src\app\ManageProfilesDialog.h">
-      <Filter>Header Files\src\app\UI\Profile</Filter>
-    </QtMoc>
-    <QtMoc Include="src\app\AddProfileDialog.h">
-      <Filter>Header Files\src\app\UI\Profile</Filter>
-    </QtMoc>
-    <QtMoc Include="src\app\RenameProfileDialog.h">
-      <Filter>Header Files\src\app\UI\Profile</Filter>
-    </QtMoc>
-    <QtMoc Include="src\app\MainWindow.h">
-      <Filter>Header Files\src\app\UI</Filter>
-    </QtMoc>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\core\Operation.h">
-      <Filter>Header Files\src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\Amount.h">
-      <Filter>Header Files\src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\app\DataManager.h">
-      <Filter>Header Files\src\app</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\BankAccount.h">
-      <Filter>Header Files\src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\Accountant.h">
-      <Filter>Header Files\src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\app\InvalidInputException.h">
-      <Filter>Header Files\src\app\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="src\app\ForbiddenActionException.h">
-      <Filter>Header Files\src\app\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="src\app\ApplicationException.h">
-      <Filter>Header Files\src\app\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="src\app\ExceptionHandler.h">
-      <Filter>Header Files\src\app\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\app\AmountValueFormatter.h">
-      <Filter>Header Files\src\app\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\app\ConfirmationRequiser.h">
-      <Filter>Header Files\src\app\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\app\MonthString.h">
-      <Filter>Header Files\src\app\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\app\StringFormatter.h">
-      <Filter>Header Files\src\app\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\app\FileException.h">
-      <Filter>Header Files\src\app\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\Category.h">
-      <Filter>Header Files\src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\Profile.h">
-      <Filter>Header Files\src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\app\BackUpManager.h">
-      <Filter>Header Files\src\app</Filter>
-    </ClInclude>
-    <ClInclude Include="src\app\StateManager.h">
-      <Filter>Header Files\src\app</Filter>
-    </ClInclude>
-    <ClInclude Include="src\app\Files.h">
-      <Filter>Header Files\src\app</Filter>
-    </ClInclude>
-    <ClInclude Include="src\app\Converter.h">
-      <Filter>Header Files\src\app</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <None Include=".gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\ui\MainWindow.h">
+      <Filter>UI</Filter>
+    </QtMoc>
+    <QtMoc Include="src\ui\account\AddAccountDialog.h">
+      <Filter>UI\Account</Filter>
+    </QtMoc>
+    <QtMoc Include="src\ui\account\EditAccountDialog.h">
+      <Filter>UI\Account</Filter>
+    </QtMoc>
+    <QtMoc Include="src\ui\account\ManageAccountsDialog.h">
+      <Filter>UI\Account</Filter>
+    </QtMoc>
+    <QtMoc Include="src\ui\operation\AddOperationForm.h">
+      <Filter>UI\Operation</Filter>
+    </QtMoc>
+    <QtMoc Include="src\ui\operation\EditOperationDialog.h">
+      <Filter>UI\Operation</Filter>
+    </QtMoc>
+    <QtMoc Include="src\ui\operation\OperationsList.h">
+      <Filter>UI\Operation</Filter>
+    </QtMoc>
+    <QtMoc Include="src\ui\profile\AddProfileDialog.h">
+      <Filter>UI\Profile</Filter>
+    </QtMoc>
+    <QtMoc Include="src\ui\category\EditCategoryDialog.h">
+      <Filter>UI\Category</Filter>
+    </QtMoc>
+    <QtMoc Include="src\ui\category\ManageCategoriesDialog.h">
+      <Filter>UI\Category</Filter>
+    </QtMoc>
+    <QtMoc Include="src\ui\review\MonthlyReviewDialog.h">
+      <Filter>UI\Review</Filter>
+    </QtMoc>
+    <QtMoc Include="src\ui\review\YearlyReviewDialog.h">
+      <Filter>UI\Review</Filter>
+    </QtMoc>
+    <QtMoc Include="src\ui\profile\ManageProfilesDialog.h">
+      <Filter>UI\Profile</Filter>
+    </QtMoc>
+    <QtMoc Include="src\ui\profile\RenameProfileDialog.h">
+      <Filter>UI\Profile</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\domain\Accountant.cpp">
+      <Filter>Domain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\domain\Amount.cpp">
+      <Filter>Domain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\domain\Category.cpp">
+      <Filter>Domain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\domain\Profile.cpp">
+      <Filter>Domain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\domain\Operation.cpp">
+      <Filter>Domain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\exceptions\ApplicationException.cpp">
+      <Filter>Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\domain\BankAccount.cpp">
+      <Filter>Domain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\data\BackUp.cpp">
+      <Filter>Data</Filter>
+    </ClCompile>
+    <ClCompile Include="src\types\Converter.cpp">
+      <Filter>Types</Filter>
+    </ClCompile>
+    <ClCompile Include="src\data\Data.cpp">
+      <Filter>Data</Filter>
+    </ClCompile>
+    <ClCompile Include="src\exceptions\FileException.cpp">
+      <Filter>Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\files\Files.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\exceptions\ForbiddenActionException.cpp">
+      <Filter>Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\exceptions\InvalidInputException.cpp">
+      <Filter>Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\MainWindow.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\data\StateManager.cpp">
+      <Filter>Data</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\account\AddAccountDialog.cpp">
+      <Filter>UI\Account</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\account\EditAccountDialog.cpp">
+      <Filter>UI\Account</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\account\ManageAccountsDialog.cpp">
+      <Filter>UI\Account</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\operation\AddOperationForm.cpp">
+      <Filter>UI\Operation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\operation\EditOperationDialog.cpp">
+      <Filter>UI\Operation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\operation\OperationsList.cpp">
+      <Filter>UI\Operation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\profile\AddProfileDialog.cpp">
+      <Filter>UI\Profile</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\format\AmountValueFormatter.cpp">
+      <Filter>UI\Format</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\hooks\ConfirmationRequiser.cpp">
+      <Filter>UI\Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\hooks\ExceptionHandler.cpp">
+      <Filter>UI\Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\category\EditCategoryDialog.cpp">
+      <Filter>UI\Category</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\category\ManageCategoriesDialog.cpp">
+      <Filter>UI\Category</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\review\MonthlyReviewDialog.cpp">
+      <Filter>UI\Review</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\review\YearlyReviewDialog.cpp">
+      <Filter>UI\Review</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\profile\ManageProfilesDialog.cpp">
+      <Filter>UI\Profile</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\profile\RenameProfileDialog.cpp">
+      <Filter>UI\Profile</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\format\StringFormatter.cpp">
+      <Filter>UI\Format</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\format\MonthString.cpp">
+      <Filter>UI\Format</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\domain\Accountant.h">
+      <Filter>Domain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\domain\Amount.h">
+      <Filter>Domain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\domain\Category.h">
+      <Filter>Domain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\domain\Profile.h">
+      <Filter>Domain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\domain\Operation.h">
+      <Filter>Domain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\exceptions\ApplicationException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\domain\BankAccount.h">
+      <Filter>Domain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\data\BackUp.h">
+      <Filter>Data</Filter>
+    </ClInclude>
+    <ClInclude Include="src\types\Converter.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="src\data\Data.h">
+      <Filter>Data</Filter>
+    </ClInclude>
+    <ClInclude Include="src\exceptions\FileException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\files\Files.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\exceptions\ForbiddenActionException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\exceptions\InvalidInputException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\data\StateManager.h">
+      <Filter>Data</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\format\AmountValueFormatter.h">
+      <Filter>UI\Format</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\hooks\ConfirmationRequiser.h">
+      <Filter>UI\Hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\hooks\ExceptionHandler.h">
+      <Filter>UI\Hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\format\StringFormatter.h">
+      <Filter>UI\Format</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\format\MonthString.h">
+      <Filter>UI\Format</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="UI">
+      <UniqueIdentifier>{947acac0-e40a-4329-bd8e-8a35c835a80b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Domain">
+      <UniqueIdentifier>{b47546db-9172-4a19-8093-ebdcd81f4378}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{586e3407-1859-4825-8647-d90a9802a6d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Exceptions">
+      <UniqueIdentifier>{e891ac9f-8fb5-4e41-8525-79a39f46429d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files">
+      <UniqueIdentifier>{91dac96e-2b82-4487-a5d6-1882784c6b2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Types">
+      <UniqueIdentifier>{5d286c86-b591-4707-93b7-e9d763fdf35b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Account">
+      <UniqueIdentifier>{6f3ff3cd-b46f-40e1-a399-ec20383a5693}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Operation">
+      <UniqueIdentifier>{1be93936-cedd-45c2-9a61-96a41fa23870}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Profile">
+      <UniqueIdentifier>{2cf8099b-7e5d-4fa2-8e5a-78a536ed9d48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Format">
+      <UniqueIdentifier>{ff9222ff-e30f-4fcc-a494-d023b617b5d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Hooks">
+      <UniqueIdentifier>{19f4e7a0-0eba-43c4-b49c-6a88fdae50dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Category">
+      <UniqueIdentifier>{9c5fee91-9650-41f7-911b-58432e9a56d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Review">
+      <UniqueIdentifier>{32eb6941-0e55-4a51-b2dd-fbdbd2045ed6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

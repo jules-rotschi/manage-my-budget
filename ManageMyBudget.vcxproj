@@ -104,82 +104,86 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\app\Converter.cpp" />
-    <ClCompile Include="src\app\Files.cpp" />
-    <ClCompile Include="src\app\BackUpManager.cpp" />
-    <ClCompile Include="src\core\Category.cpp" />
-    <ClCompile Include="src\app\FileException.cpp" />
-    <ClCompile Include="src\app\MonthString.cpp" />
-    <ClCompile Include="src\app\ConfirmationRequiser.cpp" />
-    <ClCompile Include="src\app\AmountValueFormatter.cpp" />
-    <ClCompile Include="src\app\ExceptionHandler.cpp" />
-    <ClCompile Include="src\app\ApplicationException.cpp" />
-    <ClCompile Include="src\app\ForbiddenActionException.cpp" />
-    <ClCompile Include="src\app\InvalidInputException.cpp" />
-    <ClCompile Include="src\app\AddProfileDialog.cpp" />
-    <ClCompile Include="src\app\RenameProfileDialog.cpp" />
-    <ClCompile Include="src\app\ManageProfilesDialog.cpp" />
-    <ClCompile Include="src\core\Profile.cpp" />
-    <ClCompile Include="src\app\MonthlyReviewDialog.cpp" />
-    <ClCompile Include="src\app\StringFormatter.cpp" />
-    <ClCompile Include="src\core\Accountant.cpp" />
-    <ClCompile Include="src\app\EditAccountDialog.cpp" />
-    <ClCompile Include="src\app\AddAccountDialog.cpp" />
-    <ClCompile Include="src\app\ManageAccountsDialog.cpp" />
-    <ClCompile Include="src\app\EditCategoryDialog.cpp" />
-    <ClCompile Include="src\app\ManageCategoriesDialog.cpp" />
-    <ClCompile Include="src\core\BankAccount.cpp" />
-    <ClCompile Include="src\app\AddOperationForm.cpp" />
-    <ClCompile Include="src\app\OperationsList.cpp" />
-    <ClCompile Include="src\app\EditOperationDialog.cpp" />
-    <ClCompile Include="src\app\DataManager.cpp" />
-    <ClCompile Include="src\core\Amount.cpp" />
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\app\MainWindow.cpp" />
-    <ClCompile Include="src\core\Operation.cpp" />
-    <ClCompile Include="src\app\YearlyReviewDialog.cpp" />
-    <ClCompile Include="src\app\StateManager.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="src\app\MainWindow.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\app\Converter.h" />
-    <ClInclude Include="src\app\Files.h" />
-    <ClInclude Include="src\app\StateManager.h" />
-    <QtMoc Include="src\app\YearlyReviewDialog.h" />
-    <QtMoc Include="src\app\EditOperationDialog.h" />
-    <QtMoc Include="src\app\OperationsList.h" />
-    <QtMoc Include="src\app\AddOperationForm.h" />
-    <QtMoc Include="src\app\ManageCategoriesDialog.h" />
-    <QtMoc Include="src\app\EditCategoryDialog.h" />
-    <QtMoc Include="src\app\ManageAccountsDialog.h" />
-    <QtMoc Include="src\app\AddAccountDialog.h" />
-    <QtMoc Include="src\app\EditAccountDialog.h" />
-    <QtMoc Include="src\app\MonthlyReviewDialog.h" />
-    <QtMoc Include="src\app\ManageProfilesDialog.h" />
-    <QtMoc Include="src\app\AddProfileDialog.h" />
-    <QtMoc Include="src\app\RenameProfileDialog.h" />
-    <ClInclude Include="src\app\BackUpManager.h" />
-    <ClInclude Include="src\core\Category.h" />
-    <ClInclude Include="src\app\FileException.h" />
-    <ClInclude Include="src\app\MonthString.h" />
-    <ClInclude Include="src\app\ConfirmationRequiser.h" />
-    <ClInclude Include="src\app\AmountValueFormatter.h" />
-    <ClInclude Include="src\app\ExceptionHandler.h" />
-    <ClInclude Include="src\app\ApplicationException.h" />
-    <ClInclude Include="src\app\ForbiddenActionException.h" />
-    <ClInclude Include="src\app\InvalidInputException.h" />
-    <ClInclude Include="src\core\Profile.h" />
-    <ClInclude Include="src\app\StringFormatter.h" />
-    <ClInclude Include="src\core\Accountant.h" />
-    <ClInclude Include="src\core\BankAccount.h" />
-    <ClInclude Include="src\app\DataManager.h" />
-    <ClInclude Include="src\core\Amount.h" />
-    <ClInclude Include="src\core\Operation.h" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include=".gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\ui\account\AddAccountDialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\types\Converter.cpp" />
+    <ClCompile Include="src\data\BackUp.cpp" />
+    <ClCompile Include="src\data\Data.cpp" />
+    <ClCompile Include="src\data\StateManager.cpp" />
+    <ClCompile Include="src\domain\Accountant.cpp" />
+    <ClCompile Include="src\domain\Amount.cpp" />
+    <ClCompile Include="src\domain\BankAccount.cpp" />
+    <ClCompile Include="src\domain\Category.cpp" />
+    <ClCompile Include="src\domain\Operation.cpp" />
+    <ClCompile Include="src\domain\Profile.cpp" />
+    <ClCompile Include="src\exceptions\ApplicationException.cpp" />
+    <ClCompile Include="src\exceptions\FileException.cpp" />
+    <ClCompile Include="src\exceptions\ForbiddenActionException.cpp" />
+    <ClCompile Include="src\exceptions\InvalidInputException.cpp" />
+    <ClCompile Include="src\files\Files.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ui\account\AddAccountDialog.cpp" />
+    <ClCompile Include="src\ui\operation\AddOperationForm.cpp" />
+    <ClCompile Include="src\ui\profile\AddProfileDialog.cpp" />
+    <ClCompile Include="src\ui\format\AmountValueFormatter.cpp" />
+    <ClCompile Include="src\ui\hooks\ConfirmationRequiser.cpp" />
+    <ClCompile Include="src\ui\account\EditAccountDialog.cpp" />
+    <ClCompile Include="src\ui\category\EditCategoryDialog.cpp" />
+    <ClCompile Include="src\ui\operation\EditOperationDialog.cpp" />
+    <ClCompile Include="src\ui\hooks\ExceptionHandler.cpp" />
+    <ClCompile Include="src\ui\MainWindow.cpp" />
+    <ClCompile Include="src\ui\account\ManageAccountsDialog.cpp" />
+    <ClCompile Include="src\ui\category\ManageCategoriesDialog.cpp" />
+    <ClCompile Include="src\ui\profile\ManageProfilesDialog.cpp" />
+    <ClCompile Include="src\ui\review\MonthlyReviewDialog.cpp" />
+    <ClCompile Include="src\ui\format\MonthString.cpp" />
+    <ClCompile Include="src\ui\operation\OperationsList.cpp" />
+    <ClCompile Include="src\ui\profile\RenameProfileDialog.cpp" />
+    <ClCompile Include="src\ui\format\StringFormatter.cpp" />
+    <ClCompile Include="src\ui\review\YearlyReviewDialog.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\ui\operation\AddOperationForm.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\ui\profile\AddProfileDialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\types\Converter.h" />
+    <ClInclude Include="src\data\BackUp.h" />
+    <ClInclude Include="src\data\Data.h" />
+    <ClInclude Include="src\data\StateManager.h" />
+    <ClInclude Include="src\domain\Accountant.h" />
+    <ClInclude Include="src\domain\Amount.h" />
+    <ClInclude Include="src\domain\BankAccount.h" />
+    <ClInclude Include="src\domain\Category.h" />
+    <ClInclude Include="src\domain\Operation.h" />
+    <ClInclude Include="src\domain\Profile.h" />
+    <ClInclude Include="src\exceptions\ApplicationException.h" />
+    <ClInclude Include="src\exceptions\FileException.h" />
+    <ClInclude Include="src\exceptions\ForbiddenActionException.h" />
+    <ClInclude Include="src\exceptions\InvalidInputException.h" />
+    <ClInclude Include="src\files\Files.h" />
+    <ClInclude Include="src\ui\format\AmountValueFormatter.h" />
+    <ClInclude Include="src\ui\hooks\ConfirmationRequiser.h" />
+    <ClInclude Include="src\ui\hooks\ExceptionHandler.h" />
+    <ClInclude Include="src\ui\format\MonthString.h" />
+    <ClInclude Include="src\ui\format\StringFormatter.h" />
+    <QtMoc Include="src\ui\review\YearlyReviewDialog.h" />
+    <QtMoc Include="src\ui\profile\RenameProfileDialog.h" />
+    <QtMoc Include="src\ui\operation\OperationsList.h" />
+    <QtMoc Include="src\ui\review\MonthlyReviewDialog.h" />
+    <QtMoc Include="src\ui\profile\ManageProfilesDialog.h" />
+    <QtMoc Include="src\ui\category\ManageCategoriesDialog.h" />
+    <QtMoc Include="src\ui\account\ManageAccountsDialog.h" />
+    <QtMoc Include="src\ui\MainWindow.h" />
+    <QtMoc Include="src\ui\operation\EditOperationDialog.h" />
+    <QtMoc Include="src\ui\category\EditCategoryDialog.h" />
+    <QtMoc Include="src\ui\account\EditAccountDialog.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
