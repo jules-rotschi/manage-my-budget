@@ -47,7 +47,7 @@ void ManageProfilesDialog::UpdateUI()
 
 		QWidget* profileWidget = new QWidget();
 
-		QLabel* profileLabel = new QLabel(QString::fromStdString(LimitLength(profile.name, 20)));
+		QLabel* profileLabel = new QLabel(QString::fromStdString(LimitLength(profile.GetName(), 20)));
 
 		QPushButton* profileEditButton = new QPushButton("Renommer");
 		connect(
@@ -99,7 +99,7 @@ void ManageProfilesDialog::HandleProfileEdit(int index)
 
 void ManageProfilesDialog::HandleProfileDelete(int index)
 {
-	if (!ConfirmAction("Voulez-vous vraiment supprimer le profil \"" + StateManager::Instance().r_Profiles()[index].name + "\" ?", "Supprimer"))
+	if (!ConfirmAction("Voulez-vous vraiment supprimer le profil \"" + StateManager::Instance().r_Profiles()[index].GetName() + "\" ?", "Supprimer"))
 	{
 		return;
 	}

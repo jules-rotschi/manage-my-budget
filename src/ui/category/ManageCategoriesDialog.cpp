@@ -73,9 +73,9 @@ void ManageCategoriesDialog::UpdateUI()
 {
 	m_categoriesList->clear();
 
-	for (size_t i = 0; i < StateManager::Instance().r_CurrentProfile().categories.size(); i++)
+	for (size_t i = 0; i < StateManager::Instance().r_CurrentProfile().r_Categories().size(); i++)
 	{
-		Category category = StateManager::Instance().r_CurrentProfile().categories[i];
+		Category category = StateManager::Instance().r_CurrentProfile().r_Categories()[i];
 
 		QWidget* categoryWidget = new QWidget();
 

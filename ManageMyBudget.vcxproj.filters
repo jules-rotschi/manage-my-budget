@@ -151,6 +151,9 @@
     <ClCompile Include="src\ui\format\MonthString.cpp">
       <Filter>UI\Format</Filter>
     </ClCompile>
+    <ClCompile Include="src\application\Application.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\domain\Accountant.h">
@@ -213,6 +216,9 @@
     <ClInclude Include="src\ui\format\MonthString.h">
       <Filter>UI\Format</Filter>
     </ClInclude>
+    <ClInclude Include="src\application\Application.h">
+      <Filter>Application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="UI">
@@ -253,6 +259,9 @@
     </Filter>
     <Filter Include="UI\Review">
       <UniqueIdentifier>{32eb6941-0e55-4a51-b2dd-fbdbd2045ed6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application">
+      <UniqueIdentifier>{1e3f1706-1bb6-458b-b0c5-04ca819321c2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

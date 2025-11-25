@@ -55,7 +55,7 @@ bool LoadProfilesBackUp(const QDir& backUpDirectory)
 
 			assert(properties.size() == 1);
 
-			profile.name = properties[0].toStdString();
+			profile.Rename(properties[0].toStdString());
 
 			StateManager::Instance().LoadProfile(profile);
 		}
@@ -83,7 +83,7 @@ bool LoadCategoriesBackUp(const QDir& backUpDirectory, int profileIndex)
 {
 	const Profile& profile = StateManager::Instance().r_Profiles()[profileIndex];
 
-	QFile file(backUpDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/categories.csv")));
+	QFile file(backUpDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.GetName()) + "/categories.csv")));
 
 	if (file.open(QIODeviceBase::ReadOnly))
 	{
@@ -122,7 +122,7 @@ bool LoadAccountsBackUp(const QDir& backUpDirectory, int profileIndex)
 {
 	const Profile& profile = StateManager::Instance().r_Profiles()[profileIndex];
 
-	QFile file(backUpDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts/accounts.csv")));
+	QFile file(backUpDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.GetName()) + "/accounts/accounts.csv")));
 
 	if (file.open(QIODeviceBase::ReadOnly))
 	{
@@ -139,19 +139,19 @@ bool LoadAccountsBackUp(const QDir& backUpDirectory, int profileIndex)
 
 			assert(properties.size() == 3);
 
-			account.name = properties[0].toStdString();
+			account.Rename(properties[0].toStdString());
 
 			if (properties[1] == "Compte courant")
 			{
-				account.type = AccountType::CURRENT;
+				account.SetType(AccountType::CURRENT);
 			}
 			if (properties[1] == "Épargne")
 			{
-				account.type = AccountType::SAVING;
+				account.SetType(AccountType::SAVING);
 			}
 
 			bool isInitialAmountOk = false;
-			account.initialAmount = properties[2].toInt(&isInitialAmountOk);
+			account.SetInitialAmount(properties[2].toInt(&isInitialAmountOk));
 
 			assert(isInitialAmountOk);
 
@@ -163,7 +163,7 @@ bool LoadAccountsBackUp(const QDir& backUpDirectory, int profileIndex)
 		return false;
 	}
 
-	for (size_t i = 0; i < StateManager::Instance().r_Profiles()[profileIndex].bankAccounts.size(); i++)
+	for (size_t i = 0; i < StateManager::Instance().r_Profiles()[profileIndex].r_BankAccounts().size(); i++)
 	{
 		if (!LoadOperationsBackUp(backUpDirectory, profileIndex, SizeToInt(i)))
 		{
@@ -177,9 +177,9 @@ bool LoadAccountsBackUp(const QDir& backUpDirectory, int profileIndex)
 bool LoadOperationsBackUp(const QDir& backUpDirectory, int profileIndex, int accountIndex)
 {
 	const Profile& profile = StateManager::Instance().r_Profiles()[profileIndex];
-	const BankAccount& account = StateManager::Instance().r_Profiles()[profileIndex].bankAccounts[accountIndex];
+	const BankAccount& account = StateManager::Instance().r_Profiles()[profileIndex].r_BankAccounts()[accountIndex];
 
-	QFile file(backUpDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts/" + ToFileName(account.name) + "/operations.csv")));
+	QFile file(backUpDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.GetName()) + "/accounts/" + ToFileName(account.GetName()) + "/operations.csv")));
 
 	if (file.open(QIODeviceBase::ReadOnly))
 	{
@@ -263,7 +263,7 @@ void BackUpProfiles(const QDir& backUpDirectory)
 	for (const Profile& profile : StateManager::Instance().r_Profiles())
 	{
 		stream << profile << '\n';
-		backUpDirectory.mkdir(QString::fromStdString("profiles/" + ToFileName(profile.name)));
+		backUpDirectory.mkdir(QString::fromStdString("profiles/" + ToFileName(profile.GetName())));
 		BackUpCategories(backUpDirectory, profile);
 		BackUpAccounts(backUpDirectory, profile);
 	}
@@ -271,7 +271,7 @@ void BackUpProfiles(const QDir& backUpDirectory)
 
 void BackUpCategories(const QDir& backUpDirectory, const Profile& profile)
 {
-	QFile file(backUpDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/categories.csv")));
+	QFile file(backUpDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.GetName()) + "/categories.csv")));
 
 	file.open(QIODeviceBase::WriteOnly);
 
@@ -279,7 +279,7 @@ void BackUpCategories(const QDir& backUpDirectory, const Profile& profile)
 
 	stream << "Name,Monthly budget\n";
 
-	for (const Category& category : profile.categories)
+	for (const Category& category : profile.r_Categories())
 	{
 		stream << category << '\n';
 	}
@@ -287,9 +287,9 @@ void BackUpCategories(const QDir& backUpDirectory, const Profile& profile)
 
 void BackUpAccounts(const QDir& backUpDirectory, const Profile& profile)
 {
-	backUpDirectory.mkdir(backUpDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts")));
+	backUpDirectory.mkdir(backUpDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.GetName()) + "/accounts")));
 
-	QFile file(backUpDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts/accounts.csv")));
+	QFile file(backUpDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.GetName()) + "/accounts/accounts.csv")));
 
 	file.open(QIODeviceBase::WriteOnly);
 
@@ -297,17 +297,17 @@ void BackUpAccounts(const QDir& backUpDirectory, const Profile& profile)
 
 	stream << "Name,Type,Initial amount\n";
 
-	for (const BankAccount& account : profile.bankAccounts)
+	for (const BankAccount& account : profile.r_BankAccounts())
 	{
 		stream << account << '\n';
-		backUpDirectory.mkdir(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts/" + ToFileName(account.name)));
+		backUpDirectory.mkdir(QString::fromStdString("profiles/" + ToFileName(profile.GetName()) + "/accounts/" + ToFileName(account.GetName())));
 		BackUpOperations(backUpDirectory, profile, account);
 	}
 }
 
 void BackUpOperations(const QDir& backUpDirectory, const Profile& profile, const BankAccount& account)
 {
-	QFile file(backUpDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts/" + ToFileName(account.name) + "/operations.csv")));
+	QFile file(backUpDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.GetName()) + "/accounts/" + ToFileName(account.GetName()) + "/operations.csv")));
 
 	file.open(QIODeviceBase::WriteOnly);
 
@@ -324,7 +324,7 @@ void BackUpOperations(const QDir& backUpDirectory, const Profile& profile, const
 QTextStream& operator<<(QTextStream& stream, const Profile& profile)
 {
 	stream
-		<< QString::fromStdString(profile.name);
+		<< QString::fromStdString(profile.GetName());
 
 	return stream;
 }
@@ -346,11 +346,11 @@ QTextStream& operator<<(QTextStream& stream, const BankAccount& account)
 	QString separator = ",";
 
 	stream
-		<< QString::fromStdString(account.name)
+		<< QString::fromStdString(account.GetName())
 		<< separator
 		<< QString::fromStdString(account.GetTypeString())
 		<< separator
-		<< account.initialAmount.GetValue();
+		<< account.GetInitialAmount().GetValue();
 
 	return stream;
 }

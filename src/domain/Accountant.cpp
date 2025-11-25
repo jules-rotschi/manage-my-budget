@@ -2,20 +2,20 @@
 
 #include <assert.h>
 
-#include "Profile.h"
 #include "Amount.h"
-#include "Category.h"
 #include "BankAccount.h"
+#include "Category.h"
 #include "Operation.h"
+#include "Profile.h"
 
 Accountant::Accountant(const Profile& profile)
 	: m_profile(profile) {}
 
-Amount Accountant::GetBudgetTotal()
+Amount Accountant::GetBudgetTotal() const
 {
 	Amount total = 0;
 
-	for (const Category& category : m_profile.categories)
+	for (const Category& category : m_profile.r_Categories())
 	{
 		total += category.monthlyBudget;
 	}
@@ -29,7 +29,7 @@ Amount Accountant::GetMonthlyAmount(int year, int month) const
 
 	Amount amount = 0;
 
-	for (const BankAccount& account : m_profile.bankAccounts)
+	for (const BankAccount& account : m_profile.r_BankAccounts())
 	{
 			amount += account.GetMonthlyAmount(year, month);
 	}
@@ -43,7 +43,7 @@ Amount Accountant::GetMonthlyAmount(int year, int month, int categoryIndex) cons
 
 	Amount amount = 0;
 
-	for (const BankAccount& account : m_profile.bankAccounts)
+	for (const BankAccount& account : m_profile.r_BankAccounts())
 	{
 			amount += account.GetMonthlyAmount(year, month, categoryIndex);
 	}
@@ -55,7 +55,7 @@ Amount Accountant::GetYearlyAmount(int year) const
 {
 	Amount amount = 0;
 
-	for (const BankAccount& account : m_profile.bankAccounts)
+	for (const BankAccount& account : m_profile.r_BankAccounts())
 	{
 			amount += account.GetYearlyAmount(year);
 	}
@@ -67,7 +67,7 @@ Amount Accountant::GetYearlyAmount(int year, int categoryIndex) const
 {
 	Amount amount = 0;
 
-	for (const BankAccount& account : m_profile.bankAccounts)
+	for (const BankAccount& account : m_profile.r_BankAccounts())
 	{
 			amount += account.GetYearlyAmount(year, categoryIndex);
 	}
@@ -75,15 +75,15 @@ Amount Accountant::GetYearlyAmount(int year, int categoryIndex) const
 	return amount;
 }
 
-Amount Accountant::GetMonthlySavings(int year, int month)
+Amount Accountant::GetMonthlySavings(int year, int month) const
 {
 	assert((month >= 1 && month <= 12) && "Month argument must be within [1;12].");
 
 	Amount savings = 0;
 
-	for (const BankAccount& account : m_profile.bankAccounts)
+	for (const BankAccount& account : m_profile.r_BankAccounts())
 	{
-		if (account.type != AccountType::SAVING) continue;
+		if (!account.IsSaving()) continue;
 
 		for (const Operation& operation : account.r_Operations())
 		{
@@ -96,13 +96,13 @@ Amount Accountant::GetMonthlySavings(int year, int month)
 	return savings;
 }
 
-Amount Accountant::GetYearlySavings(int year)
+Amount Accountant::GetYearlySavings(int year) const
 {
 	Amount savings = 0;
 
-	for (const BankAccount& account : m_profile.bankAccounts)
+	for (const BankAccount& account : m_profile.r_BankAccounts())
 	{
-		if (account.type != AccountType::SAVING) continue;
+		if (!account.IsSaving()) continue;
 
 		for (const Operation& operation : account.r_Operations())
 		{

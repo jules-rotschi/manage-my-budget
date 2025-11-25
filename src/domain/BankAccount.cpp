@@ -8,9 +8,14 @@ const std::vector<Operation>& BankAccount::r_Operations() const
 	return m_operations;
 }
 
+bool BankAccount::IsSaving() const
+{
+	return m_type == AccountType::SAVING;
+}
+
 std::string BankAccount::GetTypeString() const
 {
-	switch (type)
+	switch (m_type)
 	{
 	case AccountType::CURRENT:
 		return "Compte courant";
@@ -23,9 +28,24 @@ std::string BankAccount::GetTypeString() const
 	}
 }
 
+std::string BankAccount::GetName() const
+{
+	return m_name;
+}
+
+AccountType BankAccount::GetType() const
+{
+	return m_type;
+}
+
+Amount BankAccount::GetInitialAmount() const
+{
+	return m_initialAmount;
+}
+
 Amount BankAccount::GetTotalAmount() const
 {
-	Amount total = initialAmount;
+	Amount total = m_initialAmount;
 
 	for (const Operation& operation : m_operations)
 	{
@@ -137,7 +157,7 @@ void BankAccount::EditOperation(int id, const Operation& operation)
 		}
 	}
 
-	assert((false) && "The given id does not correspond to any existing operation on this account.");
+	assert(false && "The given id does not correspond to any existing operation on this account.");
 }
 
 void BankAccount::DeleteOperation(int id)
@@ -153,7 +173,31 @@ void BankAccount::DeleteOperation(int id)
 		}
 	}
 
-	assert((false) && "The given id does not correspond to any existing operation on this account.");
+	assert(false && "The given id does not correspond to any existing operation on this account.");
+}
+
+void BankAccount::Rename(std::string_view newName)
+{
+	m_name = newName;
+}
+
+void BankAccount::SetType(AccountType type)
+{
+	m_type = type;
+}
+
+void BankAccount::SetInitialAmount(Amount amount)
+{
+	m_initialAmount = amount;
+}
+
+void BankAccount::Edit(const BankAccount& account)
+{
+	assert((account.m_type == AccountType::CURRENT || account.m_type == AccountType::SAVING) && "The given account type is incorrect.");
+
+	m_name = account.m_name;
+	m_type = account.m_type;
+	m_initialAmount = account.m_initialAmount;
 }
 
 void BankAccount::HandleCategoryDelete(int index)
@@ -168,19 +212,10 @@ void BankAccount::HandleCategoryDelete(int index)
 	}
 }
 
-void BankAccount::Edit(const BankAccount& account)
-{
-	assert((account.type == AccountType::CURRENT || account.type == AccountType::SAVING) && "The given account type is incorrect.");
-
-	name = account.name;
-	type = account.type;
-	initialAmount = account.initialAmount;
-}
-
 BankAccount BankAccount::Default()
 {
 	BankAccount defaultBankAccount;
-	defaultBankAccount.name = "Mon compte bancaire";
+	defaultBankAccount.m_name = "Mon compte bancaire";
 	return defaultBankAccount;
 }
 
@@ -196,7 +231,7 @@ Operation BankAccount::GetNewOperation(
 	int month,
 	Amount amount,
 	int categoryIndex,
-	const std::string& description
+	std::string_view description
 )
 {
 	assert((month >= 1 && month <= 12) && "Month argument must be within [1;12].");
@@ -237,10 +272,5 @@ void BankAccount::SortOperations()
 
 bool operator==(const BankAccount& a1, const BankAccount& a2)
 {
-	return a1.name == a2.name;
-}
-
-bool operator!=(const BankAccount& a1, const BankAccount& a2)
-{
-	return !(a1 == a2);
+	return a1.m_name == a2.m_name;
 }

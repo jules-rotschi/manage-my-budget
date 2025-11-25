@@ -94,7 +94,7 @@ void LoadCategories(int profileIndex, bool isDataFromVersion1_0_0)
 {
 	const Profile& profile = StateManager::Instance().r_Profiles()[profileIndex];
 
-	QFile file(dataDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/categories.dat")));
+	QFile file(dataDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.GetName()) + "/categories.dat")));
 
 	if (file.open(QIODeviceBase::ReadOnly))
 	{
@@ -129,7 +129,7 @@ void LoadAccounts(int profileIndex)
 {
 	const Profile& profile = StateManager::Instance().r_Profiles()[profileIndex];
 
-	QFile file(dataDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts/accounts.dat")));
+	QFile file(dataDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.GetName()) + "/accounts/accounts.dat")));
 
 	if (file.open(QIODeviceBase::ReadOnly))
 	{
@@ -147,7 +147,7 @@ void LoadAccounts(int profileIndex)
 		StateManager::Instance().LoadDefaultAccount(profileIndex);
 	}
 
-	for (size_t i = 0; i < StateManager::Instance().r_Profiles()[profileIndex].bankAccounts.size(); i++)
+	for (size_t i = 0; i < StateManager::Instance().r_Profiles()[profileIndex].r_BankAccounts().size(); i++)
 	{
 		LoadOperations(profileIndex, SizeToInt(i));
 	}
@@ -156,9 +156,9 @@ void LoadAccounts(int profileIndex)
 void LoadOperations(int profileIndex, int accountIndex)
 {
 	const Profile& profile = StateManager::Instance().r_Profiles()[profileIndex];
-	const BankAccount& account = StateManager::Instance().r_Profiles()[profileIndex].bankAccounts[accountIndex];
+	const BankAccount& account = StateManager::Instance().r_Profiles()[profileIndex].r_BankAccounts()[accountIndex];
 
-	QFile file(dataDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts/" + ToFileName(account.name) + "/operations.dat")));
+	QFile file(dataDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.GetName()) + "/accounts/" + ToFileName(account.GetName()) + "/operations.dat")));
 
 	file.open(QIODeviceBase::ReadOnly);
 
@@ -205,7 +205,7 @@ void SaveProfiles()
 	for (const Profile& profile : StateManager::Instance().r_Profiles())
 	{
 		stream << profile;
-		dataDirectory.mkdir(QString::fromStdString("profiles/" + ToFileName(profile.name)));
+		dataDirectory.mkdir(QString::fromStdString("profiles/" + ToFileName(profile.GetName())));
 		SaveCategories(profile);
 		SaveAccounts(profile);
 	}
@@ -213,7 +213,7 @@ void SaveProfiles()
 
 void SaveCategories(const Profile& profile)
 {
-	QFile file(dataDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/categories.dat")));
+	QFile file(dataDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.GetName()) + "/categories.dat")));
 
 	if (!file.open(QIODeviceBase::WriteOnly))
 	{
@@ -222,7 +222,7 @@ void SaveCategories(const Profile& profile)
 
 	QDataStream stream(&file);
 
-	for (const Category& category : profile.categories)
+	for (const Category& category : profile.r_Categories())
 	{
 		stream << category;
 	}
@@ -230,10 +230,10 @@ void SaveCategories(const Profile& profile)
 
 void SaveAccounts(const Profile& profile)
 {
-	RemoveDirectory(dataDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts")).toStdString());
-	dataDirectory.mkdir(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts"));
+	RemoveDirectory(dataDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.GetName()) + "/accounts")).toStdString());
+	dataDirectory.mkdir(QString::fromStdString("profiles/" + ToFileName(profile.GetName()) + "/accounts"));
 
-	QFile file(dataDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts/accounts.dat")));
+	QFile file(dataDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.GetName()) + "/accounts/accounts.dat")));
 
 	if (!file.open(QIODeviceBase::WriteOnly))
 	{
@@ -242,17 +242,17 @@ void SaveAccounts(const Profile& profile)
 
 	QDataStream stream(&file);
 
-	for (const BankAccount& account : profile.bankAccounts)
+	for (const BankAccount& account : profile.r_BankAccounts())
 	{
 		stream << account;
-		dataDirectory.mkdir(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts/" + ToFileName(account.name)));
+		dataDirectory.mkdir(QString::fromStdString("profiles/" + ToFileName(profile.GetName()) + "/accounts/" + ToFileName(account.GetName())));
 		SaveOperations(profile, account);
 	}
 }
 
 void SaveOperations(const Profile& profile, const BankAccount& account)
 {
-	QFile file(dataDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.name) + "/accounts/" + ToFileName(account.name) + "/operations.dat")));
+	QFile file(dataDirectory.filePath(QString::fromStdString("profiles/" + ToFileName(profile.GetName()) + "/accounts/" + ToFileName(account.GetName()) + "/operations.dat")));
 
 	if (!file.open(QIODeviceBase::WriteOnly))
 	{
@@ -270,7 +270,7 @@ void SaveOperations(const Profile& profile, const BankAccount& account)
 QDataStream& operator<<(QDataStream& stream, const Profile& profile)
 {
 	stream
-		<< QString::fromStdString(profile.name);
+		<< QString::fromStdString(profile.GetName());
 
 	return stream;
 }
@@ -282,7 +282,7 @@ QDataStream& operator>>(QDataStream& stream, Profile& profile)
 	stream
 		>> name;
 
-	profile.name = name.toStdString();
+	profile.Rename(name.toStdString());
 
 	return stream;
 }
@@ -314,9 +314,9 @@ QDataStream& operator>>(QDataStream& stream, Category& category)
 QDataStream& operator<<(QDataStream& stream, const BankAccount& account)
 {
 	stream
-		<< QString::fromStdString(account.name)
-		<< account.type
-		<< (qint32)account.initialAmount.GetValue();
+		<< QString::fromStdString(account.GetName())
+		<< account.GetType()
+		<< (qint32)account.GetInitialAmount().GetValue();
 
 	return stream;
 }
@@ -324,15 +324,17 @@ QDataStream& operator<<(QDataStream& stream, const BankAccount& account)
 QDataStream& operator>>(QDataStream& stream, BankAccount& account)
 {
 	QString name;
+	AccountType type;
 	qint32 initialAmountValue;
 
 	stream
 		>> name
-		>> account.type
+		>> type
 		>> initialAmountValue;
 
-	account.name = name.toStdString();
-	account.initialAmount = initialAmountValue;
+	account.Rename(name.toStdString());
+	account.SetType(type);
+	account.SetInitialAmount(initialAmountValue);
 
 	return stream;
 }

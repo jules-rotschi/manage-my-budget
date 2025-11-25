@@ -5,7 +5,7 @@
 
 class Profile;
 class BankAccount;
-class Operation;
+struct Operation;
 class Amount;
 struct Category;
 

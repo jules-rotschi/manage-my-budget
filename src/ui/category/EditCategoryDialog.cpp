@@ -14,7 +14,7 @@
 EditCategoryDialog::EditCategoryDialog(int categoryIndex, QWidget* parent)
 	: m_categoryIndex(categoryIndex), QDialog(parent)
 {
-	Category categoryToEdit = StateManager::Instance().r_CurrentProfile().categories[categoryIndex];
+	Category categoryToEdit = StateManager::Instance().r_CurrentProfile().r_Categories()[categoryIndex];
 
 	setWindowTitle(QString::fromStdString("Modifier la catégorie \"" + LimitLength(categoryToEdit.name, 20) + "\""));
 

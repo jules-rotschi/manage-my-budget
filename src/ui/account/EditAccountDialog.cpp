@@ -15,15 +15,15 @@ EditAccountDialog::EditAccountDialog(int index, QWidget* parent)
 {
 	setWindowTitle("Modifier le compte");
 
-	BankAccount account = StateManager::Instance().r_CurrentProfile().bankAccounts[m_index];
+	BankAccount account = StateManager::Instance().r_CurrentProfile().r_BankAccounts()[m_index];
 
 	m_formWidget = new QWidget();
 
 	m_nameLabel = new QLabel("Nom du compte");
-	m_nameLineEdit = new QLineEdit(QString::fromStdString(account.name));
+	m_nameLineEdit = new QLineEdit(QString::fromStdString(account.GetName()));
 
 	m_initialAmountLabel = new QLabel("Solde initial");
-	m_initialAmountLineEdit = new QLineEdit(QString::fromStdString(FormatToLineEdit(account.initialAmount.GetValue())));
+	m_initialAmountLineEdit = new QLineEdit(QString::fromStdString(FormatToLineEdit(account.GetInitialAmount().GetValue())));
 
 	m_initialAmountValidator = new QDoubleValidator();
 	m_initialAmountValidator->setDecimals(2);
@@ -38,7 +38,7 @@ EditAccountDialog::EditAccountDialog(int index, QWidget* parent)
 	m_typeCombobox->addItem("Compte courant");
 	m_typeCombobox->addItem("Épargne");
 
-	switch (account.type)
+	switch (account.GetType())
 	{
 	case AccountType::SAVING:
 		m_typeCombobox->setCurrentIndex(1);

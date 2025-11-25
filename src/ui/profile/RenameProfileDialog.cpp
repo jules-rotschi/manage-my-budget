@@ -14,12 +14,12 @@ RenameProfileDialog::RenameProfileDialog(int index, QWidget* parent)
 {
 	const Profile& profile = StateManager::Instance().r_Profiles()[index];
 
-	setWindowTitle(QString::fromStdString("Renommer le profil \"" + LimitLength(profile.name, 20) + "\""));
+	setWindowTitle(QString::fromStdString("Renommer le profil \"" + LimitLength(profile.GetName(), 20) + "\""));
 
 	m_formWidget = new QWidget();
 
 	m_nameLabel = new QLabel("Nom du profil");
-	m_nameLineEdit = new QLineEdit(QString::fromStdString(profile.name));
+	m_nameLineEdit = new QLineEdit(QString::fromStdString(profile.GetName()));
 
 	m_formLayout = new QFormLayout(m_formWidget);
 	m_formLayout->addRow(m_nameLabel, m_nameLineEdit);

@@ -75,9 +75,9 @@ void YearlyReviewDialog::UpdateUI()
 
 	m_totalTitleLabel->setText(QString::fromStdString("Total (Prévu : " + budgetTotal.GetString() + ")"));
 
-	for (int i = 1; i < StateManager::Instance().r_CurrentProfile().categories.size(); i++)
+	for (int i = 1; i < StateManager::Instance().r_CurrentProfile().r_Categories().size(); i++)
 	{
-		const Category& category = StateManager::Instance().r_CurrentProfile().categories[i];
+		const Category& category = StateManager::Instance().r_CurrentProfile().r_Categories()[i];
 
 		Amount yearlyAmount = accountant.GetYearlyAmount(m_year, i);
 		Amount yearlyBudget = category.monthlyBudget * 12;

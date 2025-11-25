@@ -178,13 +178,13 @@ void MainWindow::LoadProfilesToComboBox()
 	}
 
 	m_currentProfileComboBox->setItemText(
-		0, QString::fromStdString(LimitLength(StateManager::Instance().r_Profiles()[0].name, 20))
+		0, QString::fromStdString(LimitLength(StateManager::Instance().r_Profiles()[0].GetName(), 20))
 	);
 
 	for (int i = 1; i < StateManager::Instance().r_Profiles().size(); i++)
 	{
 		const Profile& profile = StateManager::Instance().r_Profiles()[i];
-		m_currentProfileComboBox->addItem(QString::fromStdString(LimitLength(profile.name, 20)));
+		m_currentProfileComboBox->addItem(QString::fromStdString(LimitLength(profile.GetName(), 20)));
 	}
 }
 
@@ -196,13 +196,13 @@ void MainWindow::LoadAccountsToComboBox()
 	}
 
 	m_currentAccountComboBox->setItemText(
-		0, QString::fromStdString(LimitLength(StateManager::Instance().r_CurrentProfile().bankAccounts[0].name, 20) + " (" + StateManager::Instance().r_CurrentProfile().bankAccounts[0].GetTypeString() + ")")
+		0, QString::fromStdString(LimitLength(StateManager::Instance().r_CurrentProfile().r_BankAccounts()[0].GetName(), 20) + " (" + StateManager::Instance().r_CurrentProfile().r_BankAccounts()[0].GetTypeString() + ")")
 	);
 
-	for (int i = 1; i < StateManager::Instance().r_CurrentProfile().bankAccounts.size(); i++)
+	for (int i = 1; i < StateManager::Instance().r_CurrentProfile().r_BankAccounts().size(); i++)
 	{
-		const BankAccount& account = StateManager::Instance().r_CurrentProfile().bankAccounts[i];
-		m_currentAccountComboBox->addItem(QString::fromStdString(LimitLength(account.name, 20) + " (" + account.GetTypeString() + ")"));
+		const BankAccount& account = StateManager::Instance().r_CurrentProfile().r_BankAccounts()[i];
+		m_currentAccountComboBox->addItem(QString::fromStdString(LimitLength(account.GetName(), 20) + " (" + account.GetTypeString() + ")"));
 	}
 }
 

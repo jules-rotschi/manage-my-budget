@@ -44,13 +44,13 @@ void ManageAccountsDialog::UpdateUI()
 {
 	m_accountsList->clear();
 
-	for (size_t i = 0; i < StateManager::Instance().r_CurrentProfile().bankAccounts.size(); i++)
+	for (size_t i = 0; i < StateManager::Instance().r_CurrentProfile().r_BankAccounts().size(); i++)
 	{
-		const BankAccount account = StateManager::Instance().r_CurrentProfile().bankAccounts[i];
+		const BankAccount account = StateManager::Instance().r_CurrentProfile().r_BankAccounts()[i];
 
 		QWidget* accountWidget = new QWidget();
 
-		QLabel* accountLabel = new QLabel(QString::fromStdString(LimitLength(account.name, 20) + " (" + account.GetTypeString() + ") | " + account.GetTotalAmount().GetString()));
+		QLabel* accountLabel = new QLabel(QString::fromStdString(LimitLength(account.GetName(), 20) + " (" + account.GetTypeString() + ") | " + account.GetTotalAmount().GetString()));
 		
 		QPushButton* accountEditButton = new QPushButton("Modifier");
 		connect(
@@ -102,7 +102,7 @@ void ManageAccountsDialog::HandleAccountEdit(int index)
 
 void ManageAccountsDialog::HandleAccountDelete(int index)
 {
-	if (!ConfirmAction("Voulez-vous vraiment supprimer le compte \"" + StateManager::Instance().r_CurrentProfile().bankAccounts[index].name + "\" ?", "Supprimer"))
+	if (!ConfirmAction("Voulez-vous vraiment supprimer le compte \"" + StateManager::Instance().r_CurrentProfile().r_BankAccounts()[index].GetName() + "\" ?", "Supprimer"))
 	{
 		return;
 	}

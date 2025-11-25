@@ -110,6 +110,7 @@
     <QtMoc Include="src\ui\account\AddAccountDialog.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\application\Application.cpp" />
     <ClCompile Include="src\types\Converter.cpp" />
     <ClCompile Include="src\data\BackUp.cpp" />
     <ClCompile Include="src\data\Data.cpp" />
@@ -153,6 +154,7 @@
     <QtMoc Include="src\ui\profile\AddProfileDialog.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\application\Application.h" />
     <ClInclude Include="src\types\Converter.h" />
     <ClInclude Include="src\data\BackUp.h" />
     <ClInclude Include="src\data\Data.h" />

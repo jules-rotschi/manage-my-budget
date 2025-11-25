@@ -5,7 +5,7 @@
 
 class Profile;
 class BankAccount;
-class Operation;
+struct Operation;
 struct Category;
 
 void LoadBackUp(const std::string& backUpPath);

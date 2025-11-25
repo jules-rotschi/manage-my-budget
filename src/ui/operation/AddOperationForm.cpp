@@ -76,7 +76,7 @@ AddOperationForm::AddOperationForm(QWidget* parent)
 void AddOperationForm::LoadCategories()
 {
 	m_categoryCombobox->clear();
-	for (const Category& category : StateManager::Instance().r_CurrentProfile().categories)
+	for (const Category& category : StateManager::Instance().r_CurrentProfile().r_Categories())
 	{
 		m_categoryCombobox->addItem(QString::fromStdString(LimitLength(category.name, 20)));
 	}

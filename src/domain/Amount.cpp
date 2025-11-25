@@ -9,15 +9,21 @@ long Amount::GetValue() const
 
 std::string Amount::GetString() const
 {
-	long tempValue = m_value;
-	bool isNegative = tempValue < 0;
+	bool isNegative = m_value < 0;
 
-	if (isNegative)
+	long absValue = 0;
+
+	if (!isNegative)
 	{
-		tempValue = -tempValue;
+		absValue = m_value;
+	}
+	else
+	{
+		absValue = -m_value;
 	}
 
-	std::string valueString = std::to_string(tempValue);
+	std::string valueString = std::to_string(absValue);
+
 	if (valueString.length() == 2)
 	{
 		valueString = "0" + valueString;
@@ -30,6 +36,7 @@ std::string Amount::GetString() const
 	{
 		valueString = "000";
 	}
+
 	valueString.insert(valueString.end() - 2, '.');
 
 	if (isNegative)
@@ -46,14 +53,34 @@ Amount& Amount::operator+=(const Amount& amount)
 	return *this;
 }
 
-Amount operator*(const Amount& a1, const Amount& a2)
+Amount& Amount::operator-=(const Amount& amount)
 {
-	return Amount(a1.GetValue() * a2.GetValue());
+	m_value -= amount.m_value;
+	return *this;
 }
 
-Amount operator-(const Amount& a1, const Amount& a2)
+Amount& Amount::operator*=(int coefficient)
 {
-	return Amount(a1.GetValue() - a2.GetValue());
+	m_value *= coefficient;
+	return *this;
+}
+
+Amount operator+(Amount a1, const Amount& a2)
+{
+	a1 += a2;
+	return a1;
+}
+
+Amount operator-(Amount a1, const Amount& a2)
+{
+	a1 -= a2;
+	return a1;
+}
+
+Amount operator*(Amount a, int coefficient)
+{
+	a *= coefficient;
+	return a;
 }
 
 Amount operator-(const Amount& amount)

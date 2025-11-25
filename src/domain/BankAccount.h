@@ -15,13 +15,14 @@ enum class AccountType
 class BankAccount
 {
 public:
-	std::string name;
-	AccountType type = AccountType::CURRENT;
-	Amount initialAmount;
-
 	const std::vector<Operation>& r_Operations() const;
 
+	bool IsSaving() const;
 	std::string GetTypeString() const;
+
+	std::string GetName() const;
+	AccountType GetType() const;
+	Amount GetInitialAmount() const;
 
 	Amount GetTotalAmount() const;
 
@@ -34,29 +35,35 @@ public:
 	void EditOperation(int id, const Operation& operation);
 	void DeleteOperation(int id);
 
-	void HandleCategoryDelete(int index);
-
+	void Rename(std::string_view newName);
+	void SetType(AccountType type);
+	void SetInitialAmount(Amount amount);
 	void Edit(const BankAccount& account);
+
+	void HandleCategoryDelete(int index);
 
 	static BankAccount Default();
 
-private:
-	std::vector<Operation> m_operations;
-	int m_nextId = 1;
+	friend bool operator==(const BankAccount& a1, const BankAccount& a2);
 
+private:
 	Operation GetNewOperation();
 	Operation GetNewOperation(
 		int year,
 		int month,
 		Amount amount,
 		int categoryIndex,
-		const std::string& description
+		std::string_view description
 	);
 
 	int GetNextIdAndIncrement();
-	
-	void SortOperations();
-};
 
-bool operator==(const BankAccount& a1, const BankAccount& a2);
-bool operator!=(const BankAccount& a1, const BankAccount& a2);
+	void SortOperations();
+
+private:
+	std::string m_name;
+	AccountType m_type = AccountType::CURRENT;
+	Amount m_initialAmount;
+	std::vector<Operation> m_operations;
+	int m_nextId = 1;
+};

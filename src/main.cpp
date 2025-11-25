@@ -1,23 +1,16 @@
-﻿#include <vector>
-#include <qapplication.h>
+﻿#include <string>
 
-#include "data/StateManager.h"
-#include "ui/MainWindow.h"
+#include "application/Application.h"
 
 const std::string version("1.0.1");
 
 int main(int argc, char* argv[])
 {
-	StateManager::Init(version);
+	Application app;
 
-	QApplication app(argc, argv);
-
-	MainWindow window;
-	window.show();
-
-	int result = app.exec();
-
-	StateManager::ShutDown();
+	app.Init(version);
+	int result = app.Run(argc, argv);
+	app.ShutDown();
 
 	return result;
 }

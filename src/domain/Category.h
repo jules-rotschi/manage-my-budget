@@ -10,7 +10,6 @@ struct Category
 	Amount monthlyBudget;
 
 	static Category Internal();
-};
 
-bool operator==(const Category& c1, const Category& c2);
-bool operator!=(const Category& c1, const Category& c2);
+	friend bool operator==(const Category& c1, const Category& c2);
+};
