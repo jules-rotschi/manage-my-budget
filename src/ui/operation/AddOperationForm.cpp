@@ -63,9 +63,9 @@ AddOperationForm::AddOperationForm(QWidget* parent)
 	connect(m_addButton, &QPushButton::released, this, &AddOperationForm::HandleAddButton);
 
 	m_mainLayout = new QFormLayout(this);
-	m_mainLayout->addRow(m_typeLabel, m_typeCombobox);
 	m_mainLayout->addRow(m_yearLabel, m_yearCombobox);
 	m_mainLayout->addRow(m_monthLabel, m_monthCombobox);
+	m_mainLayout->addRow(m_typeLabel, m_typeCombobox);
 	m_mainLayout->addRow(m_amountLabel, m_amountLineEdit);
 	m_mainLayout->addRow(m_categoryLabel, m_categoryCombobox);
 	m_mainLayout->addRow(m_descriptionLabel, m_descriptionLineEdit);
