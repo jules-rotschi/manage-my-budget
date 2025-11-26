@@ -12,7 +12,7 @@ struct Category;
 class StateManager
 {
 public:
-	const std::string& appVersion;
+	const std::string appVersion;
 
 	StateManager(const char* appVersion);
 
