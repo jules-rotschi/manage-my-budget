@@ -14,9 +14,9 @@ class StateManager
 public:
 	const std::string& appVersion;
 
-	StateManager(const std::string& appVersion);
+	StateManager(const char* appVersion);
 
-	static void Init(const std::string& appVersion);
+	static void Init(const char* appVersion);
 	static void ShutDown();
 
 	static StateManager& Instance();

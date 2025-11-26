@@ -5,7 +5,7 @@
 class Application
 {
 public:
-	void Init(const std::string& version);
+	void Init(const char* version);
 	int Run(int argc, char* argv[]);
 	void ShutDown();
 };

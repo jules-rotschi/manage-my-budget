@@ -6,7 +6,7 @@
 
 #include "ui/MainWindow.h"
 
-void Application::Init(const std::string& version)
+void Application::Init(const char* version)
 {
 	StateManager::Init(version);
 }

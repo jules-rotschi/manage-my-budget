@@ -15,10 +15,10 @@
 
 static StateManager* s_Instance = nullptr;
 
-StateManager::StateManager(const std::string& appVersion)
+StateManager::StateManager(const char* appVersion)
 	: appVersion(appVersion) {}
 
-void StateManager::Init(const std::string& appVersion)
+void StateManager::Init(const char* appVersion)
 {
 	assert(!s_Instance);
 	s_Instance = new StateManager(appVersion);
