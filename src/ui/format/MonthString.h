@@ -4,4 +4,4 @@
 
 std::string MonthToString(int month);
 
-int StringToMonth(const std::string& monthString);
+int StringToMonth(std::string_view monthString);

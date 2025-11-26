@@ -2,7 +2,7 @@
 
 #include "application/Application.h"
 
-const std::string version("1.0.1");
+constexpr const char* version = "1.0.1";
 
 int main(int argc, char* argv[])
 {

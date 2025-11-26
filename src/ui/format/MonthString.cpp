@@ -30,7 +30,7 @@ std::string MonthToString(int month)
 	return months[static_cast<std::array<std::string, 12>::size_type>(month) - 1];
 }
 
-int StringToMonth(const std::string& str)
+int StringToMonth(std::string_view str)
 {
 	for (size_t i = 0; i < months.size(); i++)
 	{

@@ -20,7 +20,7 @@
 #include "files/Files.h"
 #include "types/Converter.h"
 
-static std::string dataDirectoryName = "manage-my-budget-data";
+const static std::string dataDirectoryName = "manage-my-budget-data";
 static QDir saveInDirectory;
 static QDir dataDirectory;
 
