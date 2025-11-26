@@ -22,7 +22,7 @@ const std::array<const std::string, 12> months =
 
 std::string MonthToString(int month)
 {
-	if (month < 0 || month > 11)
+	if (month < 1 || month > 12)
 	{
 		return "";
 	}
