@@ -384,6 +384,7 @@ void MainWindow::HandleDataReset()
 void MainWindow::HandleVersionShow() const
 {
 	QMessageBox box;
+	box.setWindowTitle("À propos");
 	box.setText(QString::fromStdString("Version " + StateManager::Instance().appVersion));
 	box.exec();
 }
