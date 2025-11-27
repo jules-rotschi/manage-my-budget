@@ -73,7 +73,7 @@ void YearlyReviewDialog::UpdateUI()
 
 	Amount budgetTotal = accountant.GetBudgetTotal() * 12;
 
-	m_totalTitleLabel->setText(QString::fromStdString("Total (Prévu : " + budgetTotal.GetString() + ")"));
+	m_totalTitleLabel->setText(QString::fromStdString("Total (" + budgetTotal.GetString() + ")"));
 
 	for (int i = 1; i < StateManager::Instance().r_CurrentProfile().r_Categories().size(); i++)
 	{
@@ -85,8 +85,8 @@ void YearlyReviewDialog::UpdateUI()
 
 		QWidget* categoryReviewWidget = new QWidget();
 
-		QLabel* categoryLabel = new QLabel(QString::fromStdString(LimitLength(category.name, 20) + " (Budget : " + yearlyBudget.GetString() + ")"));
-		QLabel* amountLabel = new QLabel(QString::fromStdString(accountant.GetYearlyAmount(m_year, i).GetString() + " (Différence budget : " + remainingAmount.GetString() + ")"));
+		QLabel* categoryLabel = new QLabel(QString::fromStdString(LimitLength(category.name, 20) + " (" + yearlyBudget.GetString() + ")"));
+		QLabel* amountLabel = new QLabel(QString::fromStdString(accountant.GetYearlyAmount(m_year, i).GetString()));
 
 		QHBoxLayout* categoryReviewLayout = new QHBoxLayout(categoryReviewWidget);
 		categoryReviewLayout->addWidget(categoryLabel);
@@ -102,7 +102,7 @@ void YearlyReviewDialog::UpdateUI()
 	Amount total = accountant.GetYearlyAmount(m_year);
 	Amount remaingAmount = -(budgetTotal - total);
 
-	m_totalValueLabel->setText(QString::fromStdString(total.GetString() + " (Différence budget : " + remaingAmount.GetString() + ")"));
+	m_totalValueLabel->setText(QString::fromStdString(total.GetString()));
 
 	m_savingsValueLabel->setText(QString::fromStdString(accountant.GetYearlySavings(m_year).GetString()));
 
