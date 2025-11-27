@@ -34,8 +34,6 @@ public:
 	void DeleteAccount(size_t index);
 
 	void AddOperation(size_t accountIndex, const Operation& operation);
-	//void EditOperation(size_t accountIndex, size_t operationIndex, const Operation& operation);
-	//void DeleteOperation(size_t accountIndex, size_t operationIndex, const Operation& operation);
 
 	friend bool operator==(const Profile& p1, const Profile& p2);
 

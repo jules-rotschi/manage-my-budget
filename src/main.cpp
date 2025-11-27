@@ -2,7 +2,7 @@
 
 #include "application/Application.h"
 
-constexpr const char* version = "1.0.1";
+constexpr const char* version = "1.0.2 (wip)";
 
 int main(int argc, char* argv[])
 {

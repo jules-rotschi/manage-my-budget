@@ -18,6 +18,9 @@ public:
 private:
 	int m_year;
 
+	int m_firstActiveMonth = 1;
+	int m_lastActiveMonth = 12;
+
 	QVBoxLayout* m_mainLayout;
 
 	QWidget* m_yearSelectorWidget;
@@ -25,6 +28,8 @@ private:
 
 	QLabel* m_yearLabel;
 	QComboBox* m_yearComboBox;
+
+	QLabel* m_monthsIntervalLabel;
 
 	QListWidget* m_categoriesList;
 

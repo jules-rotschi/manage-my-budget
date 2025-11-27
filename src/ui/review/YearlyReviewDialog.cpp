@@ -13,6 +13,7 @@
 #include "data/StateManager.h"
 
 #include "ui/format/StringFormatter.h"
+#include "ui/format/MonthString.h"
 
 YearlyReviewDialog::YearlyReviewDialog(QWidget* parent)
 	: QDialog(parent)
@@ -37,6 +38,8 @@ YearlyReviewDialog::YearlyReviewDialog(QWidget* parent)
 
 	m_yearSelectorLayout = new QFormLayout(m_yearSelectorWidget);
 	m_yearSelectorLayout->addRow(m_yearLabel, m_yearComboBox);
+
+	m_monthsIntervalLabel = new QLabel();
 
 	m_categoriesList = new QListWidget();
 
@@ -68,10 +71,34 @@ YearlyReviewDialog::YearlyReviewDialog(QWidget* parent)
 void YearlyReviewDialog::UpdateUI()
 {
 	m_categoriesList->clear();
+	m_firstActiveMonth = 1;
+	m_lastActiveMonth = 12;
 
 	Accountant accountant(StateManager::Instance().r_CurrentProfile());
 
-	Amount budgetTotal = accountant.GetBudgetTotal() * 12;
+	for (int i = 1; i <= 12; i++)
+	{
+		if (accountant.GetMonthlyAmount(m_year, i).GetValue() != 0 || accountant.GetMonthlySavings(m_year, i).GetValue() != 0)
+		{
+			m_firstActiveMonth = i;
+			m_lastActiveMonth = i;
+			break;
+		}
+	}
+
+	for (int i = m_firstActiveMonth; i <= 12; i++)
+	{
+		if (accountant.GetMonthlyAmount(m_year, i).GetValue() != 0 || accountant.GetMonthlySavings(m_year, i).GetValue() != 0)
+		{
+			m_lastActiveMonth = i;
+		}
+	}
+
+	int activeMonths = m_lastActiveMonth - m_firstActiveMonth + 1;
+
+	m_monthsIntervalLabel->setText(QString::fromStdString(MonthToString(m_firstActiveMonth) + " - " + MonthToString(m_lastActiveMonth)));
+
+	Amount budgetTotal = accountant.GetBudgetTotal() * activeMonths;
 
 	m_totalTitleLabel->setText(QString::fromStdString("Total (" + budgetTotal.GetString() + ")"));
 
@@ -80,7 +107,7 @@ void YearlyReviewDialog::UpdateUI()
 		const Category& category = StateManager::Instance().r_CurrentProfile().r_Categories()[i];
 
 		Amount yearlyAmount = accountant.GetYearlyAmount(m_year, i);
-		Amount yearlyBudget = category.monthlyBudget * 12;
+		Amount yearlyBudget = category.monthlyBudget * activeMonths;
 		Amount remainingAmount = -(yearlyBudget - yearlyAmount);
 
 		QWidget* categoryReviewWidget = new QWidget();
@@ -107,6 +134,7 @@ void YearlyReviewDialog::UpdateUI()
 	m_savingsValueLabel->setText(QString::fromStdString(accountant.GetYearlySavings(m_year).GetString()));
 
 	m_mainLayout->addWidget(m_yearSelectorWidget);
+	m_mainLayout->addWidget(m_monthsIntervalLabel);
 	m_mainLayout->addWidget(m_categoriesList);
 	m_mainLayout->addWidget(m_totalWidget);
 	m_mainLayout->addWidget(m_savingsWidget);
