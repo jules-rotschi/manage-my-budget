@@ -1,6 +1,10 @@
 ﻿/ManageMyBudget
 /ManageMyBudgetTests
+
 **/x64
+
 /.vs
+
 /build
+
 **.vcxproj.user
