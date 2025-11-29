@@ -5,6 +5,8 @@ VisualStudioVersion = 17.13.35818.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ManageMyBudget", "ManageMyBudget.vcxproj", "{F5786223-97CB-49DC-83D9-9E3CAFC78F4D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ManageMyBudgetTests", "Test\Test.vcxproj", "{5BD6F1A8-8B4C-421E-B33A-9508F19406B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -15,6 +17,10 @@ Global
 		{F5786223-97CB-49DC-83D9-9E3CAFC78F4D}.Debug|x64.Build.0 = Debug|x64
 		{F5786223-97CB-49DC-83D9-9E3CAFC78F4D}.Release|x64.ActiveCfg = Release|x64
 		{F5786223-97CB-49DC-83D9-9E3CAFC78F4D}.Release|x64.Build.0 = Release|x64
+		{5BD6F1A8-8B4C-421E-B33A-9508F19406B8}.Debug|x64.ActiveCfg = Debug|x64
+		{5BD6F1A8-8B4C-421E-B33A-9508F19406B8}.Debug|x64.Build.0 = Debug|x64
+		{5BD6F1A8-8B4C-421E-B33A-9508F19406B8}.Release|x64.ActiveCfg = Release|x64
+		{5BD6F1A8-8B4C-421E-B33A-9508F19406B8}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
