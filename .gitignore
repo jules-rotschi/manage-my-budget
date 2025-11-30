@@ -2,9 +2,7 @@
 /ManageMyBudgetTests
 
 **/x64
+**/build
 
 /.vs
-
-/build
-
 **.vcxproj.user

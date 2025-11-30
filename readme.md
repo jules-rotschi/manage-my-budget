@@ -30,6 +30,14 @@ In the project directory :
 1. Generate a build file : `cmake -G "Your generator" -B /path/to/build-dir` (the build file depends on your build system).
 2. Build : `cmake --build /path/to/build-dir`.
 
+## Testing
+
+In '/test' (`cd ./test`) :
+
+1. Generate a build file for tests : `cmake -G "Your generator" -B /build`.
+2. Build tests : `cmake --build build`.
+3. Run tests : `./build/ManageMyBudgetTests`.
+
 ## Deployment
 
 1. Generate a Ninja file : `cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -B build`.
